@@ -26,10 +26,9 @@ AS
 BEGIN
 
 	CREATE TABLE EMPRESAS
-	(
-		Id_Empresa				numeric(11,0),
-		RazonSocial				nvarchar(255),
-		Cuit					nvarchar(50),
+	(	
+		Cuit_Empresa			nvarchar(50),	
+		RazonSocial				nvarchar(255),		
 		FechaCreacion			datetime,
 		Mail					nvarchar(50),
 		DomCalle				nvarchar(100),
@@ -37,12 +36,12 @@ BEGIN
 		Piso					numeric(18,0),
 		Depto					nvarchar(50),
 		CodigoPostal			nvarchar(50),
-		PRIMARY KEY(Id_Empresa)
+		PRIMARY KEY(Cuit_Empresa)
 	)
 
 	CREATE TABLE CLIENTES
 	(
-		Id_Cliente				numeric(11,0),
+		Dni_Cliente				numeric(18,0),
 		Apellido				nvarchar(255),
 		Nombre					nvarchar(255),
 		FechaNacimiento			datetime,
@@ -52,7 +51,7 @@ BEGIN
 		Piso					numeric(18,0),
 		Depto					nvarchar(50),
 		Cod_Postal				nvarchar(50),
-		PRIMARY KEY(Id_Cliente)
+		PRIMARY KEY(Dni_Cliente)
 	)
 
 	CREATE TABLE VISIBILIDADES
@@ -73,12 +72,12 @@ BEGIN
 		FechaVencimiento		datetime,
 		Precio					numeric(18,2),
 		Tipo					nvarchar(255),
-		Id_Empresa				numeric(11,0),
-		Id_Cliente				numeric(11,0),
+		Id_Empresa				nvarchar(50),
+		Dni_Cliente				numeric(11,0),
 		Id_Visibilidad			numeric(11,0),
 		PRIMARY KEY(Id_Publicacion),
-		FOREIGN KEY(Id_Empresa) REFERENCES EMPRESAS(Id_Empresa),
-		FOREIGN KEY(Id_Cliente) REFERENCES CLIENTES(Id_Cliente),
+		FOREIGN KEY(Id_Empresa) REFERENCES EMPRESAS(Cuit_Empresa),
+		FOREIGN KEY(Id_Cliente) REFERENCES CLIENTES(Dni_Cliente),
 		FOREIGN KEY(Id_Visibilidad) REFERENCES VISIBILIDADES(Id_visibilidad)
 	)
 
@@ -136,9 +135,9 @@ BEGIN
 	)
 
 	INSERT INTO EMPRESAS 
-	SELECT  DISTINCT	
-		   Publ_Empresa_Razon_Social,	
+	SELECT  DISTINCT
 		   Publ_Empresa_Cuit,
+		   Publ_Empresa_Razon_Social,		   
 		   Publ_Empresa_Fecha_Creacion,	
 		   Publ_Empresa_Mail,
 		   Publ_Empresa_Dom_Calle,
@@ -171,7 +170,22 @@ BEGIN
 
 	INSERT INTO FORMASDEPAGO
 	SELECT DISTINCT
-		
+		--ACA NO TIENE CODIGO ASI QUE HAY QUE VER COMO METERLO,
+		Descripcion
+	FROM gd_esquema.Maestra
+
+	INSERT INTO PUBLICACIONES
+	SELECT DISTINCT
+			Publicacion_Cod,	
+			Publicaciones_Descripcion,		
+			Publicaciones_Stock,			
+			Publicaciones_Fecha,			
+			Publicaciones_FechaVencimiento,
+			Publicaciones_Precio,			
+			Publicaciones_Tipo,			
+			Publ_Empresa_Cuit,		
+			Publ_Cli_Dni,		
+			Publicacion_Visibilidad_Cod
 	FROM gd_esquema.Maestra
 
 	-- Create a temporary table, note the IDENTITY
@@ -268,7 +282,7 @@ BEGIN
 	@Cliente_Depto					nvarchar(50),
 	@Cliente_Cod_Postal				nvarchar(50),
 	--visibilidades
-	--Visibilidades_Id_Visibilidad	numeric(11,0),
+	@Visibilidades_Id_Visibilidad	numeric(11,0),
 	@Visibilidades_Descripcion		varchar(255),
 	@Visibilidades_Precio			numeric(18,2),
 	@Visibilidades_Porcentaje		numeric(18,2),
@@ -332,11 +346,27 @@ BEGIN
 		@Publicaciones_Tipo				= mt.Publicaciones_Tipo,				
 		@Publicaciones_Id_Empresa		= mt.Publ_Empresa_Cuit,		
 	    @Publicaciones_Id_Cliente		= mt.Publ_Cli_Dni		
-		--@Publicaciones_Id_Visibilidad	=  gd_esquema.Maestra.Publicaciones_Id_Visibilidad	
+		@Publicaciones_Id_Visibilidad	= mt.Publicacion_Visibilidad_Cod
+		
 	 FROM #MaestraTemporal mt
 	 WHERE RowID = @RowCount
+	  
 
 	 -- Aca va el insert con los values de arriba.
+
+	  SELECT DISTINCT
+	    @Publicaciones_Cod				= mt.Publicacion_Cod,	
+		@Publicaciones_Descripcion		= mt.Publicaciones_Descripcion,		
+		@Publicaciones_Stock			= mt.Publicaciones_Stock,				
+		@Publicaciones_Fecha			= mt.Publicaciones_Fecha,				
+		@Publicaciones_FechaVencimiento	= mt.Publicaciones_FechaVencimiento,	
+		@Publicaciones_Precio			= mt.Publicaciones_Precio,			
+		@Publicaciones_Tipo				= mt.Publicaciones_Tipo,				
+		@Publicaciones_Id_Empresa		= mt.Publ_Empresa_Cuit,		
+	    @Publicaciones_Id_Cliente		= mt.Publ_Cli_Dni		
+		@Publicaciones_Id_Visibilidad	= mt.Publicacion_Visibilidad_Cod
+		
+	 FROM #MaestraTemporal mt
 
 
 	
