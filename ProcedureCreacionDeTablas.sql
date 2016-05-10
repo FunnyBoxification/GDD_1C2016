@@ -83,18 +83,20 @@ BEGIN
 
 	CREATE TABLE OFERTAS
 	(
-		Id_Oferta				numeric(18,0),
+		Id_Oferta				numeric(18,0) IDENTITY(1,1) NOT NULL,
 		Fecha					datetime,
 		Monto					numeric(18,2),
 		Id_Publicacion			numeric(18,0),
+		Id_Cliente				numeric(18,0),
 		PRIMARY KEY(Id_Oferta),
-		FOREIGN KEY(Id_publicacion) REFERENCES PUBLICACIONES(Id_Publicacion)
+		FOREIGN KEY(Id_publicacion) REFERENCES PUBLICACIONES(Id_Publicacion),
+		FOREIGN KEY(Id_Cliente) REFERENCES CLIENTES(Dni_Cliente)
 	);
 	
 
 	CREATE TABLE COMPRAS
 	(
-		Id_Compras				numeric(11,0),
+		Id_Compras				numeric(11,0) IDENTITY(1,1) NOT NULL,
 		Cantidad				numeric(18,0),
 		Fecha					datetime,
 		Id_oferta				numeric(18,0),
@@ -106,7 +108,7 @@ BEGIN
 
 	CREATE TABLE FORMASDEPAGO
 	(
-		Id_FormaPago			numeric(11,0),
+		Id_FormaPago			numeric(11,0) IDENTITY(1,1) NOT NULL,
 		Descripcion				nvarchar(255),
 		PRIMARY KEY(Id_FormaPago)
 	);
@@ -126,12 +128,19 @@ BEGIN
 
 	CREATE TABLE ITEMFACTURA
 	(
-		Id_ItemFactura			numeric(18,0),
+		Id_ItemFactura			numeric(18,0) IDENTITY(1,1) NOT NULL,
 		Monto					numeric(18,2),
 		Cantidad				numeric(18,0),
 		Id_Factura				numeric(18,0),
 		PRIMARY KEY(Id_ItemFactura),
 		FOREIGN KEY(Id_Factura) REFERENCES FACTURAS(Id_Factura)
+	);
+
+	CREATE TABLE CALIFICACIONES
+	(
+		Id_Calificacion			numeric(18,0),
+		Cantidada_Estrellas		numeric(18,0),
+		Descripcion				nvarchar(255)
 	);
 
 	INSERT INTO EMPRESAS 
@@ -145,20 +154,24 @@ BEGIN
 		   Publ_Empresa_Piso,
 		   Publ_Empresa_Depto,	
 		   Publ_Empresa_Cod_Postal
-	FROM gd_esquema.Maestra WHERE Publ_Empresa_Cuit IS NOT NULL;
+	FROM gd_esquema.Maestra 
+	WHERE Publ_Empresa_Cuit IS NOT NULL;
 
-	--INSERT INTO CLIENTES
-	--SELECT  DISTINCT	
-	--	   Publ_Empresa_Razon_Social,	
-	--	   Publ_Empresa_Cuit,
-	--	   Publ_Empresa_Fecha_Creacion,	
-	--	   Publ_Empresa_Mail,
-	--	   Publ_Empresa_Dom_Calle,
-	--	   Publ_Empresa_Nro_Calle,
-	--	   Publ_Empresa_Piso,
-	--	   Publ_Empresa_Depto,	
-	--	   Publ_Empresa_Cod_Postal
-	--FROM gd_esquema.Maestra WHERE Publ_Empresa_Cuit IS NOT NULL;
+
+	INSERT INTO CLIENTES
+	SELECT DISTINCT 	
+		   Publ_Cli_Dni,	
+		   Publ_Cli_Apeliido,	
+		   Publ_Cli_Nombre,
+		   Publ_Cli_Fecha_Nac,
+		   Publ_Cli_Mail,		
+		   Publ_Cli_Dom_Calle,	
+		   Publ_Cli_Nro_Calle,	
+		   Publ_Cli_Piso,		
+		   Publ_Cli_Depto,		
+		   Publ_Cli_Cod_Postal
+	FROM gd_esquema.Maestra
+	WHERE Publ_Cli_Dni is not null;
 
 	INSERT INTO VISIBILIDADES
 	SELECT	DISTINCT
@@ -166,94 +179,89 @@ BEGIN
 			Publicacion_Visibilidad_Desc,
 			Publicacion_Visibilidad_Precio,		
 			Publicacion_Visibilidad_Porcentaje
-	FROM gd_esquema.Maestra WHERE Publicacion_Visibilidad_Cod IS NOT NULL;
+	FROM gd_esquema.Maestra 
+	WHERE Publicacion_Visibilidad_Cod IS NOT NULL;
 
-	--INSERT INTO FORMASDEPAGO
-	--SELECT DISTINCT
-	--	ACA NO TIENE CODIGO ASI QUE HAY QUE VER COMO METERLO,
-	--	Forma_Pago_Desc
-	--FROM gd_esquema.Maestra WHERE Forma_Pago_Desc IS NOT NULL;
+	INSERT INTO PUBLICACIONES
+	SELECT DISTINCT
+			Publicacion_Cod,	
+			Publicacion_Descripcion,		
+			Publicacion_Stock,			
+			Publicacion_Fecha,			
+			Publicacion_Fecha_Venc,
+			Publicacion_Precio,			
+			Publicacion_Tipo,			
+			Publ_Empresa_Cuit,		
+			Publ_Cli_Dni,		
+			Publicacion_Visibilidad_Cod
+	FROM gd_esquema.Maestra WHERE Publicacion_Cod IS NOT NULL;
 
-	--INSERT INTO PUBLICACIONES
-	--SELECT DISTINCT
-	--		Publicacion_Cod,	
-	--		Publicacion_Descripcion,		
-	--		Publicacion_Stock,			
-	--		Publicacion_Fecha,			
-	--		Publicacion_Fecha_Venc,
-	--		Publicacion_Precio,			
-	--		Publicacion_Tipo,			
-	--		Publ_Empresa_Cuit,		
-	--		Publ_Cli_Dni,		
-	--		Publicacion_Visibilidad_Cod
-	--FROM gd_esquema.Maestra WHERE Publicacion_Cod IS NOT NULL;
-
-	--SELECT  DISTINCT	
-	--	   Publ_Empresa_Razon_Social,	
-	--	   Publ_Empresa_Cuit,
-	--	   Publ_Empresa_Fecha_Creacion,	
-	--	   Publ_Empresa_Mail,
-	--	   Publ_Empresa_Dom_Calle,
-	--	   Publ_Empresa_Nro_Calle,
-	--	   Publ_Empresa_Piso,
-	--	   Publ_Empresa_Depto,	
-	--	   Publ_Empresa_Cod_Postal
-	--FROM gd_esquema.Maestra;
-	--Select empresas
-
-
-	--select Clientes
-	--SELECT DISTINCT 		
-	--	   Publ_Cli_Apeliido,	
-	--	   Publ_Cli_Nombre,
-	--	   Publ_Cli_Fecha_Nac,
-	--	   Publ_Cli_Mail,			
-	--	   Publ_Cli_Dom_Calle,		
-	--	   Publ_Cli_Nro_Calle,		
-	--	   Publ_Cli_Piso,			
-	--	   Publ_Cli_Depto,			
-	--	   Publ_Cli_Cod_Postal
-	--FROM gd_esquema.Maestra;
-	--select Clientes
-
-	--seect Visibilidad
-	--SELECT	DISTINCT
-	--		Publicacion_Visibilidad_Cod,
-	--		Publicacion_Visibilidad_Desc,
-	--		Publicacion_Visibilidad_Precio,		
-	--		Publicacion_Visibilidad_Porcentaje
-	--FROM gd_esquema.Maestra;
-	--seect Visibilidad
+	INSERT INTO PUBLICACIONES
+	SELECT DISTINCT
+			Publicacion_Cod,	
+			Publicacion_Descripcion,		
+			Publicacion_Stock,			
+			Publicacion_Fecha,			
+			Publicacion_Fecha_Venc,
+			Publicacion_Precio,			
+			Publicacion_Tipo,			
+			Publ_Empresa_Cuit,		
+			Publ_Cli_Dni,		
+			Publicacion_Visibilidad_Cod
+	FROM gd_esquema.Maestra WHERE Publicacion_Cod IS NOT NULL;
 	
-	--seect Publicacion
-	--SELECT
-	--	Publicacion_Cod,	
-	--	Publicacion_Descripcion,
-	--	Publicacion_Stock,	
-	--	Publicacion_Fecha,			
-	--	Publicacion_Fecha_Venc,
-	--	Publicacion_Precio,			
-	--	Publicacion_Tipo
-	--FROM gd_esquema.Maestra;
-	--select Publicacion	
 
-	--select ofertas
-	--SELECT
-	--	Oferta_Fecha,
-	--	Oferta_Monto
-	--FROM gd_esquema.Maestra;
-	--select ofertas	
+	INSERT INTO OFERTAS	
+	SELECT DISTINCT
+		Oferta_Fecha,
+		Oferta_Monto,
+		Publicacion_Cod,
+		Cli_Dni
+	FROM gd_esquema.Maestra WHERE Oferta_Monto IS NOT NULL;
+
+	INSERT INTO COMPRAS
+	SELECT DISTINCT
+		Compra_Cantidad,			
+		Compra_Fecha,			
+		(SELECT Id_Oferta
+		 FROM OFERTAS
+		 WHERE Publicacion_Cod = Id_Publicacion),	-- esto puede ser null y no si da error!			
+		Publicacion_Cod
+	FROM gd_esquema.Maestra WHERE Compra_Cantidad IS NOT NULL;
+
+	INSERT INTO FORMASDEPAGO	
+	SELECT DISTINCT
+		Forma_Pago_Desc
+	FROM gd_esquema.Maestra WHERE Forma_Pago_Desc IS NOT NULL;
+
+	INSERT INTO FACTURAS
+	SELECT DISTINCT			
+		Factura_Nro,		
+		Factura_Fecha,			
+		Factura_Total,			
+		(SELECT Id_FormaPago
+		   FROM	FORMASDEPAGO
+		  WHERE	Forma_Pago_Desc = Descripcion)	
+	FROM gd_esquema.Maestra WHERE Forma_Pago_Desc IS NOT NULL;
+
+	INSERT INTO ITEMFACTURA
+	SELECT DISTINCT 
+		Item_Factura_Monto,			
+		Item_Factura_Cantidad,		
+		Factura_Nro	
+	FROM gd_esquema.Maestra WHERE Item_Factura_Monto IS NOT NULL;
+
+	INSERT INTO CALIFICACIONES
+	SELECT DISTINCT
+		Calificacion_Codigo,
+		Calificacion_Cant_Estrellas,
+		Calificacion_Descripcion
+	FROM gd_esquema.Maestra WHERE Calificacion_Codigo IS NOT NULL;
 	
-	--SLECT item facturas		
-	--SELECT 
-	--	Item_Factura_Monto,
-	--	Item_Factura_Cantidad
-	--FROM gd_esquema.Maestra;
-	--select Item Facturas
+		
 
-	--select formas de pago
+		
 
-	--select formas de pago
 
 
 
