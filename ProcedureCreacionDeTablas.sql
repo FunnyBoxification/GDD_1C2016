@@ -18,14 +18,14 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE CreacionTabla--<CreactionTabla, sysname, CreacionTabla> 
+CREATE PROCEDURE PMS.CreacionTabla--<CreactionTabla, sysname, CreacionTabla> 
 	-- Add the parameters for the stored procedure here
 	--<@Param1, sysname, @p1> <Datatype_For_Param1, , int> = <Default_Value_For_Param1, , 0>, 
 	--<@Param2, sysname, @p2> <Datatype_For_Param2, , int> = <Default_Value_For_Param2, , 0>
 AS
 BEGIN
 
-	CREATE TABLE EMPRESAS
+	CREATE TABLE PMS.EMPRESAS
 	(	
 		Cuit_Empresa			nvarchar(50),	
 		RazonSocial				nvarchar(255),		
@@ -39,7 +39,7 @@ BEGIN
 		PRIMARY KEY(Cuit_Empresa)
 	);
 
-	CREATE TABLE CLIENTES
+	CREATE TABLE PMS.CLIENTES
 	(
 		Dni_Cliente				numeric(18,0),
 		Apellido				nvarchar(255),
@@ -54,7 +54,7 @@ BEGIN
 		PRIMARY KEY(Dni_Cliente)
 	);
 
-	CREATE TABLE VISIBILIDADES
+	CREATE TABLE PMS.VISIBILIDADES
 	(
 		Id_Visibilidad			numeric(18,0),
 		Descripcion				nvarchar(255),
@@ -63,7 +63,7 @@ BEGIN
 		PRIMARY KEY(Id_Visibilidad)
 	);
 
-	CREATE TABLE PUBLICACIONES
+	CREATE TABLE PMS.PUBLICACIONES
 	(
 		Id_Publicacion			numeric(18,0),
 		Descripcion				nvarchar(255),
@@ -76,12 +76,12 @@ BEGIN
 		Id_Cliente				numeric(18,0),
 		Id_Visibilidad			numeric(18,0),
 		PRIMARY KEY(Id_Publicacion),
-		FOREIGN KEY(Id_Empresa) REFERENCES EMPRESAS(Cuit_Empresa),
-		FOREIGN KEY(Id_Cliente) REFERENCES CLIENTES(Dni_Cliente),
-		FOREIGN KEY(Id_Visibilidad) REFERENCES VISIBILIDADES(Id_visibilidad)
+		FOREIGN KEY(Id_Empresa) REFERENCES PMS.EMPRESAS(Cuit_Empresa),
+		FOREIGN KEY(Id_Cliente) REFERENCES PMS.CLIENTES(Dni_Cliente),
+		FOREIGN KEY(Id_Visibilidad) REFERENCES PMS.VISIBILIDADES(Id_visibilidad)
 	);
 
-	CREATE TABLE OFERTAS
+	CREATE TABLE PMS.OFERTAS
 	(
 		Id_Oferta				numeric(18,0) IDENTITY(1,1) NOT NULL,
 		Fecha					datetime,
@@ -89,12 +89,12 @@ BEGIN
 		Id_Publicacion			numeric(18,0),
 		Id_Cliente				numeric(18,0),
 		PRIMARY KEY(Id_Oferta),
-		FOREIGN KEY(Id_publicacion) REFERENCES PUBLICACIONES(Id_Publicacion),
-		FOREIGN KEY(Id_Cliente) REFERENCES CLIENTES(Dni_Cliente)
+		FOREIGN KEY(Id_publicacion) REFERENCES PMS.PUBLICACIONES(Id_Publicacion),
+		FOREIGN KEY(Id_Cliente) REFERENCES PMS.CLIENTES(Dni_Cliente)
 	);
 	
 
-	CREATE TABLE COMPRAS
+	CREATE TABLE PMS.COMPRAS
 	(
 		Id_Compras				numeric(18,0) IDENTITY(1,1) NOT NULL,
 		Cantidad				numeric(18,0),
@@ -102,47 +102,47 @@ BEGIN
 		Id_oferta				numeric(18,0),
 		Id_publicacion			numeric(18,0),
 		PRIMARY KEY(Id_Compras),
-		FOREIGN KEY(Id_Oferta) REFERENCES OFERTAS(Id_oferta),
-		FOREIGN KEY(Id_Publicacion) REFERENCES PUBLICACIONES(Id_Publicacion),
+		FOREIGN KEY(Id_Oferta) REFERENCES PMS.OFERTAS(Id_oferta),
+		FOREIGN KEY(Id_Publicacion) REFERENCES PMS.PUBLICACIONES(Id_Publicacion),
 	);
 
-	CREATE TABLE FORMASDEPAGO
+	CREATE TABLE PMS.FORMASDEPAGO
 	(
 		Id_FormaPago			numeric(11,0) IDENTITY(1,1) NOT NULL,
 		Descripcion				nvarchar(255),
 		PRIMARY KEY(Id_FormaPago)
 	);
 
-	CREATE TABLE FACTURAS
+	CREATE TABLE PMS.FACTURAS
 	(
 		Numero					numeric(18,0),
 		Fecha					datetime,
 		Total					numeric(18,2),
 		Id_FormaPago			numeric(11,0),
 		PRIMARY KEY(Numero),
-		FOREIGN KEY(Id_FormaPago) REFERENCES FORMASDEPAGO(Id_FormaPago)
+		FOREIGN KEY(Id_FormaPago) REFERENCES PMS.FORMASDEPAGO(Id_FormaPago)
 	);
 
 	
 
-	CREATE TABLE ITEMFACTURA
+	CREATE TABLE PMS.ITEMFACTURA
 	(
 		Id_ItemFactura			numeric(18,0) IDENTITY(1,1) NOT NULL,
 		Monto					numeric(18,2),
 		Cantidad				numeric(18,0),
 		Id_Factura				numeric(18,0),
 		PRIMARY KEY(Id_ItemFactura),
-		FOREIGN KEY(Id_Factura) REFERENCES FACTURAS(Numero)
+		FOREIGN KEY(Id_Factura) REFERENCES PMS.FACTURAS(Numero)
 	);
 
-	CREATE TABLE CALIFICACIONES
+	CREATE TABLE PMS.CALIFICACIONES
 	(
 		Id_Calificacion			numeric(18,0),
 		Cantidada_Estrellas		numeric(18,0),
 		Descripcion				nvarchar(255)
 	);
 
-	INSERT INTO EMPRESAS 
+	INSERT INTO PMS.EMPRESAS 
 	SELECT  DISTINCT
 		   Publ_Empresa_Cuit,
 		   Publ_Empresa_Razon_Social,		   
@@ -157,7 +157,7 @@ BEGIN
 	WHERE Publ_Empresa_Cuit IS NOT NULL;
 
 
-	INSERT INTO CLIENTES
+	INSERT INTO PMS.CLIENTES
 	SELECT DISTINCT 	
 		   Publ_Cli_Dni,	
 		   Publ_Cli_Apeliido,	
@@ -172,7 +172,7 @@ BEGIN
 	FROM gd_esquema.Maestra
 	WHERE Publ_Cli_Dni is not null;
 
-	INSERT INTO VISIBILIDADES
+	INSERT INTO PMS.VISIBILIDADES
 	SELECT	DISTINCT
 			Publicacion_Visibilidad_Cod,
 			Publicacion_Visibilidad_Desc,
@@ -181,7 +181,7 @@ BEGIN
 	FROM gd_esquema.Maestra 
 	WHERE Publicacion_Visibilidad_Cod IS NOT NULL;
 
-	INSERT INTO PUBLICACIONES
+	INSERT INTO PMS.PUBLICACIONES
 	SELECT DISTINCT
 			Publicacion_Cod,	
 			Publicacion_Descripcion,		
@@ -195,7 +195,7 @@ BEGIN
 			Publicacion_Visibilidad_Cod
 	FROM gd_esquema.Maestra WHERE Publicacion_Cod IS NOT NULL;
 
-	INSERT INTO OFERTAS	
+	INSERT INTO PMS.OFERTAS	
 	SELECT DISTINCT
 		Oferta_Fecha,
 		Oferta_Monto,
@@ -203,7 +203,7 @@ BEGIN
 		Cli_Dni
 	FROM gd_esquema.Maestra WHERE Oferta_Monto IS NOT NULL;
 
-	INSERT INTO COMPRAS
+	INSERT INTO PMS.COMPRAS
 	SELECT DISTINCT
 		Compra_Cantidad,			
 		Compra_Fecha,			
@@ -215,12 +215,12 @@ BEGIN
 		Publicacion_Cod
 	FROM gd_esquema.Maestra WHERE Compra_Cantidad IS NOT NULL;
 
-	INSERT INTO FORMASDEPAGO	
+	INSERT INTO PMS.FORMASDEPAGO	
 	SELECT DISTINCT
 		Forma_Pago_Desc
 	FROM gd_esquema.Maestra WHERE Forma_Pago_Desc IS NOT NULL;
 
-	INSERT INTO FACTURAS
+	INSERT INTO PMS.FACTURAS
 	SELECT DISTINCT			
 		Factura_Nro,		
 		Factura_Fecha,			
@@ -230,14 +230,14 @@ BEGIN
 		  WHERE	Forma_Pago_Desc = Descripcion)	
 	FROM gd_esquema.Maestra WHERE Forma_Pago_Desc IS NOT NULL;
 
-	INSERT INTO ITEMFACTURA
+	INSERT INTO PMS.ITEMFACTURA
 	SELECT DISTINCT 
 		Item_Factura_Monto,			
 		Item_Factura_Cantidad,		
 		Factura_Nro	
 	FROM gd_esquema.Maestra WHERE Item_Factura_Monto IS NOT NULL;
 
-	INSERT INTO CALIFICACIONES
+	INSERT INTO PMS.CALIFICACIONES
 	SELECT DISTINCT
 		Calificacion_Codigo,
 		Calificacion_Cant_Estrellas,
