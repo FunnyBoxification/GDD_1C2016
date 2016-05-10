@@ -96,7 +96,7 @@ BEGIN
 
 	CREATE TABLE COMPRAS
 	(
-		Id_Compras				numeric(11,0) IDENTITY(1,1) NOT NULL,
+		Id_Compras				numeric(18,0) IDENTITY(1,1) NOT NULL,
 		Cantidad				numeric(18,0),
 		Fecha					datetime,
 		Id_oferta				numeric(18,0),
@@ -115,12 +115,11 @@ BEGIN
 
 	CREATE TABLE FACTURAS
 	(
-		Id_Factura				numeric(18,0),
 		Numero					numeric(18,0),
 		Fecha					datetime,
 		Total					numeric(18,2),
 		Id_FormaPago			numeric(11,0),
-		PRIMARY KEY(Id_Factura),
+		PRIMARY KEY(Numero),
 		FOREIGN KEY(Id_FormaPago) REFERENCES FORMASDEPAGO(Id_FormaPago)
 	);
 
@@ -133,7 +132,7 @@ BEGIN
 		Cantidad				numeric(18,0),
 		Id_Factura				numeric(18,0),
 		PRIMARY KEY(Id_ItemFactura),
-		FOREIGN KEY(Id_Factura) REFERENCES FACTURAS(Id_Factura)
+		FOREIGN KEY(Id_Factura) REFERENCES FACTURAS(Numero)
 	);
 
 	CREATE TABLE CALIFICACIONES
@@ -196,21 +195,6 @@ BEGIN
 			Publicacion_Visibilidad_Cod
 	FROM gd_esquema.Maestra WHERE Publicacion_Cod IS NOT NULL;
 
-	INSERT INTO PUBLICACIONES
-	SELECT DISTINCT
-			Publicacion_Cod,	
-			Publicacion_Descripcion,		
-			Publicacion_Stock,			
-			Publicacion_Fecha,			
-			Publicacion_Fecha_Venc,
-			Publicacion_Precio,			
-			Publicacion_Tipo,			
-			Publ_Empresa_Cuit,		
-			Publ_Cli_Dni,		
-			Publicacion_Visibilidad_Cod
-	FROM gd_esquema.Maestra WHERE Publicacion_Cod IS NOT NULL;
-	
-
 	INSERT INTO OFERTAS	
 	SELECT DISTINCT
 		Oferta_Fecha,
@@ -225,7 +209,9 @@ BEGIN
 		Compra_Fecha,			
 		(SELECT Id_Oferta
 		 FROM OFERTAS
-		 WHERE Publicacion_Cod = Id_Publicacion),	-- esto puede ser null y no si da error!			
+		 WHERE	Publicacion_Cod = Id_Publicacion
+			And	Oferta_Monto = Monto
+			And	Oferta_Fecha = Fecha),	--Monto tiene que ser unico.	
 		Publicacion_Cod
 	FROM gd_esquema.Maestra WHERE Compra_Cantidad IS NOT NULL;
 
