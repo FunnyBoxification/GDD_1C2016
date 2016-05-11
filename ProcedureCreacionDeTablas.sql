@@ -138,8 +138,25 @@ BEGIN
 	CREATE TABLE PMS.CALIFICACIONES
 	(
 		Id_Calificacion			numeric(18,0),
-		Cantidada_Estrellas		numeric(18,0),
-		Descripcion				nvarchar(255)
+		Cantidad_Estrellas		numeric(18,0),
+		Descripcion				nvarchar(255),
+		PRIMARY KEY(Id_Calificacion)
+	);
+
+
+	CREATE TABLE PMS.FUNCIONALIDADES
+	(
+	Id_Funcionalidad			numeric(18,0),
+	Nombre						nvarchar(255),
+	PRIMARY KEY(Id_Funcionalidad)
+	);
+
+
+	CREATE TABLE PMS.FUNCIONALIDES_ROLES
+	(
+	Id_Funcionalidad			numeric(18,0),
+	Id_Rol						numeric(18,0),
+	PRIMARY KEY(Id_Funcionalidad,Id_Rol)
 	);
 
 	INSERT INTO PMS.EMPRESAS 
