@@ -78,8 +78,8 @@ BEGIN
 		Id_Cliente				numeric(18,0),
 		Id_Visibilidad			numeric(18,0),
 		PRIMARY KEY(Id_Publicacion),
-		FOREIGN KEY(Id_Empresa) REFERENCES PMS.EMPRESAS(Cuit_Empresa),
-		FOREIGN KEY(Id_Cliente) REFERENCES PMS.CLIENTES(Dni_Cliente),
+		FOREIGN KEY(Id_Empresa) REFERENCES PMS.EMPRESAS(Id_Empresa),
+		FOREIGN KEY(Id_Cliente) REFERENCES PMS.CLIENTES(Id_Cliente),
 		FOREIGN KEY(Id_Visibilidad) REFERENCES PMS.VISIBILIDADES(Id_visibilidad)
 	);
 
