@@ -27,6 +27,7 @@ BEGIN
 
 	CREATE TABLE PMS.EMPRESAS
 	(	
+		Id_Empresa				numeric(18,0) IDENTITY(1,1) NOT NULL,
 		Cuit_Empresa			nvarchar(50),	
 		RazonSocial				nvarchar(255),		
 		FechaCreacion			datetime,
@@ -36,11 +37,12 @@ BEGIN
 		Piso					numeric(18,0),
 		Depto					nvarchar(50),
 		CodigoPostal			nvarchar(50),
-		PRIMARY KEY(Cuit_Empresa)
+		PRIMARY KEY(Id_Empresa)
 	);
 
 	CREATE TABLE PMS.CLIENTES
 	(
+		Id_Cliente				numeric(18,0) IDENTITY(1,1) NOT NULL,
 		Dni_Cliente				numeric(18,0),
 		Apellido				nvarchar(255),
 		Nombre					nvarchar(255),
@@ -51,7 +53,7 @@ BEGIN
 		Piso					numeric(18,0),
 		Depto					nvarchar(50),
 		Cod_Postal				nvarchar(50),
-		PRIMARY KEY(Dni_Cliente)
+		PRIMARY KEY(Id_Cliente)
 	);
 
 	CREATE TABLE PMS.VISIBILIDADES
@@ -81,6 +83,13 @@ BEGIN
 		FOREIGN KEY(Id_Visibilidad) REFERENCES PMS.VISIBILIDADES(Id_visibilidad)
 	);
 
+	CREATE TABLE PMS.PUBLICACION_ESTADOS
+	(
+		Id_Estado				numeric(18,0) IDENTITY(1,1) NOT NULL,
+		Estado					nvarchar(255),
+		PRIMARY KEY(Id_Estado)					
+	);
+
 	CREATE TABLE PMS.OFERTAS
 	(
 		Id_Oferta				numeric(18,0) IDENTITY(1,1) NOT NULL,
@@ -90,7 +99,7 @@ BEGIN
 		Id_Cliente				numeric(18,0),
 		PRIMARY KEY(Id_Oferta),
 		FOREIGN KEY(Id_publicacion) REFERENCES PMS.PUBLICACIONES(Id_Publicacion),
-		FOREIGN KEY(Id_Cliente) REFERENCES PMS.CLIENTES(Dni_Cliente)
+		FOREIGN KEY(Id_Cliente) REFERENCES PMS.CLIENTES(Id_Cliente)
 	);
 	
 
@@ -99,10 +108,10 @@ BEGIN
 		Id_Compras				numeric(18,0) IDENTITY(1,1) NOT NULL,
 		Cantidad				numeric(18,0),
 		Fecha					datetime,
-		Id_oferta				numeric(18,0),
-		Id_publicacion			numeric(18,0),
+		Id_Cliente_Comprador	numeric(18,0),
+		Id_Publicacion			numeric(18,0),
 		PRIMARY KEY(Id_Compras),
-		FOREIGN KEY(Id_Oferta) REFERENCES PMS.OFERTAS(Id_oferta),
+		FOREIGN KEY(Id_Cliente_Comprador) REFERENCES PMS.CLIENTES(Id_Cliente),
 		FOREIGN KEY(Id_Publicacion) REFERENCES PMS.PUBLICACIONES(Id_Publicacion),
 	);
 
@@ -143,20 +152,39 @@ BEGIN
 		PRIMARY KEY(Id_Calificacion)
 	);
 
+	CREATE TABLE PMS.USUARIOS 
+	(
+		Id_Usuario				numeric(18,0) IDENTITY(1,1) NOT NULL,
+		User_Nombre				nvarchar(255),
+		User_Password			binary,
+		Id_Rol					numeric(18,0),
+		Id_Cliente				numeric(11,0),
+		Id_Empresa				numeric(11,0),
+		PRIMARY KEY(Id_Usuario)
+	);
+
+	CREATE TABLE PMS.ROLES
+	(
+		Id_Rol						numeric(18,0) IDENTITY(1,1) NOT NULL,
+		Nombre						nvarchar(255),
+		PRIMARY KEY(Id_Rol)
+	);
+
 
 	CREATE TABLE PMS.FUNCIONALIDADES
 	(
-	Id_Funcionalidad			numeric(18,0),
-	Nombre						nvarchar(255),
-	PRIMARY KEY(Id_Funcionalidad)
+		Id_Funcionalidad			numeric(18,0) IDENTITY(1,1) NOT NULL,
+		Nombre						nvarchar(255),
+		PRIMARY KEY(Id_Funcionalidad)
 	);
 
 
 	CREATE TABLE PMS.FUNCIONALIDES_ROLES
 	(
-	Id_Funcionalidad			numeric(18,0),
-	Id_Rol						numeric(18,0),
-	PRIMARY KEY(Id_Funcionalidad,Id_Rol)
+		Id_Funcionalidad			numeric(18,0) IDENTITY(1,1) NOT NULL,
+		Id_Rol						numeric(18,0),
+		PRIMARY KEY(Id_Funcionalidad),
+		FOREIGN KEY(Id_Rol) REFERENCES PMS.ROLES(Id_Rol)
 	);
 
 	INSERT INTO PMS.EMPRESAS 
