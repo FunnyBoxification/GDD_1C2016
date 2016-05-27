@@ -230,6 +230,22 @@ BEGIN
 		   Publ_Cli_Depto,		
 		   Publ_Cli_Cod_Postal
 	FROM gd_esquema.Maestra
+	WHERE Publ_Cli_Dni is not null
+	
+	INSERT INTO PMS.CLIENTES
+	SELECT DISTINCT 	
+		   Cli_Dni,	
+		   Cli_Apeliido,	
+		   Cli_Nombre,
+		   Cli_Fecha_Nac,
+		   Cli_Mail,		
+		   Cli_Dom_Calle,	
+		   Cli_Nro_Calle,	
+		   Cli_Piso,		
+		   Cli_Depto,		
+		   Cli_Cod_Postal
+	FROM gd_esquema.Maestra
+	where Cli_dni not in (select Dni_Cliente from PMS.CLIENTES)
 	WHERE Publ_Cli_Dni is not null;
 
 	INSERT INTO PMS.USUARIOS (Id_Usuario) SELECT Id_Empresa FROM PMS.EMPRESAS;
