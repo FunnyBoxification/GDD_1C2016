@@ -245,68 +245,71 @@ BEGIN
 	FROM gd_esquema.Maestra 
 	WHERE Publicacion_Visibilidad_Cod IS NOT NULL;
 
-	--INSERT INTO PMS.PUBLICACIONES
-	--SELECT DISTINCT
-	--		Publicacion_Cod,	
-	--		Publicacion_Descripcion,		
-	--		Publicacion_Stock,			
-	--		Publicacion_Fecha,			
-	--		Publicacion_Fecha_Venc,
-	--		Publicacion_Precio,			
-	--		Publicacion_Tipo,			
-	--		Publ_Empresa_Cuit,		
-	--		Publ_Cli_Dni,		
-	--		Publicacion_Visibilidad_Cod
-	--FROM gd_esquema.Maestra WHERE Publicacion_Cod IS NOT NULL;
+	insert into pms.publicaciones
+	select distinct
+			publicacion_cod,	
+			publicacion_descripcion,		
+			publicacion_stock,			
+			publicacion_fecha,			
+			publicacion_fecha_venc,
+			publicacion_precio,			
+			publicacion_tipo,			
+			(Select Id_Cliente
+			   From PMS.CLIENTES
+			  Where Id_Cliente = publ_cli_dni),		
+			publicacion_visibilidad_cod
+	from gd_esquema.maestra where publicacion_cod is not null;
 
-	--INSERT INTO PMS.OFERTAS	
-	--SELECT DISTINCT
-	--	Oferta_Fecha,
-	--	Oferta_Monto,
-	--	Publicacion_Cod,
-	--	Cli_Dni
-	--FROM gd_esquema.Maestra WHERE Oferta_Monto IS NOT NULL;
+	INSERT INTO PMS.OFERTAS	
+	SELECT DISTINCT
+		Oferta_Fecha,
+		Oferta_Monto,
+		Publicacion_Cod,
+		(Select Id_Usuario
+			   From PMS.USUARIOS
+			  Where Id_Usuario = Cli_Dni),		
+	FROM gd_esquema.Maestra WHERE Oferta_Monto IS NOT NULL;
 
-	--INSERT INTO PMS.COMPRAS
-	--SELECT DISTINCT
-	--	Compra_Cantidad,			
-	--	Compra_Fecha,			
-	--	(SELECT Id_Oferta
-	--	 FROM OFERTAS
-	--	 WHERE	Publicacion_Cod = Id_Publicacion
-	--		And	Oferta_Monto = Monto
-	--		And	Oferta_Fecha = Fecha),	--Monto tiene que ser unico.	
-	--	Publicacion_Cod
-	--FROM gd_esquema.Maestra WHERE Compra_Cantidad IS NOT NULL;
+	INSERT INTO PMS.COMPRAS
+	SELECT DISTINCT
+		Compra_Cantidad,			
+		Compra_Fecha,			
+		(SELECT Id_Oferta
+		 FROM OFERTAS
+		 WHERE	Publicacion_Cod = Id_Publicacion
+			And	Oferta_Monto = Monto
+			And	Oferta_Fecha = Fecha),	--Monto tiene que ser unico.	
+		Publicacion_Cod
+	FROM gd_esquema.Maestra WHERE Compra_Cantidad IS NOT NULL;
 
-	--INSERT INTO PMS.FORMASDEPAGO	
-	--SELECT DISTINCT
-	--	Forma_Pago_Desc
-	--FROM gd_esquema.Maestra WHERE Forma_Pago_Desc IS NOT NULL;
+	INSERT INTO PMS.FORMASDEPAGO	
+	SELECT DISTINCT
+		Forma_Pago_Desc
+	FROM gd_esquema.Maestra WHERE Forma_Pago_Desc IS NOT NULL;
 
-	--INSERT INTO PMS.FACTURAS
-	--SELECT DISTINCT			
-	--	Factura_Nro,		
-	--	Factura_Fecha,			
-	--	Factura_Total,			
-	--	(SELECT Id_FormaPago
-	--	   FROM	FORMASDEPAGO
-	--	  WHERE	Forma_Pago_Desc = Descripcion)	
-	--FROM gd_esquema.Maestra WHERE Forma_Pago_Desc IS NOT NULL;
+	INSERT INTO PMS.FACTURAS
+	SELECT DISTINCT			
+		Factura_Nro,		
+		Factura_Fecha,			
+		Factura_Total,			
+		(SELECT Id_FormaPago
+		   FROM	FORMASDEPAGO
+		  WHERE	Forma_Pago_Desc = Descripcion)	
+	FROM gd_esquema.Maestra WHERE Forma_Pago_Desc IS NOT NULL;
 
-	--INSERT INTO PMS.ITEMFACTURA
-	--SELECT DISTINCT 
-	--	Item_Factura_Monto,			
-	--	Item_Factura_Cantidad,		
-	--	Factura_Nro	
-	--FROM gd_esquema.Maestra WHERE Item_Factura_Monto IS NOT NULL;
+	INSERT INTO PMS.ITEMFACTURA
+	SELECT DISTINCT 
+		Item_Factura_Monto,			
+		Item_Factura_Cantidad,		
+		Factura_Nro	
+	FROM gd_esquema.Maestra WHERE Item_Factura_Monto IS NOT NULL;
 
-	--INSERT INTO PMS.CALIFICACIONES
-	--SELECT DISTINCT
-	--	Calificacion_Codigo,
-	--	Calificacion_Cant_Estrellas,
-	--	Calificacion_Descripcion
-	--FROM gd_esquema.Maestra WHERE Calificacion_Codigo IS NOT NULL;
+	INSERT INTO PMS.CALIFICACIONES
+	SELECT DISTINCT
+		Calificacion_Codigo,
+		Calificacion_Cant_Estrellas,
+		Calificacion_Descripcion
+	FROM gd_esquema.Maestra WHERE Calificacion_Codigo IS NOT NULL;
 	
 		
 
