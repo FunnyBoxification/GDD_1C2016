@@ -245,7 +245,7 @@ BEGIN
 		   Cli_Depto,		
 		   Cli_Cod_Postal
 	FROM gd_esquema.Maestra
-	WHERE Cli_Dni not in (select Dni_Cliente from PMS.CLIENTES);
+	WHERE Cli_Dni not in (select Dni_Cliente from PMS.CLIENTES) AND Cli_Dni IS NOT NULL;
 
 	INSERT INTO PMS.USUARIOS (Id_Usuario) SELECT Id_Empresa FROM PMS.EMPRESAS;
 	
