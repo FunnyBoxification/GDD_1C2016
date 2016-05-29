@@ -66,7 +66,7 @@ BEGIN
 
 	CREATE TABLE PMS.VISIBILIDADES
 	(
-		Id_Visibilidad			numeric(18,0) IDENTITY(1,1) NOT NULL,
+		Id_Visibilidad			numeric(18,0),
 		Descripcion				nvarchar(255),
 		Precio					numeric(18,2),
 		Porcentaje				numeric(18,2),
@@ -75,7 +75,7 @@ BEGIN
 
 	CREATE TABLE PMS.PUBLICACIONES
 	(
-		Id_Publicacion			numeric(18,0) IDENTITY(1,1) NOT NULL,
+		Id_Publicacion			numeric(18,0), -- RECORDAR, Debo insertas ids ya generadas, pero el tp dice que las ids de publicaciones deben ser autogeneradas y consecutivas, por ende va a haber que setearla a mano
 		Descripcion				nvarchar(255),
 		Stock					numeric(18,0),
 		Fecha					datetime,
@@ -170,7 +170,7 @@ BEGIN
 		PRIMARY KEY(Id_Rol)
 	);
 
-	CREATE TABLE ROLES_USUARIOS 
+	CREATE TABLE PMS.ROLES_USUARIOS 
 	(
 		Id_Rol						numeric(18,0),
 		Id_Usuario					numeric(18,0),
@@ -245,8 +245,7 @@ BEGIN
 		   Cli_Depto,		
 		   Cli_Cod_Postal
 	FROM gd_esquema.Maestra
-	where Cli_dni not in (select Dni_Cliente from PMS.CLIENTES)
-	WHERE Publ_Cli_Dni is not null;
+	WHERE Cli_Dni not in (select Dni_Cliente from PMS.CLIENTES);
 
 	INSERT INTO PMS.USUARIOS (Id_Usuario) SELECT Id_Empresa FROM PMS.EMPRESAS;
 	
@@ -261,29 +260,29 @@ BEGIN
 	FROM gd_esquema.Maestra 
 	WHERE Publicacion_Visibilidad_Cod IS NOT NULL;
 
-	insert into pms.publicaciones
-	select distinct
-			publicacion_cod,	
-			publicacion_descripcion,		
-			publicacion_stock,			
-			publicacion_fecha,			
-			publicacion_fecha_venc,
-			publicacion_precio,			
-			publicacion_tipo,			
-			(Select Id_Cliente
-			   From PMS.CLIENTES
-			  Where Id_Cliente = publ_cli_dni),		
-			publicacion_visibilidad_cod
-	from gd_esquema.maestra where publicacion_cod is not null;
+	INSERT INTO PMS.PUBLICACIONES
+	SELECT DISTINCT
+			Publicacion_Cod,	
+			Publicacion_Descripcion,		
+			Publicacion_Stock,			
+			Publicacion_Fecha,			
+			Publicacion_Fecha_Venc,
+			Publicacion_Precio,			
+			Publicacion_Tipo,			
+			(SELECT Id_Cliente
+			   FROM PMS.CLIENTES
+			  WHERE Dni_Cliente = Publ_Cli_Dni),		
+			Publicacion_Visibilidad_Cod
+	FROM gd_esquema.Maestra WHERE Publicacion_Cod is not null;
 
 	INSERT INTO PMS.OFERTAS	
 	SELECT DISTINCT
 		Oferta_Fecha,
 		Oferta_Monto,
 		Publicacion_Cod,
-		(Select Id_Usuario
+		(SELECT Id_Usuario
 			   From PMS.USUARIOS
-			  Where Id_Usuario = Cli_Dni),		
+			  WHERE Id_Usuario = Cli_Dni)		
 	FROM gd_esquema.Maestra WHERE Oferta_Monto IS NOT NULL;
 
 	INSERT INTO PMS.COMPRAS
@@ -326,6 +325,17 @@ BEGIN
 		Calificacion_Cant_Estrellas,
 		Calificacion_Descripcion
 	FROM gd_esquema.Maestra WHERE Calificacion_Codigo IS NOT NULL;
+
+	-- Asignacion de roles
+	INSERT INTO PMS.ROLES (Nombre, Habilitado) VALUES
+		('Administrador',1),('Cliente',1), ('Empresa',1);
+
+	INSERT INTO PMS.ROLES_USUARIOS 
+	SELECT 2,Id_Empresa FROM PMS.EMPRESAS;
+
+	INSERT INTO PMS.ROLES_USUARIOS
+	SELECT 3, Id_Cliente FROM PMS.CLIENTES;
+
 	
 		
 
