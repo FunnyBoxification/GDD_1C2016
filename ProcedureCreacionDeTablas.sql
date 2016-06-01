@@ -261,17 +261,18 @@ BEGIN
 	WHERE Publicacion_Visibilidad_Cod IS NOT NULL;
 
 	INSERT INTO PMS.PUBLICACIONES
-	SELECT DISTINCT
-			Publicacion_Cod,	
-			Publicacion_Descripcion,		
-			Publicacion_Stock,			
-			Publicacion_Fecha,			
-			Publicacion_Fecha_Venc,
-			Publicacion_Precio,			
-			Publicacion_Tipo,			
-			(SELECT Id_Cliente
-			   FROM PMS.CLIENTES
-			  WHERE Dni_Cliente = Publ_Cli_Dni),		
+	SELECT DISTINCT				
+			Publicacion_Cod,									numeric(18,0),
+			Publicacion_Descripcion,		                    nvarchar(255),
+			Publicacion_Stock,			                        numeric(18,0),
+			Publicacion_Fecha,			                        datetime,datet
+			Publicacion_Fecha_Venc,                             datetime,datet
+			Publicacion_Precio,			                        numeric(18,2),
+			Publicacion_Tipo,			                        nvarchar(255),
+			(SELECT Id_usuario                                  numeric(18,0),
+			   FROM PMS.USUARIOS, PMS.CLIENTES, PMS.EMPRESAS    numeric(18,0),
+			  WHERE Dni_Cliente = Publ_Cli_Dni
+				 OR Cuit_Empresa = Publ_Empresa_Cuit),		
 			Publicacion_Visibilidad_Cod
 	FROM gd_esquema.Maestra WHERE Publicacion_Cod is not null;
 
