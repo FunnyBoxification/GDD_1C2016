@@ -269,7 +269,7 @@ BEGIN
 			Publicacion_Fecha_Venc,                             
 			Publicacion_Precio,			                        
 			Publicacion_Tipo,			                        
-			(SELECT Id_usuario                                  
+			(SELECT top 1 Id_usuario                                  
 			   FROM PMS.USUARIOS, PMS.CLIENTES, PMS.EMPRESAS    
 			  WHERE Dni_Cliente = Publ_Cli_Dni
 				 OR Cuit_Empresa = Publ_Empresa_Cuit),		
