@@ -1,0 +1,84 @@
+CREATE TYPE pms.Funcionalidades
+AS TABLE
+(
+  funcionalidad_id INT
+);
+GO
+
+CREATE  PROCEDURE pms.upd_Rol
+       @id numeric,
+	   @nombre nvarchar(255),
+	   @func_del pms.Funcionalidades READONLY,
+	   @func_add pms.Funcionalidades READONLY
+	   
+		
+                    
+AS 
+BEGIN 
+     SET NOCOUNT ON 
+
+UPDATE [pms].[ROLES]
+   SET nombre = @nombre
+ WHERE Id_Rol = @id;
+ 
+
+ DELETE FROM [pms].[FUNCIONALIDES_ROLES]
+      WHERE (Id_Funcionalidad in (select * from @func_del));
+
+DECLARE @id_func INT
+DECLARE db_cursor CURSOR FOR  
+SELECT * 
+FROM @func_add 
+
+OPEN db_cursor   
+FETCH NEXT FROM db_cursor INTO @id_func   
+
+WHILE @@FETCH_STATUS = 0
+BEGIN
+
+ INSERT INTO [pms].[FUNCIONALIDES_ROLES]
+           ([Id_Rol],Id_Funcionalidad)
+     VALUES
+           (@id,@id_func);
+FETCH NEXT FROM db_cursor INTO @id_func
+END
+
+END 
+GO
+
+CREATE PROCEDURE pms.insert_Ro
+       @nombre nvarchar(255)
+                    
+AS 
+BEGIN 
+     SET NOCOUNT ON 
+
+     INSERT INTO [pms].[ROLES]
+          ( 
+            nombre, 
+			habilitado		
+          ) 
+     VALUES 
+          ( 
+            @nombre,
+			1)
+			
+END 
+GO
+CREATE  PROCEDURE pms.del_Rol
+       @id numeric 
+                    
+AS 
+BEGIN 
+     SET NOCOUNT ON 
+
+UPDATE [pms].[ROLES]
+   SET [Habilitado] = 0
+ WHERE Id_Rol = @id;
+ 
+ DELETE FROM [pms].[ROLES_USUARIOS]
+      where Id_Rol=@id;
+
+
+END
+GO
