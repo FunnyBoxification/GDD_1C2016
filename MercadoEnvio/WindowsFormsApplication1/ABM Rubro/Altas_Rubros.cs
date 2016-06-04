@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace WindowsFormsApplication1.ABM_Rubro
 {
-    public partial class Form1 : Form
+    public partial class Altas_Rubros : Form
     {
-        public Form1()
+        public Altas_Rubros()
         {
             InitializeComponent();
+        }
+
+        private void btnGrabar_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 }
