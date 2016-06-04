@@ -269,10 +269,10 @@ BEGIN
 			Publicacion_Fecha_Venc,                             
 			Publicacion_Precio,			                        
 			Publicacion_Tipo,			                        
-			(SELECT top 1 Id_usuario                                  
-			   FROM PMS.USUARIOS, PMS.CLIENTES, PMS.EMPRESAS    
-			  WHERE Dni_Cliente = Publ_Cli_Dni
-				 OR Cuit_Empresa = Publ_Empresa_Cuit),		
+			(SELECT top 1 Id_Usuario                                  
+			   FROM PMS.USUARIOS Usuarios   
+			  WHERE Id_Usuario IN (SELECT Id_Cliente FROM PMS.CLIENTES WHERE Dni_Cliente = Publ_Cli_Dni)
+				OR Id_Usuario IN (SELECT Id_Empresa FROM PMS.EMPRESAS WHERE Cuit_Empresa = Publ_Empresa_Cuit)),		
 			Publicacion_Visibilidad_Cod
 	FROM gd_esquema.Maestra WHERE Publicacion_Cod is not null;
 
