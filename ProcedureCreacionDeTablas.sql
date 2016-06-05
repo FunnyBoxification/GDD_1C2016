@@ -27,7 +27,7 @@ BEGIN
 
 	CREATE TABLE PMS.USUARIOS 
 	(
-		Id_Usuario				numeric(18,0),
+		Id_Usuario				numeric(18,0)IDENTITY(1,1) NOT NULL,
 		User_Nombre				nvarchar(255),
 		User_Password			binary,
 		PRIMARY KEY(Id_Usuario)
@@ -35,7 +35,7 @@ BEGIN
 
 	CREATE TABLE PMS.EMPRESAS
 	(	
-		Id_Empresa				numeric(18,0) IDENTITY(1,1) NOT NULL,
+		Id_Empresa				numeric(18,0) NOT NULL,
 		Cuit_Empresa			nvarchar(50) UNIQUE,	
 		RazonSocial				nvarchar(255),		
 		FechaCreacion			datetime,
@@ -50,7 +50,7 @@ BEGIN
 
 	CREATE TABLE PMS.CLIENTES
 	(
-		Id_Cliente				numeric(18,0) IDENTITY(1,1) NOT NULL,
+		Id_Cliente				numeric(18,0) NOT NULL,
 		Dni_Cliente				numeric(18,0) UNIQUE,
 		Apellido				nvarchar(255),
 		Nombre					nvarchar(255),
@@ -98,7 +98,7 @@ BEGIN
 
 	CREATE TABLE PMS.COMPRAS
 	(
-		Id_Compra				numeric(18,0) IDENTITY(1,1) NOT NULL,
+		Id_Compra				numeric(18,0) NOT NULL,
 		Cantidad				numeric(18,0),
 		Monto					numeric(18,2),
 		Fecha					datetime,
@@ -112,7 +112,7 @@ BEGIN
 
 	CREATE TABLE PMS.OFERTAS
 	(
-		Id_Oferta				numeric(18,0) IDENTITY(1,1) NOT NULL,
+		Id_Oferta				numeric(18,0) NOT NULL,
 		Fecha					datetime,
 		Monto					numeric(18,2),
 		Cantidad				numeric(18,0),
@@ -197,8 +197,8 @@ BEGIN
 		FOREIGN KEY(Id_Rol) REFERENCES PMS.ROLES(Id_Rol)
 	);
 
-	INSERT INTO PMS.EMPRESAS 
-	SELECT DISTINCT
+	
+	SELECT DISTINCT			
 		   Publ_Empresa_Cuit,
 		   Publ_Empresa_Razon_Social,		   
 		   Publ_Empresa_Fecha_Creacion,	
@@ -208,16 +208,10 @@ BEGIN
 		   Publ_Empresa_Piso,
 		   Publ_Empresa_Depto,	
 		   Publ_Empresa_Cod_Postal
+	INTO #TempEmpresas
 	FROM gd_esquema.Maestra 
 	WHERE Publ_Empresa_Cuit IS NOT NULL 
-
-	DECLARE @CantidadEmpresas numeric(18,0);
-	SELECT @CantidadEmpresas = COUNT(*) FROM PMS.EMPRESAS;
-	SET @CantidadEmpresas = @CantidadEmpresas + 1;
-
-	DBCC CHECKIDENT('PMS.CLIENTES', RESEED, @CantidadEmpresas);
-
-	INSERT INTO PMS.CLIENTES
+	
 	SELECT DISTINCT 	
 		   Publ_Cli_Dni,	
 		   Publ_Cli_Apeliido,	
@@ -229,10 +223,11 @@ BEGIN
 		   Publ_Cli_Piso,		
 		   Publ_Cli_Depto,		
 		   Publ_Cli_Cod_Postal
+	INTO #TempClientes
 	FROM gd_esquema.Maestra
 	WHERE Publ_Cli_Dni is not null
 	
-	INSERT INTO PMS.CLIENTES
+	INSERT INTO #TempClientes
 	SELECT DISTINCT 	
 		   Cli_Dni,	
 		   Cli_Apeliido,	
@@ -246,10 +241,41 @@ BEGIN
 		   Cli_Cod_Postal
 	FROM gd_esquema.Maestra
 	WHERE Cli_Dni not in (select Dni_Cliente from PMS.CLIENTES) AND Cli_Dni IS NOT NULL;
-
-	INSERT INTO PMS.USUARIOS (Id_Usuario) SELECT Id_Empresa FROM PMS.EMPRESAS;
 	
-	INSERT INTO PMS.USUARIOS (Id_Usuario) SELECT Id_Cliente FROM PMS.CLIENTES;
+	
+	INSERT INTO PMS.EMPRESAS 
+	SELECT
+		   rownum,
+		   *
+	FROM #TempEmpresa
+	WHERE Publ_Empresa_Cuit IS NOT NULL 
+	
+
+
+	DECLARE @CantidadEmpresas numeric(18,0);
+	SELECT @CantidadEmpresas = COUNT(*) FROM #TempEmpresas;
+	
+
+	--DBCC CHECKIDENT('PMS.CLIENTES', RESEED, @CantidadEmpresas);
+
+	INSERT INTO PMS.CLIENTES
+	SELECT DISTINCT 	
+		   rownum + @CantidadEmpresas,
+		   *
+	FROM gd_esquema.Maestra
+	WHERE Publ_Cli_Dni is not null
+	
+	
+
+	INSERT INTO PMS.USUARIOS 
+	SELECT RazonSocial 
+	FROM PMS.EMPRESAS
+	ORDER BY Id_Empresa;
+	
+	INSERT INTO PMS.USUARIOS 
+	SELECT (Nombre + Apellido) 
+	FROM PMS.CLIENTES
+	ORDER BY Id_Clientes;
 
 	INSERT INTO PMS.VISIBILIDADES
 	SELECT	DISTINCT
