@@ -245,9 +245,17 @@ BEGIN
 	
 	INSERT INTO PMS.EMPRESAS 
 	SELECT
-		   rownum,
-		   *
-	FROM #TempEmpresa
+		   ROW_NUMBER() OVER (ORDER BY (SELECT NULL)),
+		   Publ_Empresa_Cuit,
+		   Publ_Empresa_Razon_Social,
+		   Publ_Empresa_Fecha_Creacion,
+		   Publ_Empresa_Mail,
+		   Publ_Empresa_Dom_Calle,
+		   Publ_Empresa_Nro_Calle,
+		   Publ_Empresa_Piso,
+		   Publ_Empresa_Depto,
+		   Publ_Empresa_Cod_Postal
+	FROM #TempEmpresas
 	WHERE Publ_Empresa_Cuit IS NOT NULL 
 	
 
@@ -260,7 +268,7 @@ BEGIN
 
 	INSERT INTO PMS.CLIENTES
 	SELECT DISTINCT 	
-		   rownum + @CantidadEmpresas,
+		   ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) + @CantidadEmpresas,
 		   *
 	FROM gd_esquema.Maestra
 	WHERE Publ_Cli_Dni is not null
@@ -275,7 +283,7 @@ BEGIN
 	INSERT INTO PMS.USUARIOS 
 	SELECT (Nombre + Apellido) 
 	FROM PMS.CLIENTES
-	ORDER BY Id_Clientes;
+	ORDER BY Id_Cliente;
 
 	INSERT INTO PMS.VISIBILIDADES
 	SELECT	DISTINCT
