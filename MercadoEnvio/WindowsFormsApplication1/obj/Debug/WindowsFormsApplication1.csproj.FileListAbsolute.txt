@@ -10,3 +10,14 @@ C:\Users\Juli\Desktop\MercadoEnvio\WindowsFormsApplication1\obj\Debug\WindowsFor
 C:\Users\Pablo\Documents\SQL Server Management Studio\GDD_1C2016\MercadoEnvio\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe.config
 C:\Users\Pablo\Documents\SQL Server Management Studio\GDD_1C2016\MercadoEnvio\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
 C:\Users\Pablo\Documents\SQL Server Management Studio\GDD_1C2016\MercadoEnvio\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
+C:\Users\federico\Documents\GDD_1C2016\MercadoEnvio\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe.config
+C:\Users\federico\Documents\GDD_1C2016\MercadoEnvio\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
+C:\Users\federico\Documents\GDD_1C2016\MercadoEnvio\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
+C:\Users\federico\Documents\GDD_1C2016\MercadoEnvio\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csprojResolveAssemblyReference.cache
+C:\Users\federico\Documents\GDD_1C2016\MercadoEnvio\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.ABM_Visibilidad.VisibilidadesForm.resources
+C:\Users\federico\Documents\GDD_1C2016\MercadoEnvio\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
+C:\Users\federico\Documents\GDD_1C2016\MercadoEnvio\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csproj.GenerateResource.Cache
+C:\Users\federico\Documents\GDD_1C2016\MercadoEnvio\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe
+C:\Users\federico\Documents\GDD_1C2016\MercadoEnvio\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.pdb
+C:\Users\federico\Documents\GDD_1C2016\MercadoEnvio\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.LoginForm.resources
+C:\Users\federico\Documents\GDD_1C2016\MercadoEnvio\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.SelectRolForm.resources
