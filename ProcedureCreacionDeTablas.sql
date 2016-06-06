@@ -30,6 +30,7 @@ BEGIN
 		Id_Usuario				numeric(18,0)IDENTITY(1,1) NOT NULL,
 		User_Nombre				nvarchar(255),
 		User_Password			binary,
+		Habilitado				numeric(18,0)
 		PRIMARY KEY(Id_Usuario)
 	);
 
@@ -98,7 +99,7 @@ BEGIN
 
 	CREATE TABLE PMS.COMPRAS
 	(
-		Id_Compra				numeric(18,0) NOT NULL,
+		Id_Compra				numeric(18,0) IDENTITY(1,1) NOT NULL,
 		Cantidad				numeric(18,0),
 		Monto					numeric(18,2),
 		Fecha					datetime,
@@ -112,10 +113,9 @@ BEGIN
 
 	CREATE TABLE PMS.OFERTAS
 	(
-		Id_Oferta				numeric(18,0) NOT NULL,
+		Id_Oferta				numeric(18,0) IDENTITY(1,1) NOT NULL,
 		Fecha					datetime,
 		Monto					numeric(18,2),
-		Cantidad				numeric(18,0),
 		Id_Publicacion			numeric(18,0),
 		Id_Cliente				numeric(18,0),
 		PRIMARY KEY(Id_Oferta),
@@ -240,7 +240,7 @@ BEGIN
 		   Cli_Depto,		
 		   Cli_Cod_Postal
 	FROM gd_esquema.Maestra
-	WHERE Cli_Dni not in (select Dni_Cliente from PMS.CLIENTES) AND Cli_Dni IS NOT NULL;
+	WHERE Cli_Dni not in (select Cli_Dni from #TempClientes) AND Cli_Dni IS NOT NULL;
 	
 	
 	INSERT INTO PMS.EMPRESAS 
@@ -256,7 +256,7 @@ BEGIN
 		   Publ_Empresa_Depto,
 		   Publ_Empresa_Cod_Postal
 	FROM #TempEmpresas
-	WHERE Publ_Empresa_Cuit IS NOT NULL 
+	WHERE Publ_Empresa_Cuit IS NOT NULL;
 	
 
 
@@ -270,18 +270,18 @@ BEGIN
 	SELECT DISTINCT 	
 		   ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) + @CantidadEmpresas,
 		   *
-	FROM gd_esquema.Maestra
-	WHERE Publ_Cli_Dni is not null
+	FROM #TempClientes
+	WHERE Publ_Cli_Dni is not null;
 	
 	
 
-	INSERT INTO PMS.USUARIOS 
-	SELECT RazonSocial 
+	INSERT INTO PMS.USUARIOS (User_Nombre, Habilitado)
+	SELECT RazonSocial, 1
 	FROM PMS.EMPRESAS
 	ORDER BY Id_Empresa;
 	
-	INSERT INTO PMS.USUARIOS 
-	SELECT (Nombre + Apellido) 
+	INSERT INTO PMS.USUARIOS (User_Nombre, Habilitado)
+	SELECT (Nombre + Apellido), 1 
 	FROM PMS.CLIENTES
 	ORDER BY Id_Cliente;
 
@@ -322,7 +322,8 @@ BEGIN
 
 	INSERT INTO PMS.COMPRAS
 	SELECT DISTINCT
-		Compra_Cantidad,			
+		Compra_Cantidad,
+		Publicacion_Precio,			
 		Compra_Fecha,			
 		(SELECT Id_Oferta
 		 FROM OFERTAS
@@ -351,7 +352,8 @@ BEGIN
 	SELECT DISTINCT 
 		Item_Factura_Monto,			
 		Item_Factura_Cantidad,		
-		Factura_Nro	
+		Factura_Nro,
+		Publicacion_Cod	
 	FROM gd_esquema.Maestra WHERE Item_Factura_Monto IS NOT NULL;
 
 	INSERT INTO PMS.CALIFICACIONES
