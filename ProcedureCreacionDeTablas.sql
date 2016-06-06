@@ -73,6 +73,28 @@ BEGIN
 		Porcentaje				numeric(18,2),
 		PRIMARY KEY(Id_Visibilidad)
 	);
+	
+	CREATE TABLE PMS.RUBROS
+	(
+		Id_Rubro						numeric(18,0) IDENTITY(1,1) NOT NULL,
+		Descripcion						numeric(18,0),
+		PRIMARY KEY(Id_Rubro)	
+	);
+	
+	CREATE TABLE PMS.TIPO_PUBLICACION
+	(
+		Id_Tipo						numeric(2,0) IDENTITY(1,1) NOT NULL,
+		Descripcion					nvarchar(255),
+		PRIMARY KEY(Id_Tipo)
+	);
+	
+		CREATE TABLE PMS.PUBLICACION_ESTADOS
+	(
+		Id_Estado				numeric(18,0) IDENTITY(1,1) NOT NULL,
+		Descripcion				nvarchar(255),
+		PRIMARY KEY(Id_Estado)					
+	);
+
 
 	CREATE TABLE PMS.PUBLICACIONES
 	(
@@ -85,17 +107,18 @@ BEGIN
 		Tipo					nvarchar(255),
 		Id_Usuario				numeric(18,0),
 		Id_Visibilidad			numeric(18,0),
+		Id_Tipo					numeric(18,0),
+		Id_Rubro				numeric(18,0),
+		Id_Estado				numeric(18,0),
 		PRIMARY KEY(Id_Publicacion),
 		FOREIGN KEY(Id_Visibilidad) REFERENCES PMS.VISIBILIDADES(Id_visibilidad),
-		FOREIGN KEY(Id_Usuario) REFERENCES PMS.USUARIOS(Id_Usuario)
+		FOREIGN KEY(Id_Usuario) 	REFERENCES PMS.USUARIOS(Id_Usuario),
+		FOREIGN KEY(Id_Rubro) 		REFERENCES PMS.USUARIOS(Id_Rubro),
+		FOREIGN KEY(Id_Tipo) 		REFERENCES PMS.USUARIOS(Id_Tipo),
+		FOREIGN KEY(Id_Tipo) 		REFERENCES PMS.USUARIOS(Id_Estado),
+		
 	);
 
-	CREATE TABLE PMS.PUBLICACION_ESTADOS
-	(
-		Id_Estado				numeric(18,0) IDENTITY(1,1) NOT NULL,
-		Estado					nvarchar(255),
-		PRIMARY KEY(Id_Estado)					
-	);
 
 	CREATE TABLE PMS.COMPRAS
 	(
@@ -196,7 +219,16 @@ BEGIN
 		PRIMARY KEY(Id_Funcionalidad),
 		FOREIGN KEY(Id_Rol) REFERENCES PMS.ROLES(Id_Rol)
 	);
-
+	
+	CREATE TABLE PMS.FUNCIONALIDES_ROLES
+	(
+		Id_Funcionalidad			numeric(18,0) IDENTITY(1,1) NOT NULL,
+		Id_Rol						numeric(18,0),
+		PRIMARY KEY(Id_Funcionalidad),
+		FOREIGN KEY(Id_Rol) REFERENCES PMS.ROLES(Id_Rol)
+	);
+	
+	
 	
 	SELECT DISTINCT			
 		   Publ_Empresa_Cuit,
@@ -293,6 +325,25 @@ BEGIN
 			Publicacion_Visibilidad_Porcentaje
 	FROM gd_esquema.Maestra 
 	WHERE Publicacion_Visibilidad_Cod IS NOT NULL;
+	
+	INSERT INTO PMS.RUBROS
+	SELECT	DISTINCT
+			Publicacion_Rubro_Descripcion
+	FROM gd_esquema.Maestra 
+	WHERE Publicacion_Rubro_Descripcion IS NOT NULL;
+	
+	INSERT INTO PMS.ESTADOS
+	SELECT	DISTINCT
+			Publicacion_Estado
+	FROM gd_esquema.Maestra 
+	WHERE Publicacion_Estado IS NOT NULL;
+	
+	INSERT INTO PMS.ESTADOS
+	SELECT	DISTINCT
+			Publicacion_Estado
+	FROM gd_esquema.Maestra 
+	WHERE Publicacion_Estado IS NOT NULL;
+	
 
 	INSERT INTO PMS.PUBLICACIONES
 	SELECT DISTINCT				
@@ -307,7 +358,19 @@ BEGIN
 			   FROM PMS.USUARIOS Usuarios   
 			  WHERE Id_Usuario IN (SELECT Id_Cliente FROM PMS.CLIENTES WHERE Dni_Cliente = Publ_Cli_Dni)
 				OR Id_Usuario IN (SELECT Id_Empresa FROM PMS.EMPRESAS WHERE Cuit_Empresa = Publ_Empresa_Cuit)),		
-			Publicacion_Visibilidad_Cod
+			Publicacion_Visibilidad_Cod,
+			(SELECT top 1 r.Id_Tipo
+			   FROM PMS.TIPOS t, gd_esquema.Maestra m
+			  WHERE t.Descripcion = m.Publicacion_Tipo
+			    AND m.Publicacion_Cod = Publicacion_Cod),
+			(SELECT top 1 r.Id_Rubro
+			   FROM PMS.RUBROS r, gd_esquema.Maestra m
+			  WHERE r.Descripcion = m.Publicacion_Rubro_Descripcion
+			    AND m.Publicacion_Cod = Publicacion_Cod),
+			(SELECT top 1 r.Id_Estado
+			   FROM PMS.ESTADOS e gd_esquema.Maestra m
+			  WHERE e.Descripcion = m.Publicacion_Estado
+			    AND m.Publicacion_Cod = Publicacion_Cod)			
 	FROM gd_esquema.Maestra WHERE Publicacion_Cod is not null;
 
 	INSERT INTO PMS.OFERTAS	
