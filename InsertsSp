@@ -1,0 +1,162 @@
+CREATE PROCEDURE pms.insert_Pub
+       @Id_Publicacion numeric(18,0)
+       ,@Descripcion nvarchar(255)
+           ,@Stock numeric(18,0)
+           ,@Fecha datetime
+           ,@FechaVencimiento datetime
+           ,@Precio numeric(18,2)
+           ,@Id_Usuario numeric(18,0)
+           ,@Id_Visibilidad numeric(18,0)
+           ,@Id_Tipo numeric(18,0)
+           ,@Id_Rubro numeric(18,0)
+           ,@Id_Estado numeric(18,0)
+	   
+                    
+AS 
+BEGIN 
+     SET NOCOUNT ON 
+
+INSERT INTO pms.PUBLICACIONES
+           (Descripcion
+           ,Stock
+           ,Fecha
+           ,FechaVencimiento
+           ,Precio
+           ,Tipo
+           ,Id_Usuario
+           ,Id_Visibilidad)
+     VALUES
+           (@Id_Publicacion 
+			,@Descripcion 
+			,@Stock 
+			,@Fecha 
+			,@FechaVencimiento 
+			,@Precio 
+			,@Id_Usuario 
+			,@Id_Visibilidad 
+			,@Id_Tipo 
+			,@Id_Rubro 
+			,@Id_Estado)
+END
+GO
+
+CREATE PROCEDURE pms.comprar
+			@Cantidad numeric(18,0)
+           ,@Monto numeric(18,2)
+           ,@Fecha datetime
+           ,@Id_Cliente_Comprador numeric(18,0)
+           ,@Id_Publicacion numeric(18,0)
+		   ,@Numero numeric(18,0)
+           ,@Total numeric(18,2)
+           ,@Id_FormaPago numeric(11,0)
+AS BEGIN
+if @Monto> (select stock from PUBLICACIONES where Id_Publicacion=@Id_Publicacion)
+begin
+;throw 999,'monto a comprar mayor a stock',1;
+end
+else if @Id_Cliente_Comprador!=(select Id_usuario from PUBLICACIONES where Id_Publicacion=@Id_Publicacion)
+begin
+; throw 999,'comprador no puede ser el vendedor',1;
+end
+else
+begin
+INSERT INTO pms.COMPRAS
+           (Cantidad
+           ,Monto
+           ,Fecha
+           ,Id_Cliente_Comprador
+           ,Id_Publicacion)
+     VALUES
+           (@Cantidad
+           ,@Monto
+           ,@Fecha
+           ,@Id_Cliente_Comprador
+           ,@Id_Publicacion);
+update PUBLICACIONES set Stock=Stock-@Monto where Id_Publicacion=@Id_Publicacion;
+/*EXECUTE pms.generar_Factura
+   */
+end
+end
+GO
+
+
+CREATE PROCEDURE pms.insert_Rub
+		@Descripcion nvarchar(30)
+
+AS BEGIN
+
+INSERT INTO pms.RUBROS
+           (Descripcion)
+     VALUES
+           (@Descripcion,
+           )
+
+end
+GO
+
+create procedure pms.ofertar
+			@Fecha datetime
+           ,@Monto numeric(18,2)
+           ,@Id_Publicacion numeric(18,0)
+           ,@Id_Cliente numeric(18,0)
+as begin
+if @monto<(select max(monto)from OFERTAS where Id_Publicacion=@Id_Publicacion)
+begin
+; throw 999,'monto menor',1;
+end
+else if @Id_Cliente!=(select Id_usuario from PUBLICACIONES where Id_Publicacion=@Id_Publicacion)
+begin
+; throw 999,'comprador no puede ser el vendedor',1;
+end
+else
+begin
+INSERT INTO [pms].[OFERTAS]
+           ([Fecha]
+           ,[Monto]
+           ,[Id_Publicacion]
+           ,[Id_Cliente])
+     VALUES
+           (@Fecha
+           ,@Monto
+           ,@Id_Publicacion
+           ,@Id_Cliente)
+end
+end
+GO
+
+create procedure pms.generar_Factura
+		@Numero numeric(18,0)
+        ,@Fecha datetime
+        ,@Total numeric(18,2)
+        ,@Id_FormaPago numeric(11,0)
+		,@Monto numeric(18,2)
+        ,@Cantidad numeric(18,0)
+        ,@Id_Publicacion numeric(18,0)
+as
+begin 
+
+INSERT INTO [pms].[FACTURAS]
+           (numero
+           ,Fecha
+           ,Total
+           ,Id_FormaPago)
+     VALUES
+           (@Numero
+           ,@Fecha
+           ,@Total
+           ,@Id_FormaPago );
+declare @Id_Factura numeric (18,0);
+set @Id_Factura= @@IDENTITY;
+
+INSERT INTO [pms].[ITEMFACTURA]
+           ([Monto]
+           ,[Cantidad]
+           ,[Id_Factura]
+           ,[Id_Publicacion])
+     VALUES
+           (@Monto
+           ,@Cantidad
+           ,@Id_Factura
+           ,@Id_Publicacion);
+END
+GO
