@@ -28,8 +28,16 @@ namespace WindowsFormsApplication1
 
         }
 
+        
+        
+       
+
+        
+
         private void btLogin_Click(object sender, EventArgs e)
         {
+            int  PASSWORD_INVALID = -1;
+            int USER_NOT_FOUND = -2;
 
             //Connection.Connection.loginUser(txtUsername.Text, txtPassword.Text);
 
@@ -46,6 +54,7 @@ namespace WindowsFormsApplication1
                if (listRolIds.Count > 1)
                {
                    //Tiene mas de un rol el usuario, se debe elegir con cual quiere loguear
+                   //TODO limpiar cantidad de intentos fallidos
                    SelectRolForm form = new SelectRolForm(listRolIds);
                    form.ShowDialog();
                }
@@ -56,7 +65,22 @@ namespace WindowsFormsApplication1
                }
 
             }
-            else if (userId < 0) MessageBox.Show("Usuario invalido");
-        }
+                //El logueo fue rechazo
+            else if (userId == USER_NOT_FOUND)
+            {
+                MessageBox.Show("El usuario especificado no existe");
+            }
+
+            else if (userId == PASSWORD_INVALID)
+            {
+               
+                //aumentar la cantidad de intentos fallidos               
+               instance.incrementarIntentosLogin(txtUsuario.Text);
+               decimal intentos = instance.getIntentosDeLogin(txtUsuario.Text);
+               MessageBox.Show("Contraseña invalida, intentos : " + intentos);
+            
+            }
+            
+            }
     }
 }

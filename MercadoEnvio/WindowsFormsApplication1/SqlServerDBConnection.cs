@@ -66,7 +66,7 @@ namespace WindowsFormsApplication1
             try
             {
 
-                String sqlRequest = "SELECT PMS.getUser(@userName,@password)";
+                String sqlRequest = "SELECT PMS.getUserV2(@userName,@password)";
 
                 SqlCommand command = new SqlCommand(sqlRequest, Connection);
                 command.Parameters.Add("@userName", SqlDbType.VarChar).Value = username;
@@ -79,7 +79,7 @@ namespace WindowsFormsApplication1
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("Error con la conexion  SQL ! " + ex.Message);
+                //System.Windows.Forms.MessageBox.Show("Error con la conexion  SQL ! " + ex.Message);
                 return -1;
             }
         }
@@ -157,6 +157,40 @@ namespace WindowsFormsApplication1
 
         }
 
+
+        public decimal getIntentosDeLogin(String user)
+        {
+            String sqlRequest = "SELECT Intentos_Login FROM PMS.USUARIOS where User_Nombre = @user";
+            SqlCommand command = new SqlCommand(sqlRequest, Connection);
+            command.Parameters.Add("@user", SqlDbType.VarChar).Value = user;
+
+            try
+            {
+                decimal intentos = (decimal)command.ExecuteScalar();
+                return intentos;
+            }
+            catch (Exception e) {
+                return -1;
+            }
+
+        }
+
+
+        public void incrementarIntentosLogin(String user)
+        {
+            String sqlRequest = "EXEC PMS.AumentarIntentosFallidos @userName =  @user";
+            SqlCommand command = new SqlCommand(sqlRequest, Connection);
+            command.Parameters.Add("@user", SqlDbType.VarChar).Value = user;
+
+            try
+            {
+                command.ExecuteScalar();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("No se pudo editar la cantidad de intentos fallidos : " + e.Message);
+            }
+        }
 
 
     }
