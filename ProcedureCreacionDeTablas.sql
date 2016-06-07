@@ -29,7 +29,7 @@ BEGIN
 	(
 		Id_Usuario				numeric(18,0)IDENTITY(1,1) NOT NULL,
 		User_Nombre				nvarchar(255),
-		User_Password			binary,
+		User_Password			binary(32),
 		Habilitado				numeric(18,0)
 		PRIMARY KEY(Id_Usuario)
 	);
@@ -77,13 +77,13 @@ BEGIN
 	CREATE TABLE PMS.RUBROS
 	(
 		Id_Rubro						numeric(18,0) IDENTITY(1,1) NOT NULL,
-		Descripcion						numeric(18,0),
+		Descripcion						nvarchar(255),
 		PRIMARY KEY(Id_Rubro)	
 	);
 	
 	CREATE TABLE PMS.TIPO_PUBLICACION
 	(
-		Id_Tipo						numeric(2,0) IDENTITY(1,1) NOT NULL,
+		Id_Tipo						numeric(18,0) IDENTITY(1,1) NOT NULL,
 		Descripcion					nvarchar(255),
 		PRIMARY KEY(Id_Tipo)
 	);
@@ -104,7 +104,6 @@ BEGIN
 		Fecha					datetime,
 		FechaVencimiento		datetime,
 		Precio					numeric(18,2),
-		Tipo					nvarchar(255),
 		Id_Usuario				numeric(18,0),
 		Id_Visibilidad			numeric(18,0),
 		Id_Tipo					numeric(18,0),
@@ -113,9 +112,9 @@ BEGIN
 		PRIMARY KEY(Id_Publicacion),
 		FOREIGN KEY(Id_Visibilidad) REFERENCES PMS.VISIBILIDADES(Id_visibilidad),
 		FOREIGN KEY(Id_Usuario) 	REFERENCES PMS.USUARIOS(Id_Usuario),
-		FOREIGN KEY(Id_Rubro) 		REFERENCES PMS.USUARIOS(Id_Rubro),
-		FOREIGN KEY(Id_Tipo) 		REFERENCES PMS.USUARIOS(Id_Tipo),
-		FOREIGN KEY(Id_Tipo) 		REFERENCES PMS.USUARIOS(Id_Estado),
+		FOREIGN KEY(Id_Rubro) 		REFERENCES PMS.RUBROS(Id_Rubro),
+		FOREIGN KEY(Id_Tipo) 		REFERENCES PMS.TIPO_PUBLICACION(Id_Tipo),
+		FOREIGN KEY(Id_Estado) 		REFERENCES PMS.PUBLICACION_ESTADOS(Id_Estado),
 		
 	);
 
@@ -209,15 +208,6 @@ BEGIN
 		Id_Funcionalidad			numeric(18,0) IDENTITY(1,1) NOT NULL,
 		Nombre						nvarchar(255),
 		PRIMARY KEY(Id_Funcionalidad)
-	);
-
-
-	CREATE TABLE PMS.FUNCIONALIDES_ROLES
-	(
-		Id_Funcionalidad			numeric(18,0) IDENTITY(1,1) NOT NULL,
-		Id_Rol						numeric(18,0),
-		PRIMARY KEY(Id_Funcionalidad),
-		FOREIGN KEY(Id_Rol) REFERENCES PMS.ROLES(Id_Rol)
 	);
 	
 	CREATE TABLE PMS.FUNCIONALIDES_ROLES
@@ -325,25 +315,24 @@ BEGIN
 			Publicacion_Visibilidad_Porcentaje
 	FROM gd_esquema.Maestra 
 	WHERE Publicacion_Visibilidad_Cod IS NOT NULL;
+
+	INSERT INTO PMS.TIPO_PUBLICACION
+	SELECT DISTINCT
+		Publicacion_Tipo
+	FROM gd_esquema.Maestra 
+	WHERE Publicacion_Tipo IS NOT NULL;
 	
 	INSERT INTO PMS.RUBROS
-	SELECT	DISTINCT
+	SELECT DISTINCT
 			Publicacion_Rubro_Descripcion
 	FROM gd_esquema.Maestra 
 	WHERE Publicacion_Rubro_Descripcion IS NOT NULL;
 	
-	INSERT INTO PMS.ESTADOS
-	SELECT	DISTINCT
+	INSERT INTO PMS.PUBLICACION_ESTADOS
+	SELECT DISTINCT
 			Publicacion_Estado
 	FROM gd_esquema.Maestra 
-	WHERE Publicacion_Estado IS NOT NULL;
-	
-	INSERT INTO PMS.ESTADOS
-	SELECT	DISTINCT
-			Publicacion_Estado
-	FROM gd_esquema.Maestra 
-	WHERE Publicacion_Estado IS NOT NULL;
-	
+	WHERE Publicacion_Estado IS NOT NULL;	
 
 	INSERT INTO PMS.PUBLICACIONES
 	SELECT DISTINCT				
@@ -352,23 +341,22 @@ BEGIN
 			Publicacion_Stock,			                        
 			Publicacion_Fecha,			                        
 			Publicacion_Fecha_Venc,                             
-			Publicacion_Precio,			                        
-			Publicacion_Tipo,			                        
+			Publicacion_Precio,			                        			                        
 			(SELECT top 1 Id_Usuario                                  
 			   FROM PMS.USUARIOS Usuarios   
 			  WHERE Id_Usuario IN (SELECT Id_Cliente FROM PMS.CLIENTES WHERE Dni_Cliente = Publ_Cli_Dni)
 				OR Id_Usuario IN (SELECT Id_Empresa FROM PMS.EMPRESAS WHERE Cuit_Empresa = Publ_Empresa_Cuit)),		
 			Publicacion_Visibilidad_Cod,
-			(SELECT top 1 r.Id_Tipo
-			   FROM PMS.TIPOS t, gd_esquema.Maestra m
+			(SELECT top 1 t.Id_Tipo
+			   FROM PMS.TIPO_PUBLICACION t, gd_esquema.Maestra m
 			  WHERE t.Descripcion = m.Publicacion_Tipo
 			    AND m.Publicacion_Cod = Publicacion_Cod),
 			(SELECT top 1 r.Id_Rubro
 			   FROM PMS.RUBROS r, gd_esquema.Maestra m
 			  WHERE r.Descripcion = m.Publicacion_Rubro_Descripcion
 			    AND m.Publicacion_Cod = Publicacion_Cod),
-			(SELECT top 1 r.Id_Estado
-			   FROM PMS.ESTADOS e gd_esquema.Maestra m
+			(SELECT top 1 e.Id_Estado
+			   FROM PMS.PUBLICACION_ESTADOS e, gd_esquema.Maestra m
 			  WHERE e.Descripcion = m.Publicacion_Estado
 			    AND m.Publicacion_Cod = Publicacion_Cod)			
 	FROM gd_esquema.Maestra WHERE Publicacion_Cod is not null;
@@ -435,6 +423,9 @@ BEGIN
 
 	INSERT INTO PMS.ROLES_USUARIOS
 	SELECT 3, Id_Cliente FROM PMS.CLIENTES;
+
+	INSERT INTO PMS.USUARIOS (User_Nombre,User_Password,Habilitado) VALUES ('Admin',HASHBYTES('SHA2_256','1234'),1);
+	INSERT INTO PMS.ROLES_USUARIOS (Id_Rol, Id_Usuario) SELECT 1, (SELECT TOP 1 Id_Usuario FROM PMS.USUARIOS WHERE User_Nombre='Admin');
 
 	
 		
