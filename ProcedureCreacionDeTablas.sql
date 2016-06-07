@@ -1,14 +1,3 @@
--- ================================================
--- Template generated from Template Explorer using:
--- Create Procedure (New Menu).SQL
---
--- Use the Specify Values for Template Parameters 
--- command (Ctrl-Shift-M) to fill in the parameter 
--- values below.
---
--- This block of comments will not be included in
--- the definition of the procedure.
--- ================================================
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -30,7 +19,10 @@ BEGIN
 		Id_Usuario				numeric(18,0)IDENTITY(1,1) NOT NULL,
 		User_Nombre				nvarchar(255),
 		User_Password			binary(32),
-		Habilitado				numeric(18,0)
+		Habilitado				numeric(18,0),
+		Intentos_login			numeric(18,0) DEFAULT 0,
+		Primera_Vez				numeric(18,0),
+		Reputacion				numeric(18,0)
 		PRIMARY KEY(Id_Usuario)
 	);
 
