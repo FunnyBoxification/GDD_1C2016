@@ -1,0 +1,18 @@
+CREATE TRIGGER PMS.TriggerIntentosFallidos
+ON PMS.USUARIOS
+AFTER UPDATE
+AS
+
+
+BEGIN
+DECLARE @intentos numeric(18,0)
+DECLARE @userId numeric(18,0)
+
+SELECT @intentos = (SELECT Intentos_Login FROM inserted)
+SELECT @userId = (SELECT Id_Usuario FROM inserted)
+
+if @intentos = 3 
+UPDATE PMS.USUARIOS SET Habilitado = 0 WHERE Id_Usuario = @userId
+
+
+END
