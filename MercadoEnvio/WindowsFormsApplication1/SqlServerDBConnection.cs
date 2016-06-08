@@ -66,7 +66,7 @@ namespace WindowsFormsApplication1
             try
             {
 
-                String sqlRequest = "SELECT PMS.getUserV2(@userName,@password)";
+                String sqlRequest = "SELECT PMS.getUser(@userName,@password)";
 
                 SqlCommand command = new SqlCommand(sqlRequest, Connection);
                 command.Parameters.Add("@userName", SqlDbType.VarChar).Value = username;
@@ -119,6 +119,16 @@ namespace WindowsFormsApplication1
         }
 
 
+
+        public void limpiarIntentos(String user)
+        {
+            String sqlRequest = "EXEC PMS.LimpiarIntentos @userName = @user";
+            SqlCommand command = new SqlCommand(sqlRequest, Connection);
+            command.Parameters.Add("@user", SqlDbType.VarChar).Value = user;
+
+            command.ExecuteScalar();
+        }
+
         public Rol getRolById(decimal idRol)
         {
             Rol rol = new Rol();
@@ -144,7 +154,7 @@ namespace WindowsFormsApplication1
                 reader.Close();
             }
             catch (Exception e)
-            {                
+            {
                 MessageBox.Show(e.Message);
 
             }
@@ -169,12 +179,31 @@ namespace WindowsFormsApplication1
                 decimal intentos = (decimal)command.ExecuteScalar();
                 return intentos;
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 return -1;
             }
 
         }
 
+
+        public Boolean estaHabilitado(String user)
+        {
+            String sqlRequest = "SELECT Habilitado FROM PMS.USUARIOS where User_Nombre = @user";
+            SqlCommand command = new SqlCommand(sqlRequest, Connection);
+            command.Parameters.Add("@user", SqlDbType.VarChar).Value = user;
+
+            try
+            {
+                decimal habilitado = (decimal)command.ExecuteScalar();
+                if (habilitado == 1) return true;
+                else return false;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
 
         public void incrementarIntentosLogin(String user)
         {

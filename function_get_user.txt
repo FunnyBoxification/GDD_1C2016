@@ -1,11 +1,11 @@
 USE [GD1C2016]
 GO
-
+/****** Object:  UserDefinedFunction [PMS].[getUser]    Script Date: 07/06/2016 22:30:07 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE FUNCTION [PMS].[getUserV2] (@userName nvarchar(255), @password integer)
+ALTER FUNCTION [PMS].[getUser] (@userName nvarchar(255), @password binary(32))
 returns integer
 AS
 BEGIN
@@ -13,10 +13,11 @@ DECLARE @resultExistence integer
 DECLARE @resultLogin integer
 
 	SET @resultExistence = (SELECT  USUARIOS.Id_Usuario FROM Pms.USUARIOS where User_Nombre like @userName)
+	
 
 	if @resultExistence >= 0 
 	BEGIN
-	SET @resultLogin = ( SELECT USUARIOS.Id_Usuario FROM Pms.USUARIOS where User_Password = CONVERT(BINARY(1),@password) AND User_Nombre like @userName);
+	SET @resultLogin = ( SELECT USUARIOS.Id_Usuario FROM Pms.USUARIOS where User_Password = @password AND User_Nombre like @userName);
 	
 	END
 	else if @resultExistence IS NULL
