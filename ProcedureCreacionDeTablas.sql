@@ -16,16 +16,16 @@ BEGIN
 
 	CREATE TABLE PMS.USUARIOS 
 	(
-		Id_Usuario				numeric(18,0)IDENTITY(1,1) NOT NULL,
+		Id_Usuario				numeric(18,0) IDENTITY(1,1) NOT NULL,
 		User_Nombre				nvarchar(255),
 		User_Password			binary(32),
-		Habilitado				numeric(18,0),
+		Habilitado				numeric(18,0) DEFAULT 1,
 		Intentos_login			numeric(18,0) DEFAULT 0,
 		Primera_Vez				numeric(18,0),
 		Reputacion				numeric(18,0)
 		PRIMARY KEY(Id_Usuario)
 	);
-
+	
 	CREATE TABLE PMS.EMPRESAS
 	(	
 		Id_Empresa				numeric(18,0) NOT NULL,
@@ -63,6 +63,7 @@ BEGIN
 		Descripcion				nvarchar(255),
 		Precio					numeric(18,2),
 		Porcentaje				numeric(18,2),
+		Habilitado				numeric(18,0) DEFAULT 1,
 		PRIMARY KEY(Id_Visibilidad)
 	);
 	
@@ -180,7 +181,7 @@ BEGIN
 	(
 		Id_Rol						numeric(18,0) IDENTITY(1,1) NOT NULL,
 		Nombre						nvarchar(255),
-		Habilitado					numeric(18,0),
+		Habilitado					numeric(18,0) DEFAULT 1,
 		PRIMARY KEY(Id_Rol)
 	);
 
@@ -204,10 +205,11 @@ BEGIN
 	
 	CREATE TABLE PMS.FUNCIONALIDES_ROLES
 	(
-		Id_Funcionalidad			numeric(18,0) IDENTITY(1,1) NOT NULL,
+		Id_Funcionalidad			numeric(18,0),
 		Id_Rol						numeric(18,0),
-		PRIMARY KEY(Id_Funcionalidad),
-		FOREIGN KEY(Id_Rol) REFERENCES PMS.ROLES(Id_Rol)
+		PRIMARY KEY(Id_Funcionalidad,Id_Rol),
+		FOREIGN KEY(Id_Rol) REFERENCES PMS.ROLES(Id_Rol),
+		FOREIGN KEY(Id_Funcionalidad) REFERENCES PMS.FUNCIONALIDADES(Id_Funcionalidad)
 	);
 	
 	
@@ -289,13 +291,13 @@ BEGIN
 	
 	
 
-	INSERT INTO PMS.USUARIOS (User_Nombre, Habilitado)
-	SELECT RazonSocial, 1
+	INSERT INTO PMS.USUARIOS (User_Nombre, Habilitado, User_Password)
+	SELECT RazonSocial, 1, HASHBYTES('SHA2_256','1234')
 	FROM PMS.EMPRESAS
 	ORDER BY Id_Empresa;
 	
-	INSERT INTO PMS.USUARIOS (User_Nombre, Habilitado)
-	SELECT (Nombre + Apellido), 1 
+	INSERT INTO PMS.USUARIOS (User_Nombre, Habilitado, User_Password)
+	SELECT (Nombre + Apellido), 1 , HASHBYTES('SHA2_256','1234')
 	FROM PMS.CLIENTES
 	ORDER BY Id_Cliente;
 
@@ -304,7 +306,8 @@ BEGIN
 			Publicacion_Visibilidad_Cod,
 			Publicacion_Visibilidad_Desc,
 			Publicacion_Visibilidad_Precio,		
-			Publicacion_Visibilidad_Porcentaje
+			Publicacion_Visibilidad_Porcentaje,
+			1
 	FROM gd_esquema.Maestra 
 	WHERE Publicacion_Visibilidad_Cod IS NOT NULL;
 
@@ -411,21 +414,54 @@ BEGIN
 		('Administrador',1),('Cliente',1), ('Empresa',1);
 
 	INSERT INTO PMS.ROLES_USUARIOS 
-	SELECT 2,Id_Empresa FROM PMS.EMPRESAS;
+	SELECT 3,Id_Empresa FROM PMS.EMPRESAS;
 
 	INSERT INTO PMS.ROLES_USUARIOS
-	SELECT 3, Id_Cliente FROM PMS.CLIENTES;
+	SELECT 2, Id_Cliente FROM PMS.CLIENTES;
 
 	INSERT INTO PMS.USUARIOS (User_Nombre,User_Password,Habilitado) VALUES ('Admin',HASHBYTES('SHA2_256','1234'),1);
 	INSERT INTO PMS.ROLES_USUARIOS (Id_Rol, Id_Usuario) SELECT 1, (SELECT TOP 1 Id_Usuario FROM PMS.USUARIOS WHERE User_Nombre='Admin');
 
-	
-		
+	INSERT INTO PMS.FUNCIONALIDADES (Nombre) VALUES ('ConsultaRol'),
+													('AltaRol'),
+													('ModificacionRol'),
+													('ConsultaUsuario'),
+													('ModificacionUsuario'),
+													('AltaUsuario'),
+													('ConsultaRubro'),
+													('AltaRubro'),
+													('ModificacionRubro'),
+													('AltaVisibilidad'),
+													('ConsultaVisibilidad'),
+													('ModificacionVisibilidad'),
+													('CompraOferta'),
+													('HistorialCliente'),
+													('FacturasVendedor'),
+													('ListadoEstadistico'),
+													('Publicar'),
+													('Calificar');
 
-		
+	INSERT INTO PMS.FUNCIONALIDES_ROLES (Id_Funcionalidad,Id_Rol) 
+	SELECT Id_Funcionalidad,1 
+	FROM PMS.FUNCIONALIDADES
+	WHERE Nombre NOT LIKE '%Publicacion' 
+		AND Nombre NOT LIKE '%CompraOferta' 
+		AND Nombre NOT LIKE '%Calificar' 
+		AND Nombre NOT LIKE '%HistorialCliente';
 
+	INSERT INTO PMS.FUNCIONALIDES_ROLES (Id_Funcionalidad,Id_Rol)
+	SELECT Id_Funcionalidad,2
+	FROM PMS.FUNCIONALIDADES
+	WHERE Nombre NOT LIKE '%Rol'
+		AND Nombre NOT LIKE '%Rubro'
+		AND Nombre NOT LIKE 'ListadoEstadistico'
+		AND Nombre NOT LIKE '%Visibilidad'
+		AND Nombre NOT LIKE '%Usuario';
 
-
+	INSERT INTO PMS.FUNCIONALIDES_ROLES (Id_Funcionalidad,Id_Rol)
+	SELECT Id_Funcionalidad, 3
+	FROM PMS.FUNCIONALIDADES 
+	WHERE Nombre LIKE '%Publicar' OR Nombre LIKE 'FacturasVendedor';				
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
@@ -433,5 +469,59 @@ BEGIN
 
     -- Insert statements for procedure here
 	--SELECT <@Param1, sysname, @p1>, <@Param2, sysname, @p2>
+
+	--SELECT 
+	--Id_Visibilidad	,
+	--Descripcion		,
+	--Precio			,
+	--Porcentaje
+	--FROM PMS.VISIBILIDADES
+	--WHERE Descripcion = 
+	--  AND Precio =
+	--  And Porcentaje =
+
+	--SELECT
+	--	Descripcion 
+	--FROM PMS.Rubros
+	--Where 
+	--		Descripcion =
+
+	--SELECT 
+	--	p.Id_Publicacion	,
+	--	p.Descripcion		,
+	--	p.Stock				,
+	--	p.Fecha				,
+	--	p.FechaVencimiento	,
+	--	p.Precio			,
+	--	(SELECT 
+	--		u.User_Nombre 
+	--	 FROM PMS.USUARIOS u
+	--	 WHERE u.Id_Usuario = p.Id_Usuario),
+	--	(SELECT 
+	--		v.Descripcion
+	--	 FROM PMS.VISIBILIDADES v
+	--	 WHERE v.Id_Visibilidad = p.Id_Visibilidad),
+	--	(SELECT 
+	--		t.Descripcion
+	--	 FROM PMS.TIPO_PUBLICACION t
+	--	 WHERE t.Id_Tipo = p.Id_Tipo),
+	--	(SELECT 
+	--		r.Descripcion
+	--	 FROM PMS.RUBROS r
+	--	 WHERE r.Id_Rubro = r.Id_Rubro),
+	--	(SELECT 
+	--		e.Descripcion
+	--	 FROM PMS.PUBLICACION_ESTADOS e
+	--	 WHERE e.Id_Estado = e.Id_Estado)
+	--FROM PMS.PUBLICACIONES p 
+	--Where 
+	--	p.  = 
+	--	p.  = 
+	--	p.  = 
+	--	p.  = 
+	--	p.  = 
+	--	p.  = 
+
+
 END
 GO

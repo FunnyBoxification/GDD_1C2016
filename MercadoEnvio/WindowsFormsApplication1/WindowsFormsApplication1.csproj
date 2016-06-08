@@ -107,6 +107,7 @@
     <Compile Include="Calificar\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="SqlServerDBConnection.cs" />
     <Compile Include="ComprarOfertar\Form1.cs">
       <SubType>Form</SubType>
     </Compile>

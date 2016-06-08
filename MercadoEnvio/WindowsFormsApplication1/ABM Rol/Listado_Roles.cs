@@ -31,7 +31,7 @@ namespace WindowsFormsApplication1.ABM_Rol
         private void Form1_Load(object sender, EventArgs e)
         {
             String select = "SELECT * FROM PMS.ROLES";
-            SqlCommand
+            SqlCommand command = new SqlCommand(select, SqlServerDBConnection.Instance().Connection);
             this.dataGridView1;            
         }
 
