@@ -5,7 +5,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-ALTER FUNCTION [PMS].[getUser] (@userName nvarchar(255), @password binary(32))
+CREATE FUNCTION [PMS].[getUser] (@userName nvarchar(255), @password binary(32))
 returns integer
 AS
 BEGIN

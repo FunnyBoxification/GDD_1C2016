@@ -1,14 +1,3 @@
--- ================================================
--- Template generated from Template Explorer using:
--- Create Procedure (New Menu).SQL
---
--- Use the Specify Values for Template Parameters 
--- command (Ctrl-Shift-M) to fill in the parameter 
--- values below.
---
--- This block of comments will not be included in
--- the definition of the procedure.
--- ================================================
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -27,15 +16,19 @@ BEGIN
 
 	CREATE TABLE PMS.USUARIOS 
 	(
-		Id_Usuario				numeric(18,0),
+		Id_Usuario				numeric(18,0)IDENTITY(1,1) NOT NULL,
 		User_Nombre				nvarchar(255),
-		User_Password			binary,
+		User_Password			binary(32),
+		Habilitado				numeric(18,0),
+		Intentos_login			numeric(18,0) DEFAULT 0,
+		Primera_Vez				numeric(18,0),
+		Reputacion				numeric(18,0)
 		PRIMARY KEY(Id_Usuario)
 	);
 
 	CREATE TABLE PMS.EMPRESAS
 	(	
-		Id_Empresa				numeric(18,0) IDENTITY(1,1) NOT NULL,
+		Id_Empresa				numeric(18,0) NOT NULL,
 		Cuit_Empresa			nvarchar(50) UNIQUE,	
 		RazonSocial				nvarchar(255),		
 		FechaCreacion			datetime,
@@ -50,7 +43,7 @@ BEGIN
 
 	CREATE TABLE PMS.CLIENTES
 	(
-		Id_Cliente				numeric(18,0) IDENTITY(1,1) NOT NULL,
+		Id_Cliente				numeric(18,0) NOT NULL,
 		Dni_Cliente				numeric(18,0) UNIQUE,
 		Apellido				nvarchar(255),
 		Nombre					nvarchar(255),
@@ -72,6 +65,28 @@ BEGIN
 		Porcentaje				numeric(18,2),
 		PRIMARY KEY(Id_Visibilidad)
 	);
+	
+	CREATE TABLE PMS.RUBROS
+	(
+		Id_Rubro						numeric(18,0) IDENTITY(1,1) NOT NULL,
+		Descripcion						nvarchar(255),
+		PRIMARY KEY(Id_Rubro)	
+	);
+	
+	CREATE TABLE PMS.TIPO_PUBLICACION
+	(
+		Id_Tipo						numeric(18,0) IDENTITY(1,1) NOT NULL,
+		Descripcion					nvarchar(255),
+		PRIMARY KEY(Id_Tipo)
+	);
+	
+		CREATE TABLE PMS.PUBLICACION_ESTADOS
+	(
+		Id_Estado				numeric(18,0) IDENTITY(1,1) NOT NULL,
+		Descripcion				nvarchar(255),
+		PRIMARY KEY(Id_Estado)					
+	);
+
 
 	CREATE TABLE PMS.PUBLICACIONES
 	(
@@ -81,20 +96,20 @@ BEGIN
 		Fecha					datetime,
 		FechaVencimiento		datetime,
 		Precio					numeric(18,2),
-		Tipo					nvarchar(255),
 		Id_Usuario				numeric(18,0),
 		Id_Visibilidad			numeric(18,0),
+		Id_Tipo					numeric(18,0),
+		Id_Rubro				numeric(18,0),
+		Id_Estado				numeric(18,0),
 		PRIMARY KEY(Id_Publicacion),
 		FOREIGN KEY(Id_Visibilidad) REFERENCES PMS.VISIBILIDADES(Id_visibilidad),
-		FOREIGN KEY(Id_Usuario) REFERENCES PMS.USUARIOS(Id_Usuario)
+		FOREIGN KEY(Id_Usuario) 	REFERENCES PMS.USUARIOS(Id_Usuario),
+		FOREIGN KEY(Id_Rubro) 		REFERENCES PMS.RUBROS(Id_Rubro),
+		FOREIGN KEY(Id_Tipo) 		REFERENCES PMS.TIPO_PUBLICACION(Id_Tipo),
+		FOREIGN KEY(Id_Estado) 		REFERENCES PMS.PUBLICACION_ESTADOS(Id_Estado),
+		
 	);
 
-	CREATE TABLE PMS.PUBLICACION_ESTADOS
-	(
-		Id_Estado				numeric(18,0) IDENTITY(1,1) NOT NULL,
-		Estado					nvarchar(255),
-		PRIMARY KEY(Id_Estado)					
-	);
 
 	CREATE TABLE PMS.COMPRAS
 	(
@@ -115,7 +130,6 @@ BEGIN
 		Id_Oferta				numeric(18,0) IDENTITY(1,1) NOT NULL,
 		Fecha					datetime,
 		Monto					numeric(18,2),
-		Cantidad				numeric(18,0),
 		Id_Publicacion			numeric(18,0),
 		Id_Cliente				numeric(18,0),
 		PRIMARY KEY(Id_Oferta),
@@ -187,8 +201,7 @@ BEGIN
 		Nombre						nvarchar(255),
 		PRIMARY KEY(Id_Funcionalidad)
 	);
-
-
+	
 	CREATE TABLE PMS.FUNCIONALIDES_ROLES
 	(
 		Id_Funcionalidad			numeric(18,0) IDENTITY(1,1) NOT NULL,
@@ -196,9 +209,10 @@ BEGIN
 		PRIMARY KEY(Id_Funcionalidad),
 		FOREIGN KEY(Id_Rol) REFERENCES PMS.ROLES(Id_Rol)
 	);
-
-	INSERT INTO PMS.EMPRESAS 
-	SELECT DISTINCT
+	
+	
+	
+	SELECT DISTINCT			
 		   Publ_Empresa_Cuit,
 		   Publ_Empresa_Razon_Social,		   
 		   Publ_Empresa_Fecha_Creacion,	
@@ -208,16 +222,10 @@ BEGIN
 		   Publ_Empresa_Piso,
 		   Publ_Empresa_Depto,	
 		   Publ_Empresa_Cod_Postal
+	INTO #TempEmpresas
 	FROM gd_esquema.Maestra 
 	WHERE Publ_Empresa_Cuit IS NOT NULL 
-
-	DECLARE @CantidadEmpresas numeric(18,0);
-	SELECT @CantidadEmpresas = COUNT(*) FROM PMS.EMPRESAS;
-	SET @CantidadEmpresas = @CantidadEmpresas + 1;
-
-	DBCC CHECKIDENT('PMS.CLIENTES', RESEED, @CantidadEmpresas);
-
-	INSERT INTO PMS.CLIENTES
+	
 	SELECT DISTINCT 	
 		   Publ_Cli_Dni,	
 		   Publ_Cli_Apeliido,	
@@ -229,10 +237,11 @@ BEGIN
 		   Publ_Cli_Piso,		
 		   Publ_Cli_Depto,		
 		   Publ_Cli_Cod_Postal
+	INTO #TempClientes
 	FROM gd_esquema.Maestra
 	WHERE Publ_Cli_Dni is not null
 	
-	INSERT INTO PMS.CLIENTES
+	INSERT INTO #TempClientes
 	SELECT DISTINCT 	
 		   Cli_Dni,	
 		   Cli_Apeliido,	
@@ -245,11 +254,50 @@ BEGIN
 		   Cli_Depto,		
 		   Cli_Cod_Postal
 	FROM gd_esquema.Maestra
-	WHERE Cli_Dni not in (select Dni_Cliente from PMS.CLIENTES) AND Cli_Dni IS NOT NULL;
-
-	INSERT INTO PMS.USUARIOS (Id_Usuario) SELECT Id_Empresa FROM PMS.EMPRESAS;
+	WHERE Cli_Dni not in (select Cli_Dni from #TempClientes) AND Cli_Dni IS NOT NULL;
 	
-	INSERT INTO PMS.USUARIOS (Id_Usuario) SELECT Id_Cliente FROM PMS.CLIENTES;
+	
+	INSERT INTO PMS.EMPRESAS 
+	SELECT
+		   ROW_NUMBER() OVER (ORDER BY (SELECT NULL)),
+		   Publ_Empresa_Cuit,
+		   Publ_Empresa_Razon_Social,
+		   Publ_Empresa_Fecha_Creacion,
+		   Publ_Empresa_Mail,
+		   Publ_Empresa_Dom_Calle,
+		   Publ_Empresa_Nro_Calle,
+		   Publ_Empresa_Piso,
+		   Publ_Empresa_Depto,
+		   Publ_Empresa_Cod_Postal
+	FROM #TempEmpresas
+	WHERE Publ_Empresa_Cuit IS NOT NULL;
+	
+
+
+	DECLARE @CantidadEmpresas numeric(18,0);
+	SELECT @CantidadEmpresas = COUNT(*) FROM #TempEmpresas;
+	
+
+	--DBCC CHECKIDENT('PMS.CLIENTES', RESEED, @CantidadEmpresas);
+
+	INSERT INTO PMS.CLIENTES
+	SELECT DISTINCT 	
+		   ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) + @CantidadEmpresas,
+		   *
+	FROM #TempClientes
+	WHERE Publ_Cli_Dni is not null;
+	
+	
+
+	INSERT INTO PMS.USUARIOS (User_Nombre, Habilitado)
+	SELECT RazonSocial, 1
+	FROM PMS.EMPRESAS
+	ORDER BY Id_Empresa;
+	
+	INSERT INTO PMS.USUARIOS (User_Nombre, Habilitado)
+	SELECT (Nombre + Apellido), 1 
+	FROM PMS.CLIENTES
+	ORDER BY Id_Cliente;
 
 	INSERT INTO PMS.VISIBILIDADES
 	SELECT	DISTINCT
@@ -260,6 +308,24 @@ BEGIN
 	FROM gd_esquema.Maestra 
 	WHERE Publicacion_Visibilidad_Cod IS NOT NULL;
 
+	INSERT INTO PMS.TIPO_PUBLICACION
+	SELECT DISTINCT
+		Publicacion_Tipo
+	FROM gd_esquema.Maestra 
+	WHERE Publicacion_Tipo IS NOT NULL;
+	
+	INSERT INTO PMS.RUBROS
+	SELECT DISTINCT
+			Publicacion_Rubro_Descripcion
+	FROM gd_esquema.Maestra 
+	WHERE Publicacion_Rubro_Descripcion IS NOT NULL;
+	
+	INSERT INTO PMS.PUBLICACION_ESTADOS
+	SELECT DISTINCT
+			Publicacion_Estado
+	FROM gd_esquema.Maestra 
+	WHERE Publicacion_Estado IS NOT NULL;	
+
 	INSERT INTO PMS.PUBLICACIONES
 	SELECT DISTINCT				
 			Publicacion_Cod,									
@@ -267,13 +333,24 @@ BEGIN
 			Publicacion_Stock,			                        
 			Publicacion_Fecha,			                        
 			Publicacion_Fecha_Venc,                             
-			Publicacion_Precio,			                        
-			Publicacion_Tipo,			                        
-			(SELECT top 1 Id_usuario                                  
-			   FROM PMS.USUARIOS, PMS.CLIENTES, PMS.EMPRESAS    
-			  WHERE Dni_Cliente = Publ_Cli_Dni
-				 OR Cuit_Empresa = Publ_Empresa_Cuit),		
-			Publicacion_Visibilidad_Cod
+			Publicacion_Precio,			                        			                        
+			(SELECT top 1 Id_Usuario                                  
+			   FROM PMS.USUARIOS Usuarios   
+			  WHERE Id_Usuario IN (SELECT Id_Cliente FROM PMS.CLIENTES WHERE Dni_Cliente = Publ_Cli_Dni)
+				OR Id_Usuario IN (SELECT Id_Empresa FROM PMS.EMPRESAS WHERE Cuit_Empresa = Publ_Empresa_Cuit)),		
+			Publicacion_Visibilidad_Cod,
+			(SELECT top 1 t.Id_Tipo
+			   FROM PMS.TIPO_PUBLICACION t, gd_esquema.Maestra m
+			  WHERE t.Descripcion = m.Publicacion_Tipo
+			    AND m.Publicacion_Cod = Publicacion_Cod),
+			(SELECT top 1 r.Id_Rubro
+			   FROM PMS.RUBROS r, gd_esquema.Maestra m
+			  WHERE r.Descripcion = m.Publicacion_Rubro_Descripcion
+			    AND m.Publicacion_Cod = Publicacion_Cod),
+			(SELECT top 1 e.Id_Estado
+			   FROM PMS.PUBLICACION_ESTADOS e, gd_esquema.Maestra m
+			  WHERE e.Descripcion = m.Publicacion_Estado
+			    AND m.Publicacion_Cod = Publicacion_Cod)			
 	FROM gd_esquema.Maestra WHERE Publicacion_Cod is not null;
 
 	INSERT INTO PMS.OFERTAS	
@@ -288,7 +365,8 @@ BEGIN
 
 	INSERT INTO PMS.COMPRAS
 	SELECT DISTINCT
-		Compra_Cantidad,			
+		Compra_Cantidad,
+		Publicacion_Precio,			
 		Compra_Fecha,			
 		(SELECT Id_Oferta
 		 FROM OFERTAS
@@ -317,7 +395,8 @@ BEGIN
 	SELECT DISTINCT 
 		Item_Factura_Monto,			
 		Item_Factura_Cantidad,		
-		Factura_Nro	
+		Factura_Nro,
+		Publicacion_Cod	
 	FROM gd_esquema.Maestra WHERE Item_Factura_Monto IS NOT NULL;
 
 	INSERT INTO PMS.CALIFICACIONES
@@ -337,9 +416,70 @@ BEGIN
 	INSERT INTO PMS.ROLES_USUARIOS
 	SELECT 3, Id_Cliente FROM PMS.CLIENTES;
 
+	INSERT INTO PMS.USUARIOS (User_Nombre,User_Password,Habilitado) VALUES ('Admin',HASHBYTES('SHA2_256','1234'),1);
+	INSERT INTO PMS.ROLES_USUARIOS (Id_Rol, Id_Usuario) SELECT 1, (SELECT TOP 1 Id_Usuario FROM PMS.USUARIOS WHERE User_Nombre='Admin');
+
 	
+	CREATE FUNCTION [PMS].[getUser] (@userName nvarchar(255), @password binary(32))
+	returns integer
+	AS
+	BEGIN
+	DECLARE @resultExistence integer
+	DECLARE @resultLogin integer
+
+	SET @resultExistence = (SELECT  USUARIOS.Id_Usuario FROM Pms.USUARIOS where User_Nombre like @userName)
+	
+
+	if @resultExistence >= 0 
+	BEGIN
+	SET @resultLogin = ( SELECT USUARIOS.Id_Usuario FROM Pms.USUARIOS where User_Password = @password AND User_Nombre like @userName);
+	
+	END
+	else if @resultExistence IS NULL
+	SET @resultLogin = -2;
+
+	return @resultLogin
+
+	END
+
+
+	CREATE PROCEDURE [PMS].[AumentarIntentosFallidos] @userName nvarchar(255)
+
+	AS
+
+	DECLARE @intentosActuales integer
+	SET @intentosActuales = (SELECT Intentos_Login FROM PMS.USUARIOS WHERE User_Nombre like @userName) 
+
+	UPDATE PMS.USUARIOS SET Intentos_Login = (@intentosActuales + 1) WHERE User_nombre like @userName
+
 		
 
+	CREATE PROCEDURE PMS.LimpiarIntentos @userName varchar(255)
+
+	AS
+	BEGIN
+	UPDATE PMS.USUARIOS SET Intentos_login = 0 WHERE User_Nombre LIKE @userName
+
+	END
+
+	
+	CREATE TRIGGER PMS.TriggerIntentosFallidos
+	ON PMS.USUARIOS
+	AFTER UPDATE
+	AS
+
+	BEGIN
+	DECLARE @intentos numeric(18,0)
+	DECLARE @userId numeric(18,0)
+
+	SELECT @intentos = (SELECT Intentos_Login FROM inserted)
+	SELECT @userId = (SELECT Id_Usuario FROM inserted)
+
+	if @intentos = 3 
+	UPDATE PMS.USUARIOS SET Habilitado = 0 WHERE Id_Usuario = @userId
+
+
+	END
 		
 
 
@@ -353,3 +493,7 @@ BEGIN
 	--SELECT <@Param1, sysname, @p1>, <@Param2, sysname, @p2>
 END
 GO
+
+
+
+
