@@ -1,3 +1,234 @@
+CREATE PROCEDURE pms.insert_User
+			@User_Nombre nvarchar(255)
+			,@User_Password binary(32)
+			,@Habilitado numeric(18,0)
+           ,@Intentos_login numeric(18,0)
+           ,@Primera_Vez numeric(18,0)
+           ,@Reputacion numeric(18,0)
+	   
+                    
+AS 
+BEGIN 
+     SET NOCOUNT ON 
+
+INSERT INTO [pms].[USUARIOS]
+           ([User_Nombre]
+           ,[User_Password]
+           ,[Habilitado]
+           ,[Intentos_login]
+           ,[Primera_Vez]
+           ,[Reputacion])
+     VALUES
+           (@User_Nombre
+           ,HASHBYTES('SHA2_256',@User_Password)
+           ,@Habilitado
+           ,@Intentos_login
+           ,@Primera_Vez
+           ,@Reputacion)
+end
+go
+
+CREATE PROCEDURE pms.insert_Cliente
+			@Id_Cliente numeric(18,0)
+           ,@Dni_Cliente numeric(18,0)
+           ,@Apellido nvarchar(255)
+           ,@Nombre nvarchar(255)
+           ,@FechaNacimiento datetime
+           ,@Mail nvarchar(255)
+           ,@DomCalle nvarchar(255)
+           ,@NroCalle numeric(18,0)
+           ,@Piso numeric(18,0)
+           ,@Depto nvarchar(50)
+           ,@Cod_Postal nvarchar(50)
+as begin
+INSERT INTO [pms].[CLIENTES]
+           ([Id_Cliente]
+           ,[Dni_Cliente]
+           ,[Apellido]
+           ,[Nombre]
+           ,[FechaNacimiento]
+           ,[Mail]
+           ,[DomCalle]
+           ,[NroCalle]
+           ,[Piso]
+           ,[Depto]
+           ,[Cod_Postal])
+     VALUES
+           (@Id_Cliente
+           ,@Dni_Cliente
+           ,@Apellido
+           ,@Nombre
+           ,@FechaNacimiento
+           ,@Mail
+           ,@DomCalle
+           ,@NroCalle
+           ,@Piso
+           ,@Depto
+           ,@Cod_Postal)
+end
+go
+
+create procedure pms.insert_Empresa
+			@Id_Empresa numeric(18,0)
+           ,@Cuit_Empresa nvarchar(50)
+           ,@RazonSocial nvarchar(255)
+           ,@FechaCreacion datetime
+           ,@Mail nvarchar(50)
+           ,@DomCalle nvarchar(100)
+           ,@NroCalle numeric(18,0)
+           ,@Piso numeric(18,0)
+           ,@Depto nvarchar(50)
+           ,@CodigoPostal nvarchar(50)
+as begin
+INSERT INTO [pms].[EMPRESAS]
+           ([Id_Empresa]
+           ,[Cuit_Empresa]
+           ,[RazonSocial]
+           ,[FechaCreacion]
+           ,[Mail]
+           ,[DomCalle]
+           ,[NroCalle]
+           ,[Piso]
+           ,[Depto]
+           ,[CodigoPostal])
+     VALUES
+           (@Id_Empresa
+           ,@Cuit_Empresa
+           ,@RazonSocial
+           ,@FechaCreacion
+           ,@Mail
+           ,@DomCalle
+           ,@NroCalle
+           ,@Piso
+           ,@Depto
+           ,@CodigoPostal)
+end
+go
+
+create procedure pms.nuevo_cliente
+			@User_Nombre nvarchar(255)
+			,@User_Password binary(32)
+			,@Habilitado numeric(18,0)
+           ,@Intentos_login numeric(18,0)
+           ,@Primera_Vez numeric(18,0)
+           ,@Reputacion numeric(18,0)
+           ,@Dni_Cliente numeric(18,0)
+           ,@Apellido nvarchar(255)
+           ,@Nombre nvarchar(255)
+           ,@FechaNacimiento datetime
+           ,@Mail nvarchar(255)
+           ,@DomCalle nvarchar(255)
+           ,@NroCalle numeric(18,0)
+           ,@Piso numeric(18,0)
+           ,@Depto nvarchar(50)
+           ,@Cod_Postal nvarchar(50)
+as begin
+
+INSERT INTO [pms].[USUARIOS]
+           ([User_Nombre]
+           ,[User_Password]
+           ,[Habilitado]
+           ,[Intentos_login]
+           ,[Primera_Vez]
+           ,[Reputacion])
+     VALUES
+           (@User_Nombre
+           ,HASHBYTES('SHA2_256',@User_Password)
+           ,@Habilitado
+           ,@Intentos_login
+           ,@Primera_Vez
+           ,@Reputacion)
+
+declare @id numeric(18,0);
+set @id=(select Id_usuario from pms.USUARIOS where User_Nombre=@User_Nombre);
+INSERT INTO [pms].[CLIENTES]
+           ([Id_Cliente]
+           ,[Dni_Cliente]
+           ,[Apellido]
+           ,[Nombre]
+           ,[FechaNacimiento]
+           ,[Mail]
+           ,[DomCalle]
+           ,[NroCalle]
+           ,[Piso]
+           ,[Depto]
+           ,[Cod_Postal])
+     VALUES
+           (@id
+           ,@Dni_Cliente
+           ,@Apellido
+           ,@Nombre
+           ,@FechaNacimiento
+           ,@Mail
+           ,@DomCalle
+           ,@NroCalle
+           ,@Piso
+           ,@Depto
+           ,@Cod_Postal)
+end
+go
+
+create procedure pms.nueva_empresa
+			@User_Nombre nvarchar(255)
+			,@User_Password binary(32)
+			,@Habilitado numeric(18,0)
+           ,@Intentos_login numeric(18,0)
+           ,@Primera_Vez numeric(18,0)
+           ,@Reputacion numeric(18,0)
+           ,@Cuit_Empresa nvarchar(50)
+           ,@RazonSocial nvarchar(255)
+           ,@FechaCreacion datetime
+           ,@Mail nvarchar(50)
+           ,@DomCalle nvarchar(100)
+           ,@NroCalle numeric(18,0)
+           ,@Piso numeric(18,0)
+           ,@Depto nvarchar(50)
+           ,@CodigoPostal nvarchar(50)
+as begin
+
+INSERT INTO [pms].[USUARIOS]
+           ([User_Nombre]
+           ,[User_Password]
+           ,[Habilitado]
+           ,[Intentos_login]
+           ,[Primera_Vez]
+           ,[Reputacion])
+     VALUES
+           (@User_Nombre
+           ,HASHBYTES('SHA2_256',@User_Password)
+           ,@Habilitado
+           ,@Intentos_login
+           ,@Primera_Vez
+           ,@Reputacion)
+
+declare @id numeric(18,0);
+set @id=(select Id_usuario from pms.USUARIOS where User_Nombre=@User_Nombre);
+
+INSERT INTO [pms].[EMPRESAS]
+           ([Id_Empresa]
+           ,[Cuit_Empresa]
+           ,[RazonSocial]
+           ,[FechaCreacion]
+           ,[Mail]
+           ,[DomCalle]
+           ,[NroCalle]
+           ,[Piso]
+           ,[Depto]
+           ,[CodigoPostal])
+     VALUES
+           (@id
+           ,@Cuit_Empresa
+           ,@RazonSocial
+           ,@FechaCreacion
+           ,@Mail
+           ,@DomCalle
+           ,@NroCalle
+           ,@Piso
+           ,@Depto
+           ,@CodigoPostal)
+end
+go
+
 CREATE PROCEDURE pms.insert_Pub
        @Id_Publicacion numeric(18,0)
        ,@Descripcion nvarchar(255)
@@ -17,16 +248,19 @@ BEGIN
      SET NOCOUNT ON 
 
 INSERT INTO pms.PUBLICACIONES
-           (Descripcion
-           ,Stock
-           ,Fecha
-           ,FechaVencimiento
-           ,Precio
-           ,Tipo
-           ,Id_Usuario
-           ,Id_Visibilidad)
+           ([Id_Publicacion]
+      ,[Descripcion]
+      ,[Stock]
+      ,[Fecha]
+      ,[FechaVencimiento]
+      ,[Precio]
+      ,[Id_Usuario]
+      ,[Id_Visibilidad]
+      ,[Id_Tipo]
+      ,[Id_Rubro]
+      ,[Id_Estado])
      VALUES
-           (@Id_Publicacion 
+           ((select max(Id_Publicacion)from PUBLICACIONES)+1
 			,@Descripcion 
 			,@Stock 
 			,@Fecha 
@@ -52,11 +286,11 @@ CREATE PROCEDURE pms.comprar
 AS BEGIN
 if @Monto> (select stock from PUBLICACIONES where Id_Publicacion=@Id_Publicacion)
 begin
-;throw 999,'monto a comprar mayor a stock',1;
+;throw 50999,'monto a comprar mayor a stock',1;
 end
-else if @Id_Cliente_Comprador!=(select Id_usuario from PUBLICACIONES where Id_Publicacion=@Id_Publicacion)
+else if @Id_Cliente_Comprador=(select Id_usuario from PUBLICACIONES where Id_Publicacion=@Id_Publicacion)
 begin
-; throw 999,'comprador no puede ser el vendedor',1;
+; throw 50999,'comprador no puede ser el vendedor',1;
 end
 else
 begin
@@ -88,7 +322,7 @@ AS BEGIN
 INSERT INTO pms.RUBROS
            (Descripcion)
      VALUES
-           (@Descripcion,
+           (@Descripcion
            )
 
 end
@@ -102,11 +336,11 @@ create procedure pms.ofertar
 as begin
 if @monto<(select max(monto)from OFERTAS where Id_Publicacion=@Id_Publicacion)
 begin
-; throw 999,'monto menor',1;
+; throw 50999,'monto menor',1;
 end
-else if @Id_Cliente!=(select Id_usuario from PUBLICACIONES where Id_Publicacion=@Id_Publicacion)
+else if @Id_Cliente=(select Id_usuario from PUBLICACIONES where Id_Publicacion=@Id_Publicacion)
 begin
-; throw 999,'comprador no puede ser el vendedor',1;
+; throw 50999,'comprador no puede ser el vendedor',1;
 end
 else
 begin
@@ -145,8 +379,6 @@ INSERT INTO [pms].[FACTURAS]
            ,@Fecha
            ,@Total
            ,@Id_FormaPago );
-declare @Id_Factura numeric (18,0);
-set @Id_Factura= @@IDENTITY;
 
 INSERT INTO [pms].[ITEMFACTURA]
            ([Monto]
@@ -156,7 +388,12 @@ INSERT INTO [pms].[ITEMFACTURA]
      VALUES
            (@Monto
            ,@Cantidad
-           ,@Id_Factura
+           ,@Numero
            ,@Id_Publicacion);
 END
 GO
+
+
+
+
+
