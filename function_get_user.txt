@@ -17,7 +17,7 @@ DECLARE @resultLogin integer
 
 	if @resultExistence >= 0 
 	BEGIN
-	SET @resultLogin = ( SELECT USUARIOS.Id_Usuario FROM Pms.USUARIOS where User_Password = @password AND User_Nombre like @userName);
+	SET @resultLogin = ( SELECT USUARIOS.Id_Usuario FROM Pms.USUARIOS where User_Password = HASHBYTES('SHA2_256',@password) AND User_Nombre like @userName);
 	
 	END
 	else if @resultExistence IS NULL
