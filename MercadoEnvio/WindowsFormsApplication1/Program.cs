@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WindowsFormsApplication1.ABM_Rol;
 
 
 namespace WindowsFormsApplication1
@@ -20,7 +21,7 @@ namespace WindowsFormsApplication1
             Application.SetCompatibleTextRenderingDefault(false);
 
             //SqlServerDBConnection.Instance().openConnection();
-            Application.Run(new LoginForm());
+            Application.Run(new Listado_Roles());
         }
     }
 }
