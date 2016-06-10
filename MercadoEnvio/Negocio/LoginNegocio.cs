@@ -29,18 +29,20 @@ namespace MercadoNegocio
             {
 
                 String sqlRequest = "SELECT PMS.getUser(@userName,@password)";
-
+                
                 SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
                 command.Parameters.Add("@userName", SqlDbType.VarChar).Value = username;
 
                 command.Parameters.Add("@password", SqlDbType.Int).Value = password.ToString();
+                DBConn.openConnection();
                 int result = (int)command.ExecuteScalar();
-
+                DBConn.closeConnection();
                 return result;
 
             }
             catch (Exception ex)
             {
+                DBConn.closeConnection();
                 //System.Windows.Forms.MessageBox.Show("Error con la conexion  SQL ! " + ex.Message);
                 return -1;
             }
@@ -55,6 +57,7 @@ namespace MercadoNegocio
 
             try
             {
+             DBConn.openConnection();
             String sqlRequest = "SELECT Descripcion FROM PMS.ROLES_USUARIOS where Id_Usuario = @idUser";
             SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
             command.Parameters.Add("@idUser", SqlDbType.Int).Value = idUser;
@@ -74,10 +77,12 @@ namespace MercadoNegocio
 
                 //reader.Close();
             command.Dispose();
+            DBConn.closeConnection();
 
             }
             catch (Exception ex)
             {
+                DBConn.closeConnection();
                 throw (new Exception("Error en ObetenerRoles" + ex.Message));
             }                  
 
@@ -90,8 +95,9 @@ namespace MercadoNegocio
             String sqlRequest = "EXEC PMS.LimpiarIntentos @userName = @user";
             SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
             command.Parameters.Add("@user", SqlDbType.VarChar).Value = user;
-
+            DBConn.openConnection();
             command.ExecuteScalar();
+            DBConn.closeConnection();
         }
 
         //public Rol getRolById(decimal idRol)
@@ -141,11 +147,14 @@ namespace MercadoNegocio
 
             try
             {
+                DBConn.openConnection();
                 decimal intentos = (decimal)command.ExecuteScalar();
                 return intentos;
+                DBConn.closeConnection();
             }
             catch (Exception e)
             {
+                DBConn.closeConnection();
                 return -1;
             }
 
@@ -160,12 +169,15 @@ namespace MercadoNegocio
 
             try
             {
+                DBConn.openConnection();
                 decimal habilitado = (decimal)command.ExecuteScalar();
                 if (habilitado == 1) return true;
                 else return false;
+                DBConn.closeConnection();
             }
             catch (Exception e)
             {
+                DBConn.closeConnection();
                 return false;
             }
         }
@@ -177,16 +189,19 @@ namespace MercadoNegocio
             //command.Parameters.Add("@user", SqlDbType.VarChar).Value = user;
             try
             {
+                DBConn.openConnection();
                 using (SqlCommand cmd = new SqlCommand("PMS.AumentarIntentosFallidos", DBConn.Connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.ExecuteNonQuery();
-                }            
-                
+                }
+                DBConn.closeConnection();
             }
             catch (Exception e)
             {
+                DBConn.closeConnection();
                 throw (new Exception("No se pudo editar la cantidad de intentos fallidos : " + e.Message));
+            
             }
         }
 
