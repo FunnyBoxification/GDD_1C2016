@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="dsRoles" targetNamespace="http://tempuri.org/dsRoles.xsd" xmlns:mstns="http://tempuri.org/dsRoles.xsd" xmlns="http://tempuri.org/dsRoles.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="dsRoles" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="dsRoles" msprop:Generator_UserDSName="dsRoles">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="Roles" msprop:Generator_TableClassName="RolesDataTable" msprop:Generator_TableVarName="tableRoles" msprop:Generator_TablePropName="Roles" msprop:Generator_RowDeletingName="RolesRowDeleting" msprop:Generator_RowChangingName="RolesRowChanging" msprop:Generator_RowEvHandlerName="RolesRowChangeEventHandler" msprop:Generator_RowDeletedName="RolesRowDeleted" msprop:Generator_UserTableName="Roles" msprop:Generator_RowChangedName="RolesRowChanged" msprop:Generator_RowEvArgName="RolesRowChangeEvent" msprop:Generator_RowClassName="RolesRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Id_Rol" msdata:Caption="Código Rol" msprop:Generator_ColumnVarNameInTable="columnId_Rol" msprop:Generator_ColumnPropNameInRow="Id_Rol" msprop:Generator_ColumnPropNameInTable="Id_RolColumn" msprop:Generator_UserColumnName="Id_Rol" type="xs:string" minOccurs="0" />
+              <xs:element name="Descripcion" msprop:Generator_ColumnVarNameInTable="columnDescripcion" msprop:Generator_ColumnPropNameInRow="Descripcion" msprop:Generator_ColumnPropNameInTable="DescripcionColumn" msprop:Generator_UserColumnName="Descripcion" type="xs:string" minOccurs="0" />
+              <xs:element name="Habilitado" msprop:Generator_ColumnVarNameInTable="columnHabilitado" msprop:Generator_ColumnPropNameInRow="Habilitado" msprop:Generator_ColumnPropNameInTable="HabilitadoColumn" msprop:Generator_UserColumnName="Habilitado" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

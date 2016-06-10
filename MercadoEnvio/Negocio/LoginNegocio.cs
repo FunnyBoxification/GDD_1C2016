@@ -46,37 +46,40 @@ namespace MercadoNegocio
             }
         }
 
-        public List<decimal> getRolesIdByUserId(int idUser)
+        public DataTable getRolesDT(int idUser)
         {
 
-            int ID_ROL_COLUMN = 0;
-            List<decimal> listRolIds = new List<decimal>();
-
-            String sqlRequest = "SELECT * FROM PMS.ROLES_USUARIOS where Id_Usuario = @idUser";
-            SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
-            command.Parameters.Add("@idUser", SqlDbType.Int).Value = idUser;
+            //int ID_ROL_COLUMN = 0;
+            //List<decimal> listRolIds = new List<decimal>();
+            var dt = new DataTable();
 
             try
             {
-                SqlDataReader reader = command.ExecuteReader();
+            String sqlRequest = "SELECT Descripcion FROM PMS.ROLES_USUARIOS where Id_Usuario = @idUser";
+            SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
+            command.Parameters.Add("@idUser", SqlDbType.Int).Value = idUser;
+            using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+            {
+                adapter.Fill(dt);
+                return dt;
+            }
+            
+                //SqlDataReader reader = command.ExecuteReader();
 
-                while (reader.Read())
-                {
-                    decimal id_Rol = reader.GetDecimal(ID_ROL_COLUMN);
-                    listRolIds.Add(id_Rol);
-                }
+                //while (reader.Read())
+                //{
+                //    decimal id_Rol = reader.GetDecimal(ID_ROL_COLUMN);
+                //    listRolIds.Add(id_Rol);
+                //}
 
-                reader.Close();
+                //reader.Close();
+            command.Dispose();
 
             }
             catch (Exception ex)
             {
                 throw (new Exception("Error en ObetenerRoles" + ex.Message));
-            }
-
-            command.Dispose();
-
-            return listRolIds;
+            }                  
 
         }
 
@@ -91,43 +94,43 @@ namespace MercadoNegocio
             command.ExecuteScalar();
         }
 
-        public Rol getRolById(decimal idRol)
-        {
-            MercadoEN.Rol rol = new Rol();
+        //public Rol getRolById(decimal idRol)
+        //{
+        //    MercadoEN.Rol rol = new Rol();
 
 
-            String sqlRequest = "SELECT * FROM PMS.ROLES where Id_Rol = @idRol";
-            SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
-            command.Parameters.Add("@idRol", SqlDbType.Int).Value = idRol;
+        //    String sqlRequest = "SELECT * FROM PMS.ROLES where Id_Rol = @idRol";
+        //    SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
+        //    command.Parameters.Add("@idRol", SqlDbType.Int).Value = idRol;
 
-            try
-            {
-                SqlDataReader reader = command.ExecuteReader();
+        //    try
+        //    {
+        //        SqlDataReader reader = command.ExecuteReader();
 
-                while (reader.Read())
-                {
-                    String nombre = reader.GetString(1);
-                    decimal habilitado = reader.GetDecimal(2);
-                    rol.nombre = nombre;
-                    rol.habilitado = habilitado;
-                    rol.id_rol = idRol;
+        //        while (reader.Read())
+        //        {
+        //            String nombre = reader.GetString(1);
+        //            decimal habilitado = reader.GetDecimal(2);
+        //            rol.nombre = nombre;
+        //            rol.habilitado = habilitado;
+        //            rol.id_rol = idRol;
 
-                }
-                reader.Close();
-            }
-            catch (Exception e)
-            {
-                throw (new Exception("Error en ObetenerRoles" + e.Message));
+        //        }
+        //        reader.Close();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw (new Exception("Error en ObetenerRoles" + e.Message));
 
-            }
-
-
-            command.Dispose();
+        //    }
 
 
-            return rol;
+        //    command.Dispose();
 
-        }
+
+        //    return rol;
+
+        //}
 
 
         public decimal getIntentosDeLogin(String user)
@@ -169,17 +172,21 @@ namespace MercadoNegocio
 
         public void incrementarIntentosLogin(String user)
         {
-            String sqlRequest = "EXEC PMS.AumentarIntentosFallidos @userName =  @user";
-            SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
-            command.Parameters.Add("@user", SqlDbType.VarChar).Value = user;
-
+            //String sqlRequest = "EXEC PMS.AumentarIntentosFallidos @userName =  @user";
+            //SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
+            //command.Parameters.Add("@user", SqlDbType.VarChar).Value = user;
             try
             {
-                command.ExecuteScalar();
+                using (SqlCommand cmd = new SqlCommand("PMS.AumentarIntentosFallidos", DBConn.Connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.ExecuteNonQuery();
+                }            
+                
             }
             catch (Exception e)
             {
-                Console.WriteLine("No se pudo editar la cantidad de intentos fallidos : " + e.Message);
+                throw (new Exception("No se pudo editar la cantidad de intentos fallidos : " + e.Message));
             }
         }
 

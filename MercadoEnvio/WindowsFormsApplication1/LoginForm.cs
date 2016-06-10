@@ -63,12 +63,12 @@ namespace WindowsFormsApplication1
                 //TODO Limpiar intentos fallidos
                 loginNegocio.limpiarIntentos(user);
                 MessageBox.Show("Usuario logueado exitosamente");
-                List<decimal> listRolIds = loginNegocio.getRolesIdByUserId(userId);
+                DataTable dt = loginNegocio.getRolesDT(userId);
 
-                if (listRolIds.Count > 1)
+                if (dt.Rows.Count > 1)
                 {
                     //Tiene mas de un rol el usuario, se debe elegir con cual quiere loguear
-                    SelectRolForm form = new SelectRolForm(listRolIds);
+                    SelectRolForm form = new SelectRolForm(dt);
                     form.ShowDialog();
                 }
                 else

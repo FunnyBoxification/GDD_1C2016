@@ -28,17 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.rolesListBox = new System.Windows.Forms.ListBox();
+            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
+            this.dgvRoles = new System.Windows.Forms.DataGridView();
+            this.dsRolesBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.dsRoles = new WindowsFormsApplication1.ABM_Rol.dsRoles();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvRoles)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dsRolesBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dsRoles)).BeginInit();
             this.SuspendLayout();
-            // 
-            // rolesListBox
-            // 
-            this.rolesListBox.FormattingEnabled = true;
-            this.rolesListBox.Location = new System.Drawing.Point(12, 45);
-            this.rolesListBox.Name = "rolesListBox";
-            this.rolesListBox.Size = new System.Drawing.Size(268, 186);
-            this.rolesListBox.TabIndex = 0;
             // 
             // label1
             // 
@@ -49,16 +47,42 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "¿Con que rol desea ingresar?";
             // 
+            // dgvRoles
+            // 
+            this.dgvRoles.AllowUserToAddRows = false;
+            this.dgvRoles.AllowUserToDeleteRows = false;
+            this.dgvRoles.AutoGenerateColumns = false;
+            this.dgvRoles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvRoles.DataSource = this.dsRolesBindingSource;
+            this.dgvRoles.Location = new System.Drawing.Point(13, 46);
+            this.dgvRoles.Name = "dgvRoles";
+            this.dgvRoles.ReadOnly = true;
+            this.dgvRoles.Size = new System.Drawing.Size(267, 203);
+            this.dgvRoles.TabIndex = 2;
+            // 
+            // dsRolesBindingSource
+            // 
+            this.dsRolesBindingSource.DataSource = this.dsRoles;
+            this.dsRolesBindingSource.Position = 0;
+            // 
+            // dsRoles
+            // 
+            this.dsRoles.DataSetName = "dsRoles";
+            this.dsRoles.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
             // SelectRolForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(292, 261);
+            this.Controls.Add(this.dgvRoles);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.rolesListBox);
             this.Name = "SelectRolForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "SelectRolFormcs";
+            ((System.ComponentModel.ISupportInitialize)(this.dgvRoles)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dsRolesBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dsRoles)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -66,7 +90,9 @@
 
         #endregion
 
-        private System.Windows.Forms.ListBox rolesListBox;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.DataGridView dgvRoles;
+        private System.Windows.Forms.BindingSource dsRolesBindingSource;
+        private ABM_Rol.dsRoles dsRoles;
     }
 }

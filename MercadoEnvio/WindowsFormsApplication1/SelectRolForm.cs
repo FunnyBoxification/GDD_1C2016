@@ -14,24 +14,19 @@ namespace WindowsFormsApplication1
 {
     public partial class SelectRolForm : Form
     {
-        public LoginNegocio loginNegocio { get; set; }
-        public SqlServerDBConnection instance { get; set; }
+        
         public SelectRolForm()
         {
             InitializeComponent();
         }
 
 
-        public SelectRolForm(List<decimal> rolesIdList)
+        public SelectRolForm(DataTable dt)
         {
             InitializeComponent();
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
-            var loginNegocio = new LoginNegocio(instance = new SqlServerDBConnection());
-            foreach(decimal rolId in rolesIdList){
-                Rol rol = loginNegocio.getRolById(rolId);
-                rolesListBox.Items.Add(rol.nombre);
-            }
-            
+            dgvRoles.DataSource = dt;
+            dgvRoles.Columns["Habilitado"].Visible = false;
 
         }
     }

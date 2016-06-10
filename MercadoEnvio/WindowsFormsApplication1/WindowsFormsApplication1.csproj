@@ -50,6 +50,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ABM Rol\dsRoles.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsRoles.xsd</DependentUpon>
+    </Compile>
     <Compile Include="ABM Rol\Listado_Roles.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -151,6 +156,17 @@
     <EmbeddedResource Include="SelectRolForm.resx">
       <DependentUpon>SelectRolForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="ABM Rol\dsRoles.xsc">
+      <DependentUpon>dsRoles.xsd</DependentUpon>
+    </None>
+    <None Include="ABM Rol\dsRoles.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsRoles.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="ABM Rol\dsRoles.xss">
+      <DependentUpon>dsRoles.xsd</DependentUpon>
+    </None>
     <None Include="ABM Visibilidad\VisibilidadesDS.xsc">
       <DependentUpon>VisibilidadesDS.xsd</DependentUpon>
     </None>
