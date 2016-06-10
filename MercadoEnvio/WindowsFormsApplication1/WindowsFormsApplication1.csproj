@@ -103,7 +103,6 @@
     </Compile>
     <Compile Include="Connection\Connection.cs" />
     <Compile Include="DataSet1.Designer.cs" />
-    <Compile Include="Entities\Rol.cs" />
     <Compile Include="LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -116,7 +115,6 @@
     <Compile Include="SelectRolForm.Designer.cs">
       <DependentUpon>SelectRolForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SqlServerDBConnection.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="ABM Rol\Listado_Roles.resx">
@@ -197,6 +195,16 @@
     <Folder Include="Generar Publicación\" />
     <Folder Include="Historial Cliente\" />
     <Folder Include="Listado Estadistico\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MercadoEN\MercadoEN.csproj">
+      <Project>{aba7d4eb-f95b-4247-84b7-5f60a6d0a7b8}</Project>
+      <Name>MercadoEN</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Negocio\MercadoNegocio.csproj">
+      <Project>{2d676f49-d6d7-4fd7-952e-dac6ab611674}</Project>
+      <Name>MercadoNegocio</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

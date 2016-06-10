@@ -1,0 +1,7 @@
+C:\Users\Juli\GDD\gdd\MercadoEnvio\Negocio\obj\Debug\MercadoNegocio.csprojResolveAssemblyReference.cache
+C:\Users\Juli\GDD\gdd\MercadoEnvio\Negocio\bin\Debug\Negocio.dll
+C:\Users\Juli\GDD\gdd\MercadoEnvio\Negocio\bin\Debug\Negocio.pdb
+C:\Users\Juli\GDD\gdd\MercadoEnvio\Negocio\bin\Debug\MercadoEN.dll
+C:\Users\Juli\GDD\gdd\MercadoEnvio\Negocio\bin\Debug\MercadoEN.pdb
+C:\Users\Juli\GDD\gdd\MercadoEnvio\Negocio\obj\Debug\Negocio.dll
+C:\Users\Juli\GDD\gdd\MercadoEnvio\Negocio\obj\Debug\Negocio.pdb

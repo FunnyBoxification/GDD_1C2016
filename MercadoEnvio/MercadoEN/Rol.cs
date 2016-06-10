@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WindowsFormsApplication1.Entities
+namespace MercadoEN
 {
-    class Rol
+    public class Rol
     {
         public decimal id_rol { get; set; }
         public String nombre { get; set; }

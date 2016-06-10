@@ -7,12 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using WindowsFormsApplication1.Entities;
+using MercadoEN;
+using MercadoNegocio;
 
 namespace WindowsFormsApplication1
 {
     public partial class SelectRolForm : Form
     {
+        public LoginNegocio loginNegocio { get; set; }
+        public SqlServerDBConnection instance { get; set; }
         public SelectRolForm()
         {
             InitializeComponent();
@@ -23,9 +26,9 @@ namespace WindowsFormsApplication1
         {
             InitializeComponent();
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
-
+            var loginNegocio = new LoginNegocio(instance = new SqlServerDBConnection());
             foreach(decimal rolId in rolesIdList){
-                Rol rol =SqlServerDBConnection.Instance().getRolById(rolId);
+                Rol rol = loginNegocio.getRolById(rolId);
                 rolesListBox.Items.Add(rol.nombre);
             }
             

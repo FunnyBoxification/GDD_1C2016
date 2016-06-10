@@ -7,15 +7,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MercadoNegocio;
 
 
 namespace WindowsFormsApplication1
 {
     public partial class LoginForm : Form
     {
+        public LoginNegocio loginNegocio { get; set; }
+        public SqlServerDBConnection instance { get; set; }
         public LoginForm()
         {
             InitializeComponent();
+            SqlServerDBConnection instance = new SqlServerDBConnection();
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -41,12 +45,12 @@ namespace WindowsFormsApplication1
             String user = txtUsuario.Text;
             //Connection.Connection.loginUser(txtUsername.Text, txtPassword.Text);
 
-            SqlServerDBConnection instance = SqlServerDBConnection.Instance();
+            //SqlServerDBConnection instance = SqlServerDBConnection.Instance();
+             
+            var loginNegocio = new LoginNegocio( instance = new SqlServerDBConnection());
 
-
-
-            int userId = instance.loginUser(user, txtPass.Text);
-            Boolean habilitado = instance.estaHabilitado(txtUsuario.Text);
+            int userId = loginNegocio.loginUser(user, txtPass.Text);
+            Boolean habilitado = loginNegocio.estaHabilitado(txtUsuario.Text);
 
             if (userId >= 0)
             {
@@ -57,9 +61,9 @@ namespace WindowsFormsApplication1
                 }
 
                 //TODO Limpiar intentos fallidos
-                instance.limpiarIntentos(user);
+                loginNegocio.limpiarIntentos(user);
                 MessageBox.Show("Usuario logueado exitosamente");
-                List<decimal> listRolIds = instance.getRolesIdByUserId(userId);
+                List<decimal> listRolIds = loginNegocio.getRolesIdByUserId(userId);
 
                 if (listRolIds.Count > 1)
                 {
@@ -89,8 +93,8 @@ namespace WindowsFormsApplication1
                 }
 
                 //aumentar la cantidad de intentos fallidos               
-                instance.incrementarIntentosLogin(txtUsuario.Text);
-                decimal intentos = instance.getIntentosDeLogin(txtUsuario.Text);
+                loginNegocio.incrementarIntentosLogin(txtUsuario.Text);
+                decimal intentos = loginNegocio.getIntentosDeLogin(txtUsuario.Text);
                 MessageBox.Show("Contraseña invalida, intentos : " + intentos);
 
             }

@@ -1,62 +1,24 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using WindowsFormsApplication1.Entities;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Data;
+using MercadoEN;
 
-
-namespace WindowsFormsApplication1
+namespace MercadoNegocio
 {
-    class SqlServerDBConnection
+    public class LoginNegocio
     {
-        private static SqlServerDBConnection instance;
+        SqlServerDBConnection DBConn { get; set; }
 
-        /*@author: Fede
-         * Mi instancia de SQL tiene el nombre SQLEXPRESS, en el tp SQLSERVER2012
-         * 
-         * */
-        public const String ConnectionString = "Data Source=localhost\\SQLEXPRESS;Initial Catalog=GD1C2016;User ID=gd;Password=gd2016";
-        public SqlConnection Connection;
-
-        public SqlConnection openConnection()
+        public LoginNegocio(SqlServerDBConnection dbConnection)
         {
-            try
-            {
-                Connection = new SqlConnection(ConnectionString);
-                Connection.Open();
-            }
-            catch (SqlException e)
-            {
-                MessageBox.Show(e.Message);
-
-                Application.Exit();
-            }
-
-            return Connection;
-
+            DBConn = dbConnection;
         }
 
-        public void closeConnection()
-        {
-            Connection.Close();
-        }
-
-        public static SqlServerDBConnection Instance()
-        {
-            if (instance != null)
-            {
-                return instance;
-            }
-            else
-            {
-                instance = new SqlServerDBConnection();
-                return instance;
-            }
-        }
 
 
         public int loginUser(string username, string password)
@@ -68,7 +30,7 @@ namespace WindowsFormsApplication1
 
                 String sqlRequest = "SELECT PMS.getUser(@userName,@password)";
 
-                SqlCommand command = new SqlCommand(sqlRequest, Connection);
+                SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
                 command.Parameters.Add("@userName", SqlDbType.VarChar).Value = username;
 
                 command.Parameters.Add("@password", SqlDbType.Int).Value = password.ToString();
@@ -91,7 +53,7 @@ namespace WindowsFormsApplication1
             List<decimal> listRolIds = new List<decimal>();
 
             String sqlRequest = "SELECT * FROM PMS.ROLES_USUARIOS where Id_Usuario = @idUser";
-            SqlCommand command = new SqlCommand(sqlRequest, Connection);
+            SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
             command.Parameters.Add("@idUser", SqlDbType.Int).Value = idUser;
 
             try
@@ -109,7 +71,7 @@ namespace WindowsFormsApplication1
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                throw (new Exception("Error en ObetenerRoles" + ex.Message));
             }
 
             command.Dispose();
@@ -123,7 +85,7 @@ namespace WindowsFormsApplication1
         public void limpiarIntentos(String user)
         {
             String sqlRequest = "EXEC PMS.LimpiarIntentos @userName = @user";
-            SqlCommand command = new SqlCommand(sqlRequest, Connection);
+            SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
             command.Parameters.Add("@user", SqlDbType.VarChar).Value = user;
 
             command.ExecuteScalar();
@@ -131,11 +93,11 @@ namespace WindowsFormsApplication1
 
         public Rol getRolById(decimal idRol)
         {
-            Rol rol = new Rol();
+            MercadoEN.Rol rol = new Rol();
 
 
             String sqlRequest = "SELECT * FROM PMS.ROLES where Id_Rol = @idRol";
-            SqlCommand command = new SqlCommand(sqlRequest, Connection);
+            SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
             command.Parameters.Add("@idRol", SqlDbType.Int).Value = idRol;
 
             try
@@ -155,7 +117,7 @@ namespace WindowsFormsApplication1
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
+                throw (new Exception("Error en ObetenerRoles" + e.Message));
 
             }
 
@@ -171,7 +133,7 @@ namespace WindowsFormsApplication1
         public decimal getIntentosDeLogin(String user)
         {
             String sqlRequest = "SELECT Intentos_Login FROM PMS.USUARIOS where User_Nombre = @user";
-            SqlCommand command = new SqlCommand(sqlRequest, Connection);
+            SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
             command.Parameters.Add("@user", SqlDbType.VarChar).Value = user;
 
             try
@@ -190,7 +152,7 @@ namespace WindowsFormsApplication1
         public Boolean estaHabilitado(String user)
         {
             String sqlRequest = "SELECT Habilitado FROM PMS.USUARIOS where User_Nombre = @user";
-            SqlCommand command = new SqlCommand(sqlRequest, Connection);
+            SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
             command.Parameters.Add("@user", SqlDbType.VarChar).Value = user;
 
             try
@@ -208,7 +170,7 @@ namespace WindowsFormsApplication1
         public void incrementarIntentosLogin(String user)
         {
             String sqlRequest = "EXEC PMS.AumentarIntentosFallidos @userName =  @user";
-            SqlCommand command = new SqlCommand(sqlRequest, Connection);
+            SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
             command.Parameters.Add("@user", SqlDbType.VarChar).Value = user;
 
             try
@@ -220,6 +182,8 @@ namespace WindowsFormsApplication1
                 Console.WriteLine("No se pudo editar la cantidad de intentos fallidos : " + e.Message);
             }
         }
+
+
 
 
     }
