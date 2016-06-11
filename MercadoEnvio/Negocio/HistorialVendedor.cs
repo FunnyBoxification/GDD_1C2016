@@ -28,15 +28,34 @@ namespace MercadoNegocio
                 DBConn.openConnection();
                 String sqlRequest;
                 sqlRequest = "SELECT DISTINCT Numero, Fecha, Total FROM ";
-                sqlRequest += "( SELECT item.*, factura.* FROM PMS.ITEM_FACTURA item LEFT JOINT PMS.FACTURAS factura ON item.Id_Factura = factura.Numero ";
+                sqlRequest += "( SELECT item.*, factura.* FROM PMS.ITEMFACTURA item LEFT JOIN PMS.FACTURAS factura ON item.Id_Factura = factura.Numero ";
                 sqlRequest += " WHERE 1=1";
-                if (Id_Vendedor != -1) sqlRequest += " and "+ Id_Vendedor +" IN (SELECT Id_Usuario FROM PMS.PUBLICACIONES WHERE Id_Publicacion = item.Id_Publicacion)";
-                if (Contenido_Detalle != null) sqlRequest += " and Descripcion LIKE %"+Contenido_Detalle+"%";
-                if (Importe_Max != -1 && Importe_Min != -1) sqlRequest += " AND factura.Monto BETWEEN " + Importe_Min + " AND " + Importe_Max;
-                else if (Importe_Max != -1) sqlRequest += " AND factura.Monto <= " + Importe_Max;
-                else if (Importe_Min != -1) sqlRequest += " AND factura.Monto >= " + Importe_Min;
+                if (Id_Vendedor != -1)
+                {
+                    sqlRequest += " and " + Id_Vendedor + " IN (SELECT Id_Usuario FROM PMS.PUBLICACIONES WHERE Id_Publicacion = item.Id_Publicacion)";
+                }
+                if (Contenido_Detalle != null)
+                {
+                    sqlRequest += " and Descripcion LIKE %" + Contenido_Detalle + "%";
+                }
+                if (Importe_Max != -1 && Importe_Min != -1)
+                {
+                    sqlRequest += " AND factura.Monto BETWEEN " + Importe_Min + " AND " + Importe_Max;
+                }
+                else if (Importe_Max != -1)
+                {
+                    sqlRequest += " AND factura.Monto <= " + Importe_Max;
+                }
+                else if (Importe_Min != -1)
+                {
+                    sqlRequest += " AND factura.Monto >= " + Importe_Min;
+                }
                 // CHEQUEAR ESTO
-                if(Fecha_Max != -1 && Fecha_Min != -1) sqlRequest += " AND factura.Fecha BETWEEN " + Fecha_Min + " AND "+ Fecha_Max;
+                if (Fecha_Max != -1 && Fecha_Min != -1)
+                {
+                    sqlRequest += " AND factura.Fecha BETWEEN " + Fecha_Min + " AND " + Fecha_Max;
+                }
+                sqlRequest += ") as Facturas";
                 SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
 
                 using (SqlDataAdapter adapter = new SqlDataAdapter(command))
@@ -51,7 +70,7 @@ namespace MercadoNegocio
             catch (Exception ex)
             {
                 DBConn.closeConnection();
-                throw (new Exception("Error en searchFacturasAlVendedor" + ex.Message));
+                throw (new Exception("Error en searchFacturasAlVendedor: "  + ex.Message));
             }
         }
 

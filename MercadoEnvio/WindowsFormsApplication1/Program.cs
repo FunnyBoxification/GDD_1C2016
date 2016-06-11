@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WindowsFormsApplication1.ABM_Rol;
-
+using WindowsFormsApplication1.Facturas;
 
 namespace WindowsFormsApplication1
 {
@@ -21,7 +21,7 @@ namespace WindowsFormsApplication1
             Application.SetCompatibleTextRenderingDefault(false);
 
             //SqlServerDBConnection.Instance().openConnection();
-            Application.Run(new Listado_Roles());
+            Application.Run(new FacturasVendedor());
         }
     }
 }

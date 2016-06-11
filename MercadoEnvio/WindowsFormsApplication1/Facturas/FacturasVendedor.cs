@@ -25,10 +25,5 @@ namespace WindowsFormsApplication1.Facturas
         {
 
         }
-
-        private void superGrid1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
     }
 }

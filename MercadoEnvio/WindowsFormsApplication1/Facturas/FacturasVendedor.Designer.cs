@@ -76,7 +76,6 @@
             this.superGrid1.PageSize = 10;
             this.superGrid1.Size = new System.Drawing.Size(456, 198);
             this.superGrid1.TabIndex = 3;
-            this.superGrid1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.superGrid1_CellContentClick);
             // 
             // bindingNavigator1
             // 
