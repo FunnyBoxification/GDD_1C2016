@@ -345,17 +345,17 @@ BEGIN
 				OR Id_Usuario IN (SELECT Id_Empresa FROM PMS.EMPRESAS WHERE Cuit_Empresa = Publ_Empresa_Cuit)),		
 			Publicacion_Visibilidad_Cod,
 			(SELECT top 1 t.Id_Tipo
-			   FROM PMS.TIPO_PUBLICACION t, gd_esquema.Maestra m
-			  WHERE t.Descripcion = m.Publicacion_Tipo
-			    AND m.Publicacion_Cod = Publicacion_Cod),
+			   FROM PMS.TIPO_PUBLICACION t
+			  WHERE t.Descripcion = Publicacion_Tipo
+			    AND Publicacion_Cod = Publicacion_Cod),
 			(SELECT top 1 r.Id_Rubro
-			   FROM PMS.RUBROS r, gd_esquema.Maestra m
-			  WHERE r.Descripcion = m.Publicacion_Rubro_Descripcion
-			    AND m.Publicacion_Cod = Publicacion_Cod),
+			   FROM PMS.RUBROS r
+			  WHERE r.Descripcion = Publicacion_Rubro_Descripcion
+			    AND Publicacion_Cod = Publicacion_Cod),
 			(SELECT top 1 e.Id_Estado
-			   FROM PMS.PUBLICACION_ESTADOS e, gd_esquema.Maestra m
-			  WHERE e.Descripcion = m.Publicacion_Estado
-			    AND m.Publicacion_Cod = Publicacion_Cod)			
+			   FROM PMS.PUBLICACION_ESTADOS e
+			  WHERE e.Descripcion = Publicacion_Estado
+			    AND Publicacion_Cod = Publicacion_Cod)			
 	FROM gd_esquema.Maestra WHERE Publicacion_Cod is not null;
 
 	INSERT INTO PMS.OFERTAS	
