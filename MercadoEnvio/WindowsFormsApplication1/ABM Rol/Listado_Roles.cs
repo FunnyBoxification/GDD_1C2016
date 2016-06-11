@@ -17,15 +17,10 @@ namespace WindowsFormsApplication1.ABM_Rol
         public Listado_Roles()
         {
             InitializeComponent();
-            SqlServerDBConnection.Instance().openConnection();
-            String select = "SELECT * FROM PMS.ROLES WHERE Id_Rol IS NOT NULL";
-            SqlCommand command = new SqlCommand(select, SqlServerDBConnection.Instance().Connection);
-            SqlDataAdapter dataAdapter = new SqlDataAdapter(select, SqlServerDBConnection.ConnectionString);
-            SqlCommandBuilder commandBuilder = new SqlCommandBuilder(dataAdapter);
-            DataSet ds = new DataSet();
-            dataAdapter.Fill(ds);
+            var negocio = new RolesNegocio(SqlServerDBConnection.Instance());
+            //negocio.searchRoles(null,-1);
             dataGridView1.ReadOnly = true;
-            dataGridView1.DataSource = ds.Tables[0];
+            dataGridView1.DataSource = negocio.searchRoles(null, -1);
             SqlServerDBConnection.Instance().closeConnection();
         }
 
@@ -36,17 +31,6 @@ namespace WindowsFormsApplication1.ABM_Rol
 
         private void Listado_Roles_Load(object sender, EventArgs e)
         {
-
-            SqlServerDBConnection.Instance().openConnection();
-            String select = "SELECT * FROM PMS.ROLES";
-            SqlCommand command = new SqlCommand(select, SqlServerDBConnection.Instance().Connection);
-            SqlDataAdapter dataAdapter = new SqlDataAdapter(select, SqlServerDBConnection.ConnectionString);
-            SqlCommandBuilder commandBuilder = new SqlCommandBuilder(dataAdapter);
-            DataSet ds = new DataSet();
-            dataAdapter.Fill(ds);
-            dataGridView1.ReadOnly = true;
-            dataGridView1.DataSource = ds.Tables[0];
-            SqlServerDBConnection.Instance().closeConnection();
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -54,16 +38,17 @@ namespace WindowsFormsApplication1.ABM_Rol
 
         }
 
-      /*  private void Form1_Load(object sender, EventArgs e)
-        {
-            String select = "SELECT * FROM PMS.ROLES";
-            SqlCommand command = new SqlCommand(select, SqlServerDBConnection.Instance().Connection);
-            this.dataGridView1;            
-        }*/
-
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+            var negocio = new RolesNegocio(SqlServerDBConnection.Instance());
+            var Nombre = Convert.ToString(dataGridView1.SelectedRows[0].Cells["Nombre"].Value);
+            var Habilitado = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["Habilitado"].Value);
+            var Id = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["Id_Rol"].Value);
+            var funcionalidades = negocio.getFuncionalidadesDeRol(Id);
+
+            var popupform = new Modificacion_Rol(Id,Nombre,Habilitado,funcionalidades);
+            popupform.Show(); 
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -71,5 +56,23 @@ namespace WindowsFormsApplication1.ABM_Rol
             var form = new ABM_Rol.Alta_Rol();
             form.Show();
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            var negocio = new RolesNegocio(SqlServerDBConnection.Instance());
+            var nombre = textBox1.Text;
+            int Habilitado = comboBox1.SelectedIndex;
+            dataGridView1.DataSource = negocio.searchRoles(nombre, Habilitado);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            textBox1.Clear();
+            comboBox1.SelectionLength = 0;
+            var negocio = new RolesNegocio(SqlServerDBConnection.Instance());
+            dataGridView1.DataSource = negocio.searchRoles(null, -1);
+
+        }
+
     }
 }

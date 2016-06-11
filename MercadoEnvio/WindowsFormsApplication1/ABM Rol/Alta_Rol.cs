@@ -18,8 +18,7 @@ namespace WindowsFormsApplication1.ABM_Rol
         {
             InitializeComponent();
 
-            var negocio = new LoginNegocio(SqlServerDBConnection.Instance());
-            negocio.getAllFuncionalidades();
+            var negocio = new RolesNegocio(SqlServerDBConnection.Instance());
             listBox1.DisplayMember = "Nombre";
             listBox1.ValueMember = "Id_Funcionalidad";
             listBox1.DataSource = negocio.getAllFuncionalidades();
@@ -32,14 +31,29 @@ namespace WindowsFormsApplication1.ABM_Rol
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var negocio = new LoginNegocio(SqlServerDBConnection.Instance());
+            var negocio = new RolesNegocio(SqlServerDBConnection.Instance());
 
-            negocio.insertRol();
-            
-            foreach (var item in listBox1.SelectedItems)
+            using (IDbTransaction tran = SqlServerDBConnection.Instance().Connection.BeginTransaction())
             {
-                negocio.insertFuncionalidadToRol(1, (int) (item as DataRowView)["Id_Funcionalidad"] );
+                try
+                {
 
+                    negocio.insertRol(this.textBox1.Text);
+
+                    foreach (var item in listBox1.SelectedItems)
+                    {
+                        negocio.insertFuncionalidadToRol(1, (int)(item as DataRowView)["Id_Funcionalidad"]);
+
+                    }
+
+                    tran.Commit();
+                }
+
+                catch
+                {
+                    tran.Rollback();
+                    throw;
+                }
             }
         }
 
