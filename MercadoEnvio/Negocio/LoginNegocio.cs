@@ -93,6 +93,73 @@ namespace MercadoNegocio
 
         }
 
+        public int insertRol()
+        {
+            return 1;
+        }
+
+        public void insertFuncionalidadToRol(int idRol, int idFuncionalidad)
+        {
+            //int ID_ROL_COLUMN = 0;
+            //List<decimal> listRolIds = new List<decimal>();
+            var dt = new DataTable();
+
+            try
+            {
+                DBConn.openConnection();
+                /*String sqlRequest = "INSERT INTO PMS.FUNCIONALIDES_ROLES(Id_Rol, Id_Funcionalidad) VALUES (@Id_Rol, @Id_Funcionalidad)";
+                SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
+                command.Parameters.Add("@Id_Rol", SqlDbType.Int).Value = idRol;
+                command.Parameters.Add("@Id_Funcionalidad", SqlDbType.Int).Value = idFuncionalidad;*/
+                using (SqlCommand cmd = new SqlCommand("PMS.insertFuncionalidad", DBConn.Connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("Id_Rol", idRol);
+                    cmd.Parameters.AddWithValue("Id_Funcionalidad", idFuncionalidad);
+                    cmd.ExecuteNonQuery();
+                    cmd.Dispose();
+                }
+                
+                DBConn.closeConnection();
+
+            }
+            catch (Exception ex)
+            {
+                DBConn.closeConnection();
+                throw (new Exception("Error en ObetenerRoles" + ex.Message));
+            }
+        }
+
+        public DataTable getAllFuncionalidades()
+        {
+
+            //int ID_ROL_COLUMN = 0;
+            //List<decimal> listRolIds = new List<decimal>();
+            var dt = new DataTable();
+
+            try
+            {
+                DBConn.openConnection();
+                String sqlRequest = "SELECT * FROM PMS.FUNCIONALIDADES WHERE Id_Funcionalidad IS NOT NULL";
+                SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
+                //command.Parameters.Add("@idUser", SqlDbType.Int).Value = idUser;
+                using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                {
+                    adapter.Fill(dt);
+                    return dt;
+                }
+                command.Dispose();
+                DBConn.closeConnection();
+
+            }
+            catch (Exception ex)
+            {
+                DBConn.closeConnection();
+                throw (new Exception("Error en ObetenerRoles" + ex.Message));
+            }
+
+        }
+
 
 
         public void limpiarIntentos(String user)

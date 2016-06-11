@@ -1,0 +1,547 @@
+CREATE TYPE PMS.Funcionalidades
+AS TABLE
+(
+  funcionalidad_id INT
+);
+GO
+
+CREATE  PROCEDURE PMS.UPDATE_ROLES
+       @id numeric,
+	   @nombre nvarchar(255),
+	   @func_del PMS.Funcionalidades READONLY,
+	   @func_add PMS.Funcionalidades READONLY
+	   
+		
+                    
+AS 
+BEGIN 
+     SET NOCOUNT ON 
+
+UPDATE [PMS].[ROLES]
+   SET nombre = @nombre
+ WHERE Id_Rol = @id;
+ 
+
+ DELETE FROM [PMS].[FUNCIONALIDES_ROLES]
+      WHERE (Id_Funcionalidad in (select * from @func_del));
+
+DECLARE @id_func INT
+DECLARE db_cursor CURSOR FOR  
+SELECT * 
+FROM @func_add 
+
+OPEN db_cursor   
+FETCH NEXT FROM db_cursor INTO @id_func   
+
+WHILE @@FETCH_STATUS = 0
+BEGIN
+
+ INSERT INTO [PMS].[FUNCIONALIDES_ROLES]
+           ([Id_Rol],Id_Funcionalidad)
+     VALUES
+           (@id,@id_func);
+FETCH NEXT FROM db_cursor INTO @id_func
+END
+
+END 
+GO
+
+CREATE PROCEDURE PMS.INSERT_ROL
+       @nombre nvarchar(255),
+	   @id numeric(18,0) OUTPUT
+                    
+AS 
+BEGIN 
+     SET NOCOUNT ON 
+
+     INSERT INTO [PMS].[ROLES]
+          ( 
+            nombre, 
+			habilitado		
+          ) 
+     VALUES 
+          ( 
+            @nombre,
+			1)
+	set @id=(SELECT MAX(Id_Rol) from PMS.ROLES)	
+END 
+GO
+CREATE  PROCEDURE PMS.DELETE_ROL
+       @id numeric 
+                    
+AS 
+BEGIN 
+     SET NOCOUNT ON 
+
+UPDATE [PMS].[ROLES]
+   SET [Habilitado] = 0
+ WHERE Id_Rol = @id;
+ 
+ DELETE FROM [PMS].[ROLES_USUARIOS]
+      where Id_Rol=@id;
+
+
+END
+GO
+
+CREATE PROCEDURE PMS.INSERT_USER
+			@User_Nombre nvarchar(255)
+			,@User_Password binary(32)
+			,@Habilitado numeric(18,0)
+           ,@Intentos_login numeric(18,0)
+           ,@Primera_Vez numeric(18,0)
+           ,@Reputacion numeric(18,0)
+		   ,@id numeric(18,0) output
+	   
+                    
+AS 
+BEGIN 
+     SET NOCOUNT ON 
+
+INSERT INTO [PMS].[USUARIOS]
+           ([User_Nombre]
+           ,[User_Password]
+           ,[Habilitado]
+           ,[Intentos_login]
+           ,[Primera_Vez]
+           ,[Reputacion])
+     VALUES
+           (@User_Nombre
+           ,HASHBYTES('SHA2_256',@User_Password)
+           ,@Habilitado
+           ,@Intentos_login
+           ,@Primera_Vez
+           ,@Reputacion)
+SET @id= (SELECT max(Id_Usuario) from PMS.USUARIOS)
+end
+go
+
+CREATE PROCEDURE PMS.INSERT_CLIENTE
+			@Id_Cliente numeric(18,0)
+           ,@Dni_Cliente numeric(18,0)
+           ,@Apellido nvarchar(255)
+           ,@Nombre nvarchar(255)
+           ,@FechaNacimiento datetime
+           ,@Mail nvarchar(255)
+           ,@DomCalle nvarchar(255)
+           ,@NroCalle numeric(18,0)
+           ,@Piso numeric(18,0)
+           ,@Depto nvarchar(50)
+           ,@Cod_Postal nvarchar(50)
+as begin
+INSERT INTO [PMS].[CLIENTES]
+           ([Id_Cliente]
+           ,[Dni_Cliente]
+           ,[Apellido]
+           ,[Nombre]
+           ,[FechaNacimiento]
+           ,[Mail]
+           ,[DomCalle]
+           ,[NroCalle]
+           ,[Piso]
+           ,[Depto]
+           ,[Cod_Postal])
+     VALUES
+           (@Id_Cliente
+           ,@Dni_Cliente
+           ,@Apellido
+           ,@Nombre
+           ,@FechaNacimiento
+           ,@Mail
+           ,@DomCalle
+           ,@NroCalle
+           ,@Piso
+           ,@Depto
+           ,@Cod_Postal)
+end
+go
+
+create procedure PMS.INSERT_EMPRESA
+			@Id_Empresa numeric(18,0)
+           ,@Cuit_Empresa nvarchar(50)
+           ,@RazonSocial nvarchar(255)
+           ,@FechaCreacion datetime
+           ,@Mail nvarchar(50)
+           ,@DomCalle nvarchar(100)
+           ,@NroCalle numeric(18,0)
+           ,@Piso numeric(18,0)
+           ,@Depto nvarchar(50)
+           ,@CodigoPostal nvarchar(50)
+as begin
+INSERT INTO [PMS].[EMPRESAS]
+           ([Id_Empresa]
+           ,[Cuit_Empresa]
+           ,[RazonSocial]
+           ,[FechaCreacion]
+           ,[Mail]
+           ,[DomCalle]
+           ,[NroCalle]
+           ,[Piso]
+           ,[Depto]
+           ,[CodigoPostal])
+     VALUES
+           (@Id_Empresa
+           ,@Cuit_Empresa
+           ,@RazonSocial
+           ,@FechaCreacion
+           ,@Mail
+           ,@DomCalle
+           ,@NroCalle
+           ,@Piso
+           ,@Depto
+           ,@CodigoPostal)
+end
+go
+
+create procedure PMS.INSERT_USUARIO_CLIENTE
+			@User_Nombre nvarchar(255)
+			,@User_Password binary(32)
+			,@Habilitado numeric(18,0)
+           ,@Primera_Vez numeric(18,0)
+           ,@Reputacion numeric(18,0)
+           ,@Dni_Cliente numeric(18,0)
+           ,@Apellido nvarchar(255)
+           ,@Nombre nvarchar(255)
+           ,@FechaNacimiento datetime
+           ,@Mail nvarchar(255)
+           ,@DomCalle nvarchar(255)
+           ,@NroCalle numeric(18,0)
+           ,@Piso numeric(18,0)
+           ,@Depto nvarchar(50)
+           ,@Cod_Postal nvarchar(50)
+		   ,@id numeric(18,0) output
+as begin
+
+INSERT INTO [PMS].[USUARIOS]
+           ([User_Nombre]
+           ,[User_Password]
+           ,[Habilitado]
+           ,[Intentos_login]
+           ,[Primera_Vez]
+           ,[Reputacion])
+     VALUES
+           (@User_Nombre
+           ,HASHBYTES('SHA2_256',@User_Password)
+           ,@Habilitado
+           ,0
+           ,@Primera_Vez
+           ,@Reputacion)
+
+
+set @id=(select Id_usuario from PMS.USUARIOS where User_Nombre=@User_Nombre);
+INSERT INTO [PMS].[CLIENTES]
+           ([Id_Cliente]
+           ,[Dni_Cliente]
+           ,[Apellido]
+           ,[Nombre]
+           ,[FechaNacimiento]
+           ,[Mail]
+           ,[DomCalle]
+           ,[NroCalle]
+           ,[Piso]
+           ,[Depto]
+           ,[Cod_Postal])
+     VALUES
+           (@id
+           ,@Dni_Cliente
+           ,@Apellido
+           ,@Nombre
+           ,@FechaNacimiento
+           ,@Mail
+           ,@DomCalle
+           ,@NroCalle
+           ,@Piso
+           ,@Depto
+           ,@Cod_Postal)
+end
+go
+
+create procedure PMS.INSERT_USUARIO_EMPRESA
+			@User_Nombre nvarchar(255)
+			,@User_Password binary(32)
+			,@Habilitado numeric(18,0)
+           ,@Primera_Vez numeric(18,0)
+           ,@Reputacion numeric(18,0)
+           ,@Cuit_Empresa nvarchar(50)
+           ,@RazonSocial nvarchar(255)
+           ,@FechaCreacion datetime
+           ,@Mail nvarchar(50)
+           ,@DomCalle nvarchar(100)
+           ,@NroCalle numeric(18,0)
+           ,@Piso numeric(18,0)
+           ,@Depto nvarchar(50)
+           ,@CodigoPostal nvarchar(50)
+		   ,@id numeric(18,0) output
+as begin
+
+INSERT INTO [PMS].[USUARIOS]
+           ([User_Nombre]
+           ,[User_Password]
+           ,[Habilitado]
+           ,[Intentos_login]
+           ,[Primera_Vez]
+           ,[Reputacion])
+     VALUES
+           (@User_Nombre
+           ,HASHBYTES('SHA2_256',@User_Password)
+           ,@Habilitado
+           ,0
+           ,@Primera_Vez
+           ,@Reputacion)
+
+set @id=(select Id_usuario from PMS.USUARIOS where User_Nombre=@User_Nombre);
+
+INSERT INTO [PMS].[EMPRESAS]
+           ([Id_Empresa]
+           ,[Cuit_Empresa]
+           ,[RazonSocial]
+           ,[FechaCreacion]
+           ,[Mail]
+           ,[DomCalle]
+           ,[NroCalle]
+           ,[Piso]
+           ,[Depto]
+           ,[CodigoPostal])
+     VALUES
+           (@id
+           ,@Cuit_Empresa
+           ,@RazonSocial
+           ,@FechaCreacion
+           ,@Mail
+           ,@DomCalle
+           ,@NroCalle
+           ,@Piso
+           ,@Depto
+           ,@CodigoPostal)
+end
+go
+
+CREATE PROCEDURE PMS.INSERT_PUBLICACION
+       @Id_Publicacion numeric(18,0)
+       ,@Descripcion nvarchar(255)
+           ,@Stock numeric(18,0)
+           ,@Fecha datetime
+           ,@FechaVencimiento datetime
+           ,@Precio numeric(18,2)
+           ,@Id_Usuario numeric(18,0)
+           ,@Id_Visibilidad numeric(18,0)
+           ,@Id_Tipo numeric(18,0)
+           ,@Id_Rubro numeric(18,0)
+           ,@Id_Estado numeric(18,0)
+	   
+                    
+AS 
+BEGIN 
+     SET NOCOUNT ON 
+
+INSERT INTO PMS.PUBLICACIONES
+           ([Id_Publicacion]
+      ,[Descripcion]
+      ,[Stock]
+      ,[Fecha]
+      ,[FechaVencimiento]
+      ,[Precio]
+      ,[Id_Usuario]
+      ,[Id_Visibilidad]
+      ,[Id_Tipo]
+      ,[Id_Rubro]
+      ,[Id_Estado])
+     VALUES
+           ((select max(Id_Publicacion)from PUBLICACIONES)+1
+			,@Descripcion 
+			,@Stock 
+			,@Fecha 
+			,@FechaVencimiento 
+			,@Precio 
+			,@Id_Usuario 
+			,@Id_Visibilidad 
+			,@Id_Tipo 
+			,@Id_Rubro 
+			,@Id_Estado)
+END
+GO
+
+CREATE PROCEDURE PMS.INSERT_COMPRAS
+			@Cantidad numeric(18,0)
+           ,@Fecha datetime
+           ,@Id_Cliente_Comprador numeric(18,0)
+           ,@Id_Publicacion numeric(18,0)
+		   ,@Numero numeric(18,0)
+           ,@Total numeric(18,2)
+           ,@Id_FormaPago numeric(11,0)
+		   ,@id numeric(18,0) output
+AS BEGIN
+if @Cantidad> (select stock from PUBLICACIONES where Id_Publicacion=@Id_Publicacion)
+begin
+;throw 50999,'cantidad a comprar mayor a stock',1;
+end
+else if @Id_Cliente_Comprador=(select Id_usuario from PUBLICACIONES where Id_Publicacion=@Id_Publicacion)
+begin
+; throw 50999,'comprador no puede ser el vendedor',1;
+end
+else
+begin
+INSERT INTO PMS.COMPRAS
+           (Cantidad
+           ,Monto
+           ,Fecha
+           ,Id_Cliente_Comprador
+           ,Id_Publicacion)
+     VALUES
+           (@Cantidad
+           ,(select Precio from PUBLICACIONES where Id_Publicacion=@Id_Publicacion)*@Cantidad
+           ,@Fecha
+           ,@Id_Cliente_Comprador
+           ,@Id_Publicacion);
+update PUBLICACIONES set Stock=Stock-@Cantidad where Id_Publicacion=@Id_Publicacion;
+set @id=(select max(Id_Compra)from PMS.COMPRAS)
+/*EXECUTE PMS.generar_Factura
+   */
+end
+end
+GO
+
+
+CREATE PROCEDURE PMS.INSERT_RUBRO
+		@Descripcion nvarchar(30)
+
+AS BEGIN
+
+INSERT INTO PMS.RUBROS
+           (Descripcion)
+     VALUES
+           (@Descripcion
+           )
+
+end
+GO
+
+create procedure PMS.INSERT_OFERTAS
+			@Fecha datetime
+           ,@Monto numeric(18,2)
+           ,@Id_Publicacion numeric(18,0)
+           ,@Id_Cliente numeric(18,0)
+		   ,@id numeric(18,0) output
+as begin
+if @monto<(select max(monto)from OFERTAS where Id_Publicacion=@Id_Publicacion)
+begin
+; throw 50999,'monto menor',1;
+end
+else if @Id_Cliente=(select Id_usuario from PUBLICACIONES where Id_Publicacion=@Id_Publicacion)
+begin
+; throw 50999,'comprador no puede ser el vendedor',1;
+end
+else
+begin
+INSERT INTO [PMS].[OFERTAS]
+           ([Fecha]
+           ,[Monto]
+           ,[Id_Publicacion]
+           ,[Id_Cliente])
+     VALUES
+           (@Fecha
+           ,@Monto
+           ,@Id_Publicacion
+           ,@Id_Cliente)
+end
+end
+set @id=(select max(Id_Oferta) from PMS.OFERTAS)
+GO
+
+create procedure PMS.INSERT_FACTURA
+		@Numero numeric(18,0)
+        ,@Fecha datetime
+        ,@Total numeric(18,2)
+        ,@Id_FormaPago numeric(11,0)
+		,@Monto numeric(18,2)
+        ,@Cantidad numeric(18,0)
+        ,@Id_Publicacion numeric(18,0)
+as
+begin 
+
+INSERT INTO [PMS].[FACTURAS]
+           (numero
+           ,Fecha
+           ,Total
+           ,Id_FormaPago)
+     VALUES
+           (@Numero
+           ,@Fecha
+           ,@Total
+           ,@Id_FormaPago );
+
+INSERT INTO [PMS].[ITEMFACTURA]
+           ([Monto]
+           ,[Cantidad]
+           ,[Id_Factura]
+           ,[Id_Publicacion])
+     VALUES
+           (@Monto
+           ,@Cantidad
+           ,@Numero
+           ,@Id_Publicacion);
+END
+GO
+
+CREATE TRIGGER UPDATE_USUARIO_REPUTACION
+ON PMS.CALIFICACIONES
+AFTER INSERT
+AS
+BEGIN
+DECLARE @ID_USER numeric (18,0)
+SET @ID_USER = (select Id_Usuario from PMS.PUBLICACIONES where Id_Publicacion= (select Id_Publicacion from COMPRAS where Id_Calificacion=(select Id_Calificacion from inserted)))
+DECLARE @REPUTACION numeric (18,0)
+SET @REPUTACION =((select Cantidad_Estrellas from inserted)+ (select Reputacion from PMS.USUARIOS where Id_Usuario=@ID_USER))/(select count(Id_Calificacion) from PMS.CALIFICACIONES where Id_Calificacion IN (select Id_Calificacion from COMPRAS where Id_Publicacion IN (select Id_Publicacion FROM PMS.PUBLICACIONES where Id_Usuario = @ID_USER)))
+UPDATE USUARIOS
+set Reputacion=@REPUTACION
+where Id_Usuario=@ID_USER
+END
+GO
+
+CREATE PROCEDURE INSERT_CALIFICACION
+		@Id_Compra numeric(18,0)
+        ,@Cantidad_Estrellas numeric(18,0)
+        ,@Descripcion nvarchar(255)
+		,@ID_CALIFICACION numeric(18,0) output
+AS
+BEGIN
+
+set @ID_CALIFICACION=(select max(Id_Calificacion) from PMS.CALIFICACIONES
+INSERT INTO [PMS].[CALIFICACIONES]
+           ([Id_Calificacion]
+           ,[Cantidad_Estrellas]
+           ,[Descripcion])
+     VALUES
+           (@ID_CALIFICACION
+           ,@Cantidad_Estrellas
+           ,@Descripcion)
+
+UPDATE [PMS].[COMPRAS]
+   SET [Id_Calificacion] = @Id_Calificacion
+ WHERE Id_Compra=@Id_Compra
+END
+GO
+
+CREATE PROCEDURE SUBASTAS_TERMIANDAS
+		@Fecha datetime
+AS
+BEGIN
+DECLARE @ID_CLIENTE numeric (18,0)
+DECLARE @ID_PUBLICACION numeric(18,0)
+DECLARE @MONTO numeric(18,2)
+
+DECLARE db_cursor CURSOR FOR  
+select p.Id_Publicacion,o.Monto,o.Id_Cliente from PMS.PUBLICACIONES p join PMS.OFERTAS o ON p.Id_Publicacion=o.Id_Publicacion
+ where p.Id_Tipo=2 and p.FechaVencimiento<@Fecha
+OPEN db_cursor   
+FETCH NEXT FROM db_cursor INTO @ID_PUBLICACION,@MONTO,@ID_CLIENTE
+
+WHILE @@FETCH_STATUS = 0
+BEGIN
+EXECUTE PMS.INSERT_COMPRAS 1,@MONTO,@Fecha,@ID_CLIENTE,@ID_PUBLICACION,1,1,1
+update PUBLICACIONES
+set Id_Estado=4
+where Id_Publicacion=@ID_PUBLICACION;
+END
+END
+GO
