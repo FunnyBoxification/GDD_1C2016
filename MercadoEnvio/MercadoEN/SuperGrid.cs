@@ -50,7 +50,15 @@ namespace MercadoEN
         }
         void bs_PositionChanged(object sender, EventArgs e)
         {
-            this.DataSource = tables[bs.Position];
+            if (bs.Position >= 0)
+            {
+                this.DataSource = tables[bs.Position];
+            }
+            else
+            {
+                tables = new BindingList<DataTable>();
+                this.DataSource = new DataTable();
+            }
         }
     }
 }
