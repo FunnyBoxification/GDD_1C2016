@@ -171,6 +171,7 @@ BEGIN
 		Id_ItemFactura			numeric(18,0) IDENTITY(1,1) NOT NULL,
 		Monto					numeric(18,2),
 		Cantidad				numeric(18,0),
+		Descripcion				nvarchar(255),
 		Id_Factura				numeric(18,0),
 		Id_Publicacion			numeric(18,0),
 		PRIMARY KEY(Id_ItemFactura),
@@ -406,7 +407,9 @@ BEGIN
 	INSERT INTO dbo.ITEMFACTURA
 	SELECT DISTINCT 
 		Item_Factura_Monto,			
-		Item_Factura_Cantidad,		
+		Item_Factura_Cantidad,
+		CASE WHEN (Compra_Fecha IS NOT NULL) THEN 'Comision por venta'
+			 ELSE 'Comision por publicacion' END,		
 		Factura_Nro,
 		Publicacion_Cod	
 	FROM gd_esquema.Maestra WHERE Item_Factura_Monto IS NOT NULL;
