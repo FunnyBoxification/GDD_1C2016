@@ -5,7 +5,7 @@ AS TABLE
 );
 GO
 
-CREATE  PROCEDURE PMS.UPDATE_ROLES
+CREATE  PROCEDURE PMS.MODIFICACION_ROLES
        @id numeric,
 	   @nombre nvarchar(255),
 	   @func_del PMS.Funcionalidades READONLY,
@@ -46,7 +46,7 @@ END
 END 
 GO
 
-CREATE PROCEDURE PMS.INSERT_ROL
+CREATE PROCEDURE PMS.ALTA_ROL
        @nombre nvarchar(255),
 	   @id numeric(18,0) OUTPUT
                     
@@ -66,7 +66,7 @@ BEGIN
 	set @id=(SELECT MAX(Id_Rol) from PMS.ROLES)	
 END 
 GO
-CREATE  PROCEDURE PMS.DELETE_ROL
+CREATE  PROCEDURE PMS.BAJA_ROL
        @id numeric 
                     
 AS 
@@ -84,7 +84,7 @@ UPDATE [PMS].[ROLES]
 END
 GO
 
-CREATE PROCEDURE PMS.INSERT_USER
+CREATE PROCEDURE PMS.ALTA_USER
 			@User_Nombre nvarchar(255)
 			,@User_Password binary(32)
 			,@Habilitado numeric(18,0)
@@ -116,7 +116,7 @@ SET @id= (SELECT max(Id_Usuario) from PMS.USUARIOS)
 end
 go
 
-CREATE PROCEDURE PMS.INSERT_CLIENTE
+CREATE PROCEDURE PMS.ALTA_CLIENTE
 			@Id_Cliente numeric(18,0)
            ,@Dni_Cliente numeric(18,0)
            ,@Apellido nvarchar(255)
@@ -156,7 +156,7 @@ INSERT INTO [PMS].[CLIENTES]
 end
 go
 
-create procedure PMS.INSERT_EMPRESA
+create procedure PMS.ALTA_EMPRESA
 			@Id_Empresa numeric(18,0)
            ,@Cuit_Empresa nvarchar(50)
            ,@RazonSocial nvarchar(255)
@@ -193,7 +193,7 @@ INSERT INTO [PMS].[EMPRESAS]
 end
 go
 
-create procedure PMS.INSERT_USUARIO_CLIENTE
+create procedure PMS.ALTA_USUARIO_CLIENTE
 			@User_Nombre nvarchar(255)
 			,@User_Password binary(32)
 			,@Habilitado numeric(18,0)
@@ -256,7 +256,7 @@ INSERT INTO [PMS].[CLIENTES]
 end
 go
 
-create procedure PMS.INSERT_USUARIO_EMPRESA
+create procedure PMS.ALTA_USUARIO_EMPRESA
 			@User_Nombre nvarchar(255)
 			,@User_Password binary(32)
 			,@Habilitado numeric(18,0)
@@ -316,7 +316,7 @@ INSERT INTO [PMS].[EMPRESAS]
 end
 go
 
-CREATE PROCEDURE PMS.INSERT_PUBLICACION
+CREATE PROCEDURE PMS.ALTA_PUBLICACION
        @Id_Publicacion numeric(18,0)
        ,@Descripcion nvarchar(255)
            ,@Stock numeric(18,0)
@@ -361,7 +361,7 @@ INSERT INTO PMS.PUBLICACIONES
 END
 GO
 
-CREATE PROCEDURE PMS.INSERT_COMPRAS
+CREATE PROCEDURE PMS.ALTA_COMPRAS
 			@Cantidad numeric(18,0)
            ,@Fecha datetime
            ,@Id_Cliente_Comprador numeric(18,0)
@@ -402,7 +402,7 @@ end
 GO
 
 
-CREATE PROCEDURE PMS.INSERT_RUBRO
+CREATE PROCEDURE PMS.ALTA_RUBRO
 		@Descripcion nvarchar(30)
 
 AS BEGIN
@@ -416,7 +416,7 @@ INSERT INTO PMS.RUBROS
 end
 GO
 
-create procedure PMS.INSERT_OFERTAS
+create procedure PMS.ALTA_OFERTAS
 			@Fecha datetime
            ,@Monto numeric(18,2)
            ,@Id_Publicacion numeric(18,0)
@@ -448,7 +448,7 @@ end
 set @id=(select max(Id_Oferta) from PMS.OFERTAS)
 GO
 
-create procedure PMS.INSERT_FACTURA
+create procedure PMS.ALTA_FACTURA
 		@Numero numeric(18,0)
         ,@Fecha datetime
         ,@Total numeric(18,2)
@@ -483,7 +483,7 @@ INSERT INTO [PMS].[ITEMFACTURA]
 END
 GO
 
-CREATE TRIGGER UPDATE_USUARIO_REPUTACION
+CREATE TRIGGER MODIFICACION_USUARIO_REPUTACION
 ON PMS.CALIFICACIONES
 AFTER INSERT
 AS
@@ -498,7 +498,7 @@ where Id_Usuario=@ID_USER
 END
 GO
 
-CREATE PROCEDURE INSERT_CALIFICACION
+CREATE PROCEDURE ALTA_CALIFICACION
 		@Id_Compra numeric(18,0)
         ,@Cantidad_Estrellas numeric(18,0)
         ,@Descripcion nvarchar(255)
@@ -538,7 +538,7 @@ FETCH NEXT FROM db_cursor INTO @ID_PUBLICACION,@MONTO,@ID_CLIENTE
 
 WHILE @@FETCH_STATUS = 0
 BEGIN
-EXECUTE PMS.INSERT_COMPRAS 1,@MONTO,@Fecha,@ID_CLIENTE,@ID_PUBLICACION,1,1,1
+EXECUTE PMS.ALTA_COMPRAS 1,@MONTO,@Fecha,@ID_CLIENTE,@ID_PUBLICACION,1,1,1
 update PUBLICACIONES
 set Id_Estado=4
 where Id_Publicacion=@ID_PUBLICACION;
