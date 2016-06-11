@@ -40,6 +40,12 @@ namespace WindowsFormsApplication1
 
         private void btLogin_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(txtUsuario.Text) || string.IsNullOrWhiteSpace(txtPass.Text))
+            {
+                MessageBox.Show("Complete los campos por favor");
+                return;
+            }
+
             int PASSWORD_INVALID = -1;
             int USER_NOT_FOUND = -2;
             String user = txtUsuario.Text;
@@ -60,7 +66,7 @@ namespace WindowsFormsApplication1
                     return;
                 }
 
-                //TODO Limpiar intentos fallidos
+                
                 loginNegocio.limpiarIntentos(user);
                 MessageBox.Show("Usuario logueado exitosamente");
                 DataTable dt = loginNegocio.getRolesDT(userId);

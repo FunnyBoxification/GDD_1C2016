@@ -5,7 +5,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE FUNCTION [PMS].[getUser] (@userName nvarchar(255), @password binary(32))
+CREATE FUNCTION [PMS].[getUser] (@userName nvarchar(255), @password varchar(255))
 returns integer
 AS
 BEGIN
@@ -18,7 +18,8 @@ DECLARE @resultLogin integer
 	if @resultExistence >= 0 
 	BEGIN
 	SET @resultLogin = ( SELECT USUARIOS.Id_Usuario FROM Pms.USUARIOS where User_Password = HASHBYTES('SHA2_256',@password) AND User_Nombre like @userName);
-	
+	if @resultLogin IS NULL 
+	SET @resultLogin = -1
 	END
 	else if @resultExistence IS NULL
 	SET @resultLogin = -2;

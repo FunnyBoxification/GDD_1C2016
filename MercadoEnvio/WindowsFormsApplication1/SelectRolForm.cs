@@ -25,8 +25,10 @@ namespace WindowsFormsApplication1
         {
             InitializeComponent();
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            dgvRoles.AutoGenerateColumns = true;
             dgvRoles.DataSource = dt;
-            dgvRoles.Columns["Habilitado"].Visible = false;
+            dgvRoles.DataMember = dt.TableName;
+          
 
         }
     }

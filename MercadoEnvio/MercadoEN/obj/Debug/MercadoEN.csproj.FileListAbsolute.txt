@@ -3,3 +3,8 @@ C:\Users\Juli\GDD\gdd\MercadoEnvio\MercadoEN\bin\Debug\MercadoEN.pdb
 C:\Users\Juli\GDD\gdd\MercadoEnvio\MercadoEN\obj\Debug\MercadoEN.dll
 C:\Users\Juli\GDD\gdd\MercadoEnvio\MercadoEN\obj\Debug\MercadoEN.pdb
 C:\Users\Juli\GDD\gdd\MercadoEnvio\MercadoEN\obj\Debug\MercadoEN.csprojResolveAssemblyReference.cache
+C:\Users\federico\Documents\GDD_1C2016\MercadoEnvio\MercadoEN\bin\Debug\MercadoEN.dll
+C:\Users\federico\Documents\GDD_1C2016\MercadoEnvio\MercadoEN\bin\Debug\MercadoEN.pdb
+C:\Users\federico\Documents\GDD_1C2016\MercadoEnvio\MercadoEN\obj\Debug\MercadoEN.csprojResolveAssemblyReference.cache
+C:\Users\federico\Documents\GDD_1C2016\MercadoEnvio\MercadoEN\obj\Debug\MercadoEN.dll
+C:\Users\federico\Documents\GDD_1C2016\MercadoEnvio\MercadoEN\obj\Debug\MercadoEN.pdb

@@ -27,14 +27,14 @@ namespace MercadoNegocio
 
             try
             {
-
+                DBConn.openConnection();
                 String sqlRequest = "SELECT PMS.getUser(@userName,@password)";
                 
                 SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
                 command.Parameters.Add("@userName", SqlDbType.VarChar).Value = username;
 
                 command.Parameters.Add("@password", SqlDbType.Int).Value = password.ToString();
-                DBConn.openConnection();
+               
                 int result = (int)command.ExecuteScalar();
                 DBConn.closeConnection();
                 return result;
@@ -43,8 +43,10 @@ namespace MercadoNegocio
             catch (Exception ex)
             {
                 DBConn.closeConnection();
+                Console.WriteLine("Error al obtener usuario : " + ex.Message);
                 //System.Windows.Forms.MessageBox.Show("Error con la conexion  SQL ! " + ex.Message);
-                return -1;
+                throw new Exception("Error al obtener usuario : " + ex.Message);
+              
             }
         }
 
@@ -53,16 +55,19 @@ namespace MercadoNegocio
 
             //int ID_ROL_COLUMN = 0;
             //List<decimal> listRolIds = new List<decimal>();
-            var dt = new DataTable();
+            DataTable dt = new DataTable();
+
 
             try
             {
              DBConn.openConnection();
-            String sqlRequest = "SELECT Descripcion FROM PMS.ROLES_USUARIOS where Id_Usuario = @idUser";
+             String sqlRequest = "SELECT R.Nombre FROM  PMS.ROLES_USUARIOS RU JOIN PMS.ROLES R ON RU.Id_Usuario = @idUser AND RU.Id_Rol = R.Id_Rol";
+           
             SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
             command.Parameters.Add("@idUser", SqlDbType.Int).Value = idUser;
             using (SqlDataAdapter adapter = new SqlDataAdapter(command))
             {
+
                 adapter.Fill(dt);
                 return dt;
             }
@@ -141,13 +146,14 @@ namespace MercadoNegocio
 
         public decimal getIntentosDeLogin(String user)
         {
+            DBConn.openConnection();
             String sqlRequest = "SELECT Intentos_Login FROM PMS.USUARIOS where User_Nombre = @user";
             SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
             command.Parameters.Add("@user", SqlDbType.VarChar).Value = user;
 
             try
             {
-                DBConn.openConnection();
+               
                 decimal intentos = (decimal)command.ExecuteScalar();
                 return intentos;
                 DBConn.closeConnection();
@@ -163,13 +169,14 @@ namespace MercadoNegocio
 
         public Boolean estaHabilitado(String user)
         {
+            DBConn.openConnection();
             String sqlRequest = "SELECT Habilitado FROM PMS.USUARIOS where User_Nombre = @user";
             SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
             command.Parameters.Add("@user", SqlDbType.VarChar).Value = user;
 
             try
             {
-                DBConn.openConnection();
+                
                 decimal habilitado = (decimal)command.ExecuteScalar();
                 if (habilitado == 1) return true;
                 else return false;
@@ -192,7 +199,9 @@ namespace MercadoNegocio
                 DBConn.openConnection();
                 using (SqlCommand cmd = new SqlCommand("PMS.AumentarIntentosFallidos", DBConn.Connection))
                 {
+                    
                     cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add("@userName", SqlDbType.VarChar).Value = user;
                     cmd.ExecuteNonQuery();
                 }
                 DBConn.closeConnection();

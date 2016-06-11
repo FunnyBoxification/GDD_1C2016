@@ -46,3 +46,7 @@ C:\Users\Juli\GDD\gdd\MercadoEnvio\WindowsFormsApplication1\bin\Debug\MercadoEN.
 C:\Users\Juli\GDD\gdd\MercadoEnvio\WindowsFormsApplication1\bin\Debug\Negocio.dll
 C:\Users\Juli\GDD\gdd\MercadoEnvio\WindowsFormsApplication1\bin\Debug\MercadoEN.pdb
 C:\Users\Juli\GDD\gdd\MercadoEnvio\WindowsFormsApplication1\bin\Debug\Negocio.pdb
+C:\Users\federico\Documents\GDD_1C2016\MercadoEnvio\WindowsFormsApplication1\bin\Debug\MercadoEN.dll
+C:\Users\federico\Documents\GDD_1C2016\MercadoEnvio\WindowsFormsApplication1\bin\Debug\Negocio.dll
+C:\Users\federico\Documents\GDD_1C2016\MercadoEnvio\WindowsFormsApplication1\bin\Debug\MercadoEN.pdb
+C:\Users\federico\Documents\GDD_1C2016\MercadoEnvio\WindowsFormsApplication1\bin\Debug\Negocio.pdb

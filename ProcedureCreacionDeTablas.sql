@@ -523,5 +523,85 @@ BEGIN
 	--	p.  = 
 
 
+
+
+	--************************FUNCIONES/STORED PROCEDURES/TRIGGERS*****************************************
+
+	--GETUSER
+	CREATE FUNCTION [PMS].[getUser] (@userName nvarchar(255), @password binary(32))
+	returns integer
+	AS
+BEGIN
+DECLARE @resultExistence integer
+DECLARE @resultLogin integer
+
+	SET @resultExistence = (SELECT  USUARIOS.Id_Usuario FROM Pms.USUARIOS where User_Nombre like @userName)
+	
+
+	if @resultExistence >= 0 
+	BEGIN
+	SET @resultLogin = ( SELECT USUARIOS.Id_Usuario FROM Pms.USUARIOS where User_Password = HASHBYTES('SHA2_256',@password) AND User_Nombre like @userName);
+	
+	END
+	else if @resultExistence IS NULL
+	SET @resultLogin = -2;
+
+	return @resultLogin
+
+END
+	-- /GETUSER
+
+
+	--AumentarIntentos
+	CREATE PROCEDURE [PMS].[AumentarIntentosFallidos] @userName nvarchar(255)
+
+AS
+
+DECLARE @intentosActuales integer
+
+SET @intentosActuales = (SELECT Intentos_Login FROM PMS.USUARIOS WHERE User_Nombre like @userName) 
+
+
+UPDATE PMS.USUARIOS SET Intentos_Login = (@intentosActuales + 1) WHERE User_nombre like @userName
+
+--/AumentarIntentos
+
+
+--LimpiarIntentos
+CREATE PROCEDURE PMS.LimpiarIntentos @userName varchar(255)
+
+AS
+
+BEGIN
+UPDATE PMS.USUARIOS SET Intentos_login = 0 WHERE User_Nombre LIKE @userName
+
+END
+--/LimpiarIntentos
+
+
+--Trigger Intentos Fallidos
+CREATE TRIGGER PMS.TriggerIntentosFallidos
+ON PMS.USUARIOS
+AFTER UPDATE
+AS
+
+
+BEGIN
+DECLARE @intentos numeric(18,0)
+DECLARE @userId numeric(18,0)
+
+SELECT @intentos = (SELECT Intentos_Login FROM inserted)
+SELECT @userId = (SELECT Id_Usuario FROM inserted)
+
+if @intentos = 3 
+UPDATE PMS.USUARIOS SET Habilitado = 0 WHERE Id_Usuario = @userId
+
+
+END
+--/TriggerIntentosFallidos
+
+
+
+
 END
 GO
