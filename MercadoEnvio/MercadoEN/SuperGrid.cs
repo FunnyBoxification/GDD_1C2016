@@ -29,6 +29,7 @@ namespace MercadoEN
         {
             DataTable dt = null;
             int counter = 1;
+            tables = new BindingList<DataTable>();
             foreach (DataRow dr in dataTable.Rows)
             {
                 if (counter == 1)

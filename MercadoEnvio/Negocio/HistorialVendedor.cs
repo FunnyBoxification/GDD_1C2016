@@ -20,7 +20,7 @@ namespace MercadoNegocio
             DBConn = dbConnection;
         }
 
-        public DataTable searchFacturasAVendedor(int Id_Vendedor, String Contenido_Detalle, int Importe_Max, int Importe_Min, int Fecha_Max, int Fecha_Min)
+        public DataTable searchFacturasAVendedor(int Id_Vendedor, String Contenido_Detalle, decimal Importe_Max, decimal Importe_Min, string Fecha_Max, string Fecha_Min)
         {
             try
             {
@@ -34,26 +34,26 @@ namespace MercadoNegocio
                 {
                     sqlRequest += " and " + Id_Vendedor + " IN (SELECT Id_Usuario FROM PMS.PUBLICACIONES WHERE Id_Publicacion = item.Id_Publicacion)";
                 }
-                if (Contenido_Detalle != null)
+                if (Contenido_Detalle != null && Contenido_Detalle != "")
                 {
-                    sqlRequest += " and Descripcion LIKE %" + Contenido_Detalle + "%";
+                    sqlRequest += " and Descripcion LIKE '%" + Contenido_Detalle + "%'";
                 }
-                if (Importe_Max != -1 && Importe_Min != -1)
+                if (Importe_Max > 0 && Importe_Min > 0 && Importe_Max > Importe_Min)
                 {
-                    sqlRequest += " AND factura.Monto BETWEEN " + Importe_Min + " AND " + Importe_Max;
+                    sqlRequest += " AND factura.Total BETWEEN " + Importe_Min + " AND " + Importe_Max;
                 }
-                else if (Importe_Max != -1)
+                else if (Importe_Max > 0)
                 {
-                    sqlRequest += " AND factura.Monto <= " + Importe_Max;
+                    sqlRequest += " AND factura.Total <= " + Importe_Max;
                 }
-                else if (Importe_Min != -1)
+                else if (Importe_Min > 0)
                 {
-                    sqlRequest += " AND factura.Monto >= " + Importe_Min;
+                    sqlRequest += " AND factura.Total >= " + Importe_Min;
                 }
                 // CHEQUEAR ESTO
-                if (Fecha_Max != -1 && Fecha_Min != -1)
+                if (Fecha_Max != null && Fecha_Min != null)
                 {
-                    sqlRequest += " AND factura.Fecha BETWEEN " + Fecha_Min + " AND " + Fecha_Max;
+                    sqlRequest += " AND factura.Fecha BETWEEN CONVERT(date,'" + Fecha_Min + "') AND CONVERT(date,'" + Fecha_Max + "')";
                 }
                 sqlRequest += ") as Facturas";
                 SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
