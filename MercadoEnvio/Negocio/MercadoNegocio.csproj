@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HistorialCliente.cs" />
     <Compile Include="HistorialVendedor.cs" />
     <Compile Include="LoginNegocio.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

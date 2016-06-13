@@ -120,6 +120,12 @@
     <Compile Include="Facturas\FacturasVendedor.Designer.cs">
       <DependentUpon>FacturasVendedor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Historial Cliente\HistorialForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Historial Cliente\HistorialForm.Designer.cs">
+      <DependentUpon>HistorialForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -157,6 +163,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Facturas\FacturasVendedor.resx">
       <DependentUpon>FacturasVendedor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Historial Cliente\HistorialForm.resx">
+      <DependentUpon>HistorialForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
@@ -226,7 +235,6 @@
     <Folder Include="Calificar\" />
     <Folder Include="ComprarOfertar\" />
     <Folder Include="Generar Publicación\" />
-    <Folder Include="Historial Cliente\" />
     <Folder Include="Listado Estadistico\" />
   </ItemGroup>
   <ItemGroup>

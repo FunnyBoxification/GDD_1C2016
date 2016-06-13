@@ -7,14 +7,53 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MercadoNegocio;
 
 namespace WindowsFormsApplication1.Historial_Cliente
 {
     public partial class HistorialForm : Form
     {
-        public HistorialForm()
+
+        private int id_cliente { get; set; }
+        private DataTable table { get; set; }
+
+        public HistorialForm(int id_cliente)
         {
             InitializeComponent();
+            this.id_cliente = id_cliente;
+            var negocio = new HistorialCliente(SqlServerDBConnection.Instance());
+            superGrid1.PageSize = 5;
+            table = negocio.searchHistorialCliente(id_cliente);
+            superGrid1.SetPagedDataSource(table, bindingNavigator1);
+            lblCalificadas.Text =  getCantidadOpsSinCalificar() + " compras sin calificar ";
+
+        }
+
+        private int getCantidadOpsSinCalificar(){
+            //table.Columns["Calificada"].ColumnName = "ASD";
+            DataRow[]  result = table.Select("Calificada  = 'No'");
+            int c = 0;
+            foreach(DataRow row in result){
+                c++;
+            }
+            return c;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var negocio = new HistorialCliente(SqlServerDBConnection.Instance());
+           
+            var Detalle = textBox2.Text;
+            decimal importeDesde = numericUpDown2.Value;
+            decimal importeHasta = numericUpDown1.Value;
+            DateTime fechaDesde = dateTimePicker1.Value;
+            DateTime fechaHasta = dateTimePicker2.Value;
+            superGrid1.SetPagedDataSource(negocio.searchHistorialCliente(id_cliente), bindingNavigator1);
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }

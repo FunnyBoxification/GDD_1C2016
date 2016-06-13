@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using WindowsFormsApplication1.ABM_Rol;
 using WindowsFormsApplication1.Facturas;
+using WindowsFormsApplication1.Historial_Cliente;
+
 
 namespace WindowsFormsApplication1
 {
@@ -21,7 +23,7 @@ namespace WindowsFormsApplication1
             Application.SetCompatibleTextRenderingDefault(false);
 
             //SqlServerDBConnection.Instance().openConnection();
-            Application.Run(new FacturasVendedor());
+            Application.Run(new HistorialForm(97));
         }
     }
 }

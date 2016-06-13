@@ -18,7 +18,7 @@ namespace MercadoNegocio
          * Mi instancia de SQL tiene el nombre SQLEXPRESS, en el tp SQLSERVER2012
          * 
          * */
-        public const String ConnectionString = "Data Source=PABLO-NT\\SQLSERVER2012;Initial Catalog=GD1C2016;User ID=gd;Password=gd2016";
+        public const String ConnectionString = "Data Source=localhost\\SQLEXPRESS;Initial Catalog=GD1C2016;User ID=gd;Password=gd2016";
         public SqlConnection Connection;
 
         public SqlConnection openConnection()
