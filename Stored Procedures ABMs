@@ -8,7 +8,6 @@ GO
 CREATE  PROCEDURE PMS.MODIFICACION_ROLES
        @id numeric,
 	   @nombre nvarchar(255),
-	   @func_del PMS.Funcionalidades READONLY,
 	   @func_add PMS.Funcionalidades READONLY
 	   
 		
@@ -23,7 +22,7 @@ UPDATE [PMS].[ROLES]
  
 
  DELETE FROM [PMS].[FUNCIONALIDES_ROLES]
-      WHERE (Id_Funcionalidad in (select * from @func_del));
+      WHERE (Id_Rol=@id);
 
 DECLARE @id_func INT
 DECLARE db_cursor CURSOR FOR  
@@ -379,6 +378,10 @@ else if @Id_Cliente_Comprador=(select Id_usuario from PUBLICACIONES where Id_Pub
 begin
 ; throw 50999,'comprador no puede ser el vendedor',1;
 end
+else if 2>(select count(Id_Compra) from PMS.COMPRAS where Id_Cliente_Comprador=@Id_Cliente_Comprador and Id_Calificacion is null)
+begin
+; throw 50999,'3 compras sin calificar',1;
+end
 else
 begin
 INSERT INTO PMS.COMPRAS
@@ -395,8 +398,6 @@ INSERT INTO PMS.COMPRAS
            ,@Id_Publicacion);
 update PUBLICACIONES set Stock=Stock-@Cantidad where Id_Publicacion=@Id_Publicacion;
 set @id=(select max(Id_Compra)from PMS.COMPRAS)
-/*EXECUTE PMS.generar_Factura
-   */
 end
 end
 GO
@@ -431,6 +432,10 @@ else if @Id_Cliente=(select Id_usuario from PUBLICACIONES where Id_Publicacion=@
 begin
 ; throw 50999,'comprador no puede ser el vendedor',1;
 end
+else if 2>(select count(Id_Compra) from PMS.COMPRAS where Id_Cliente_Comprador=@Id_Cliente and Id_Calificacion is null)
+begin
+; throw 50999,'3 compras sin calificar',1;
+end
 else
 begin
 INSERT INTO [PMS].[OFERTAS]
@@ -456,6 +461,7 @@ create procedure PMS.ALTA_FACTURA
 		,@Monto numeric(18,2)
         ,@Cantidad numeric(18,0)
         ,@Id_Publicacion numeric(18,0)
+		,@Descripcion nvarchar(255)
 as
 begin 
 
@@ -474,12 +480,14 @@ INSERT INTO [PMS].[ITEMFACTURA]
            ([Monto]
            ,[Cantidad]
            ,[Id_Factura]
-           ,[Id_Publicacion])
+           ,[Id_Publicacion]
+		   ,Descripcion)
      VALUES
            (@Monto
            ,@Cantidad
            ,@Numero
-           ,@Id_Publicacion);
+           ,@Id_Publicacion
+		   ,@Descripcion);
 END
 GO
 
@@ -506,7 +514,7 @@ CREATE PROCEDURE ALTA_CALIFICACION
 AS
 BEGIN
 
-set @ID_CALIFICACION=(select max(Id_Calificacion) from PMS.CALIFICACIONES
+set @ID_CALIFICACION=(select max(Id_Calificacion) from PMS.CALIFICACIONES)
 INSERT INTO [PMS].[CALIFICACIONES]
            ([Id_Calificacion]
            ,[Cantidad_Estrellas]
@@ -543,5 +551,32 @@ update PUBLICACIONES
 set Id_Estado=4
 where Id_Publicacion=@ID_PUBLICACION;
 END
+END
+GO
+
+BEGIN 
+DECLARE @NUMERO numeric(18,0)
+SET @NUMERO =(select max(Numero)from FACTURAS)
+DECLARE @PORCENTAJE numeric(18,0)
+DECLARE @ENVIO numeric(18,0)
+select @PORCENTAJE= Porcentaje,@ENVIO=isnull(Costo_Envio,0) from VISIBILIDADES WHERE Id_Visibilidad=(select Id_Visibilidad from PUBLICACIONES where Id_Publicacion = (select Id_Publicacion from inserted))
+DECLARE @FECHA datetime,@TOTAL numeric(18,0),@MONTO numeric(18,0),@CANTIDAD numeric(18,0),@ID numeric(18,0)
+select @FECHA=Fecha,@TOTAL=Monto*@PORCENTAJE+@ENVIO,@MONTO=Monto,@CANTIDAD=Cantidad,@ID=Id_Publicacion from inserted;
+EXEC PMS.ALTA_FACTURA @NUMERO ,@FECHA,@TOTAL,@MONTO,@CANTIDAD,@ID,'Comision por venta'
+END
+GO
+
+CREATE TRIGGER ALTA_FACTURA_PUBLICACION
+ON PMS.PUBLICACIONES
+AFTER INSERT
+AS
+BEGIN
+DECLARE @NUMERO numeric(18,0)
+SET @NUMERO =(select max(Numero)from FACTURAS) 
+DECLARE @FECHA datetime,@ID numeric(18,0)
+select @FECHA=Fecha,@ID=Id_Publicacion from inserted;
+DECLARE @TOTAL numeric(18,0)
+select @TOTAL=Precio from VISIBILIDADES WHERE Id_Visibilidad=(select Id_Visibilidad from PUBLICACIONES where Id_Publicacion = (select Id_Publicacion from inserted))
+EXEC PMS.ALTA_FACTURA @NUMERO,@FECHA,@TOTAL,0,0,@ID,'Comision por Publicacion'
 END
 GO

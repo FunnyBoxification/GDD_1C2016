@@ -25,6 +25,13 @@ BEGIN
 		Reputacion				numeric(18,0)
 		PRIMARY KEY(Id_Usuario)
 	);
+
+		CREATE TABLE PMS.RUBROS
+	(
+		Id_Rubro						numeric(18,0) IDENTITY(1,1) NOT NULL,
+		Descripcion						nvarchar(255),
+		PRIMARY KEY(Id_Rubro)	
+	);
 	
 	CREATE TABLE PMS.EMPRESAS
 	(	
@@ -38,7 +45,11 @@ BEGIN
 		Piso					numeric(18,0),
 		Depto					nvarchar(50),
 		CodigoPostal			nvarchar(50),
-		PRIMARY KEY(Id_Empresa)
+		Telefono				nvarchar(50),
+		Id_Rubro				numeric(18,0),
+		PRIMARY KEY(Id_Empresa),
+		FOREIGN KEY(Id_Rubro) REFERENCES PMS.RUBROS(Id_Rubro),
+
 	);
 
 	CREATE TABLE PMS.CLIENTES
@@ -54,6 +65,9 @@ BEGIN
 		Piso					numeric(18,0),
 		Depto					nvarchar(50),
 		Cod_Postal				nvarchar(50),
+		Tipo_Doc				nvarchar(50),
+		FechaCreacion			datetime,
+		Telefono				nvarchar(50),
 		PRIMARY KEY(Id_Cliente)
 	);
 
@@ -65,13 +79,6 @@ BEGIN
 		Porcentaje				numeric(18,2),
 		Habilitado				numeric(18,0) DEFAULT 1,
 		PRIMARY KEY(Id_Visibilidad)
-	);
-	
-	CREATE TABLE PMS.RUBROS
-	(
-		Id_Rubro						numeric(18,0) IDENTITY(1,1) NOT NULL,
-		Descripcion						nvarchar(255),
-		PRIMARY KEY(Id_Rubro)	
 	);
 	
 	CREATE TABLE PMS.TIPO_PUBLICACION
@@ -225,7 +232,9 @@ BEGIN
 		   Publ_Empresa_Nro_Calle,
 		   Publ_Empresa_Piso,
 		   Publ_Empresa_Depto,	
-		   Publ_Empresa_Cod_Postal
+		   Publ_Empresa_Cod_Postal,
+		   null as Telefono,
+		   (select Id_Rubro from PMS.RUBROS where Descripcion=Publicacion_Rubro_Descripcion) as Id_Rubro
 	INTO #TempEmpresas
 	FROM gd_esquema.Maestra 
 	WHERE Publ_Empresa_Cuit IS NOT NULL 
@@ -240,7 +249,10 @@ BEGIN
 		   Publ_Cli_Nro_Calle,	
 		   Publ_Cli_Piso,		
 		   Publ_Cli_Depto,		
-		   Publ_Cli_Cod_Postal
+		   Publ_Cli_Cod_Postal,
+		   'DNI' AS Tipo_Doc,
+		   NULL AS FechaCreacion,
+		   NULL as Telefono
 	INTO #TempClientes
 	FROM gd_esquema.Maestra
 	WHERE Publ_Cli_Dni is not null
@@ -256,11 +268,19 @@ BEGIN
 		   Cli_Nro_Calle,	
 		   Cli_Piso,		
 		   Cli_Depto,		
-		   Cli_Cod_Postal
+		   Cli_Cod_Postal,
+		   'DNI',
+		   NULL,
+		   NULL
 	FROM gd_esquema.Maestra
 	WHERE Cli_Dni not in (select Cli_Dni from #TempClientes) AND Cli_Dni IS NOT NULL;
 	
-	
+	INSERT INTO PMS.RUBROS
+	SELECT DISTINCT
+			Publicacion_Rubro_Descripcion
+	FROM gd_esquema.Maestra 
+	WHERE Publicacion_Rubro_Descripcion IS NOT NULL;
+
 	INSERT INTO PMS.EMPRESAS 
 	SELECT
 		   ROW_NUMBER() OVER (ORDER BY (SELECT NULL)),
@@ -272,7 +292,9 @@ BEGIN
 		   Publ_Empresa_Nro_Calle,
 		   Publ_Empresa_Piso,
 		   Publ_Empresa_Depto,
-		   Publ_Empresa_Cod_Postal
+		   Publ_Empresa_Cod_Postal,
+		   Telefono,
+		   Id_Rubro
 	FROM #TempEmpresas
 	WHERE Publ_Empresa_Cuit IS NOT NULL;
 	
@@ -319,11 +341,6 @@ BEGIN
 	FROM gd_esquema.Maestra 
 	WHERE Publicacion_Tipo IS NOT NULL;
 	
-	INSERT INTO PMS.RUBROS
-	SELECT DISTINCT
-			Publicacion_Rubro_Descripcion
-	FROM gd_esquema.Maestra 
-	WHERE Publicacion_Rubro_Descripcion IS NOT NULL;
 	
 	INSERT INTO PMS.PUBLICACION_ESTADOS
 	SELECT DISTINCT
@@ -381,7 +398,7 @@ BEGIN
 		Publicacion_Precio,			
 		Compra_Fecha,			
 		(SELECT Id_Oferta
-		 FROM OFERTAS
+		 FROM PMS.OFERTAS
 		 WHERE	Publicacion_Cod = Id_Publicacion
 			And	Oferta_Monto = Monto
 			And	Oferta_Fecha = Fecha),	--Monto tiene que ser unico.	
@@ -400,7 +417,7 @@ BEGIN
 		Factura_Fecha,			
 		Factura_Total,			
 		(SELECT Id_FormaPago
-		   FROM	FORMASDEPAGO
+		   FROM	PMS.FORMASDEPAGO
 		  WHERE	Forma_Pago_Desc = Descripcion)	
 	FROM gd_esquema.Maestra WHERE Forma_Pago_Desc IS NOT NULL;
 
@@ -466,7 +483,7 @@ BEGIN
 	INSERT INTO PMS.FUNCIONALIDES_ROLES (Id_Funcionalidad,Id_Rol)
 	SELECT Id_Funcionalidad, 3
 	FROM PMS.FUNCIONALIDADES 
-	WHERE Nombre LIKE '%Publicar' OR Nombre LIKE 'FacturasVendedor';				
+	WHERE Nombre LIKE '%Publicar' OR Nombre LIKE 'FacturasVendedor';					
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
