@@ -120,6 +120,36 @@
     <Compile Include="Facturas\FacturasVendedor.Designer.cs">
       <DependentUpon>FacturasVendedor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Listado Estadistico\ListadoClientesComprasForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Listado Estadistico\ListadoClientesComprasForm.Designer.cs">
+      <DependentUpon>ListadoClientesComprasForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Listado Estadistico\ListadoEstadisticoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Listado Estadistico\ListadoEstadisticoForm.Designer.cs">
+      <DependentUpon>ListadoEstadisticoForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Listado Estadistico\ListadoVendedoresCantidadFacturas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Listado Estadistico\ListadoVendedoresCantidadFacturas.Designer.cs">
+      <DependentUpon>ListadoVendedoresCantidadFacturas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Listado Estadistico\ListadoVendedoresMontoFactura.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Listado Estadistico\ListadoVendedoresMontoFactura.Designer.cs">
+      <DependentUpon>ListadoVendedoresMontoFactura.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Listado Estadistico\SeleccionAnioYTrimestreForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Listado Estadistico\SeleccionAnioYTrimestreForm.Designer.cs">
+      <DependentUpon>SeleccionAnioYTrimestreForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -157,6 +187,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Facturas\FacturasVendedor.resx">
       <DependentUpon>FacturasVendedor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Listado Estadistico\ListadoClientesComprasForm.resx">
+      <DependentUpon>ListadoClientesComprasForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Listado Estadistico\ListadoEstadisticoForm.resx">
+      <DependentUpon>ListadoEstadisticoForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Listado Estadistico\ListadoVendedoresCantidadFacturas.resx">
+      <DependentUpon>ListadoVendedoresCantidadFacturas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Listado Estadistico\SeleccionAnioYTrimestreForm.resx">
+      <DependentUpon>SeleccionAnioYTrimestreForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
@@ -227,7 +269,6 @@
     <Folder Include="ComprarOfertar\" />
     <Folder Include="Generar Publicación\" />
     <Folder Include="Historial Cliente\" />
-    <Folder Include="Listado Estadistico\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MercadoEN\MercadoEN.csproj">
