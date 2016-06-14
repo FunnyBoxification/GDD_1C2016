@@ -21,8 +21,30 @@ namespace MercadoNegocio
             DBConn = dbConnection;
         }
 
+        public int getCantidadDeEstrellasDadas(int idUser)
+        {
+            String sqlRequest = "select pms.getEstrellasDadas (@idUser)";
 
-        public DataTable searchHistorialCliente(int Id_Cliente)
+            try
+            {
+                SqlCommand sqlCommand = new SqlCommand(sqlRequest, DBConn.Connection);
+                sqlCommand.Parameters.Add("@idUser", SqlDbType.Int).Value = idUser;
+
+
+                int cantidad = (int)sqlCommand.ExecuteScalar();
+                return cantidad;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error al obtener la cantidad de estrellas dadas por el usuario: " + e.Message);
+            }
+         
+
+
+        }
+
+
+        public DataTable searchHistorialCliente(int Id_Cliente, String detalle, decimal importe_Max, decimal importe_Min, string fechaDesde, string fechaHasta)
         {
 
             try
@@ -37,6 +59,24 @@ namespace MercadoNegocio
 			Cl.Id_Cliente = @idCliente 
 			JOIN PMS.PUBLICACIONES P ON
 			P.Id_Publicacion  = CO.Id_Publicacion";
+            sqlRequest += " WHERE 1=1";
+
+
+                if (detalle != null && detalle != "")
+                {
+                    sqlRequest += "and P.Descripcion LIKE '%" + detalle + "%'";
+                }
+
+                if (importe_Max > 0 && importe_Min >= 0 && importe_Max > importe_Min)
+                {
+                    sqlRequest += " AND CO.Monto BETWEEN " + importe_Min + " AND " + importe_Max;
+                }
+
+                if (fechaDesde != null && fechaHasta != null)
+                {
+                    sqlRequest += " AND CO.Fecha BETWEEN CONVERT(date,'" + fechaDesde + "') AND CONVERT(date,'" + fechaHasta + "')";
+                }
+
                 SqlCommand sqlCommand = new SqlCommand(sqlRequest, DBConn.Connection);
                 sqlCommand.Parameters.Add("@idCliente", SqlDbType.Int).Value = Id_Cliente;
                 using (SqlDataAdapter da = new SqlDataAdapter(sqlCommand))

@@ -44,7 +44,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.txtDetalle = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -54,21 +54,26 @@
             this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.lblCalificadas = new System.Windows.Forms.Label();
+            this.lblEstrellas = new System.Windows.Forms.Label();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.superGrid1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).BeginInit();
             this.bindingNavigator1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // superGrid1
             // 
+            this.superGrid1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.superGrid1.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.superGrid1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.superGrid1.Location = new System.Drawing.Point(21, 207);
+            this.superGrid1.Location = new System.Drawing.Point(22, 181);
             this.superGrid1.Name = "superGrid1";
             this.superGrid1.PageSize = 10;
-            this.superGrid1.Size = new System.Drawing.Size(583, 170);
+            this.superGrid1.Size = new System.Drawing.Size(683, 170);
             this.superGrid1.TabIndex = 4;
             // 
             // bindingNavigator1
@@ -93,7 +98,7 @@
             this.bindingNavigator1.MovePreviousItem = this.bindingNavigatorMovePreviousItem;
             this.bindingNavigator1.Name = "bindingNavigator1";
             this.bindingNavigator1.PositionItem = this.bindingNavigatorPositionItem;
-            this.bindingNavigator1.Size = new System.Drawing.Size(628, 25);
+            this.bindingNavigator1.Size = new System.Drawing.Size(801, 25);
             this.bindingNavigator1.TabIndex = 5;
             this.bindingNavigator1.Text = "bindingNavigator1";
             // 
@@ -166,18 +171,18 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(387, 160);
+            this.button1.Location = new System.Drawing.Point(175, 137);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(132, 38);
             this.button1.TabIndex = 6;
-            this.button1.Text = "Buscar";
+            this.button1.Text = "Filtrar";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.label6);
-            this.groupBox1.Controls.Add(this.textBox2);
+            this.groupBox1.Controls.Add(this.txtDetalle);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label3);
@@ -197,18 +202,18 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(175, 26);
+            this.label6.Location = new System.Drawing.Point(7, 22);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(40, 13);
             this.label6.TabIndex = 11;
             this.label6.Text = "Detalle";
             // 
-            // textBox2
+            // txtDetalle
             // 
-            this.textBox2.Location = new System.Drawing.Point(250, 19);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(200, 20);
-            this.textBox2.TabIndex = 10;
+            this.txtDetalle.Location = new System.Drawing.Point(87, 19);
+            this.txtDetalle.Name = "txtDetalle";
+            this.txtDetalle.Size = new System.Drawing.Size(363, 20);
+            this.txtDetalle.TabIndex = 10;
             // 
             // label5
             // 
@@ -249,13 +254,24 @@
             // numericUpDown2
             // 
             this.numericUpDown2.Location = new System.Drawing.Point(87, 45);
+            this.numericUpDown2.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
             this.numericUpDown2.Name = "numericUpDown2";
             this.numericUpDown2.Size = new System.Drawing.Size(69, 20);
             this.numericUpDown2.TabIndex = 4;
+            this.numericUpDown2.ValueChanged += new System.EventHandler(this.numericUpDown2_ValueChanged);
             // 
             // numericUpDown1
             // 
             this.numericUpDown1.Location = new System.Drawing.Point(87, 69);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(69, 20);
             this.numericUpDown1.TabIndex = 3;
@@ -278,18 +294,38 @@
             // lblCalificadas
             // 
             this.lblCalificadas.AutoSize = true;
-            this.lblCalificadas.Location = new System.Drawing.Point(35, 160);
+            this.lblCalificadas.Location = new System.Drawing.Point(18, 19);
             this.lblCalificadas.Name = "lblCalificadas";
             this.lblCalificadas.Size = new System.Drawing.Size(35, 13);
             this.lblCalificadas.TabIndex = 8;
             this.lblCalificadas.Text = "label1";
             // 
+            // lblEstrellas
+            // 
+            this.lblEstrellas.AutoSize = true;
+            this.lblEstrellas.Location = new System.Drawing.Point(18, 66);
+            this.lblEstrellas.Name = "lblEstrellas";
+            this.lblEstrellas.Size = new System.Drawing.Size(35, 13);
+            this.lblEstrellas.TabIndex = 9;
+            this.lblEstrellas.Text = "label1";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.lblCalificadas);
+            this.groupBox2.Controls.Add(this.lblEstrellas);
+            this.groupBox2.Location = new System.Drawing.Point(505, 31);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(200, 100);
+            this.groupBox2.TabIndex = 10;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Resumen";
+            // 
             // HistorialForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(628, 389);
-            this.Controls.Add(this.lblCalificadas);
+            this.ClientSize = new System.Drawing.Size(801, 389);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.bindingNavigator1);
@@ -304,6 +340,8 @@
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -329,11 +367,13 @@
         private System.Windows.Forms.DateTimePicker dateTimePicker2;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox txtDetalle;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lblCalificadas;
+        private System.Windows.Forms.Label lblEstrellas;
+        private System.Windows.Forms.GroupBox groupBox2;
     }
 }
