@@ -53,3 +53,10 @@ C:\Users\federico\Documents\GDD_1C2016\MercadoEnvio\WindowsFormsApplication1\obj
 C:\Users\federico\Documents\GDD_1C2016\MercadoEnvio\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csproj.GenerateResource.Cache
 C:\Users\federico\Documents\GDD_1C2016\MercadoEnvio\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
 C:\Users\federico\Documents\GDD_1C2016\MercadoEnvio\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
+C:\Users\Juli\GDD\gdd\MercadoEnvio\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.ABM_Visibilidad.AltaModVisibForm.resources
+C:\Users\Juli\GDD\gdd\MercadoEnvio\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Facturas.FacturasVendedor.resources
+C:\Users\Juli\GDD\gdd\MercadoEnvio\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Historial_Cliente.HistorialForm.resources
+C:\Users\Juli\GDD\gdd\MercadoEnvio\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.ABM_Usuario.AltaModUsuarioForm.resources
+C:\Users\Juli\GDD\gdd\MercadoEnvio\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.ABM_Visibilidad.Datos.resources
+C:\Users\Juli\GDD\gdd\MercadoEnvio\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.ABM_Usuario.DatosCliente.resources
+C:\Users\Juli\GDD\gdd\MercadoEnvio\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.ABM_Usuario.DatosEmpresa.resources

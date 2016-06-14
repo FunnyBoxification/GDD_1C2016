@@ -73,11 +73,29 @@
     <Compile Include="ABM Rol\Modificacion_Rol.Designer.cs">
       <DependentUpon>Modificacion_Rol.cs</DependentUpon>
     </Compile>
+    <Compile Include="ABM Usuario\AltaModUsuarioForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Usuario\AltaModUsuarioForm.Designer.cs">
+      <DependentUpon>AltaModUsuarioForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ABM Usuario\Alta_Usuario.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ABM Usuario\Alta_Usuario.Designer.cs">
       <DependentUpon>Alta_Usuario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Usuario\Datos.cs" />
+    <Compile Include="ABM Usuario\Datos.Designer.cs">
+      <DependentUpon>Datos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Usuario\DatosCliente.cs" />
+    <Compile Include="ABM Usuario\DatosCliente.Designer.cs">
+      <DependentUpon>DatosCliente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Usuario\DatosEmpresa.cs" />
+    <Compile Include="ABM Usuario\DatosEmpresa.Designer.cs">
+      <DependentUpon>DatosEmpresa.cs</DependentUpon>
     </Compile>
     <Compile Include="ABM Usuario\Listado_Usuarios.cs">
       <SubType>Form</SubType>
@@ -148,6 +166,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ABM Rol\Modificacion_Rol.resx">
       <DependentUpon>Modificacion_Rol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Usuario\AltaModUsuarioForm.resx">
+      <DependentUpon>AltaModUsuarioForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Usuario\Datos.resx">
+      <DependentUpon>Datos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Usuario\DatosCliente.resx">
+      <DependentUpon>DatosCliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Usuario\DatosEmpresa.resx">
+      <DependentUpon>DatosEmpresa.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ABM Usuario\Listado_Usuarios.resx">
       <DependentUpon>Listado_Usuarios.cs</DependentUpon>
