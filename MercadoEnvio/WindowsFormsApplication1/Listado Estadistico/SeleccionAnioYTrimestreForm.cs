@@ -38,8 +38,26 @@ namespace WindowsFormsApplication1.Listado_Estadistico
 
         private void button1_Click(object sender, EventArgs e)
         {
-            /*var form = new ListadoEstadisticoForm();
-            form.Show();*/
+            if (comboBox3.SelectedText.Equals("Vendedores con prods no vendidos"))
+            {
+                var form = new ListadoEstadisticoForm();
+                form.Show();
+            }
+            else if (comboBox3.SelectedText.Equals("Clientes con mayor cantidad de productos comprados"))
+            {
+                var form = new ListadoClientesComprasForm();
+                form.Show();
+            }
+            else if (comboBox3.SelectedText.Equals("Vendedores con mayor cantidad de facturas"))
+            {
+                var form = new ListadoVendedoresCantidadFacturas();
+                form.Show();
+            }
+            else
+            {
+                var form = new ListadoVendedoresMontoFactura();
+                form.Show();
+            }
         }
     }
 }

@@ -380,9 +380,7 @@ BEGIN
 		Oferta_Fecha,
 		Oferta_Monto,
 		Publicacion_Cod,
-		(SELECT Id_Usuario
-			   From PMS.USUARIOS
-			  WHERE Id_Usuario = Cli_Dni)		
+		(SELECT Id_Cliente FROM PMS.CLIENTES cliente WHERE Cli_Dni = cliente.Dni_Cliente)		
 	FROM gd_esquema.Maestra WHERE Oferta_Monto IS NOT NULL;
 
 	INSERT INTO PMS.CALIFICACIONES
@@ -397,11 +395,7 @@ BEGIN
 		Compra_Cantidad,
 		Publicacion_Precio,			
 		Compra_Fecha,			
-		(SELECT Id_Oferta
-		 FROM PMS.OFERTAS
-		 WHERE	Publicacion_Cod = Id_Publicacion
-			And	Oferta_Monto = Monto
-			And	Oferta_Fecha = Fecha),	--Monto tiene que ser unico.	
+		(SELECT Id_Cliente FROM PMS.CLIENTES cliente WHERE Cli_Dni = cliente.Dni_Cliente),	--Monto tiene que ser unico.	
 		Publicacion_Cod,
 		Calificacion_Codigo
 	FROM gd_esquema.Maestra WHERE Compra_Cantidad IS NOT NULL;

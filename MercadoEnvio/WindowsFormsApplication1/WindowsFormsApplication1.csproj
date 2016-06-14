@@ -112,6 +112,12 @@
     <Compile Include="ABM Visibilidad\VisibilidadesForm.Designer.cs">
       <DependentUpon>VisibilidadesForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Calificar\Calificar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Calificar\Calificar.Designer.cs">
+      <DependentUpon>Calificar.cs</DependentUpon>
+    </Compile>
     <Compile Include="Connection\Connection.cs" />
     <Compile Include="DataSet1.Designer.cs" />
     <Compile Include="Facturas\FacturasVendedor.cs">
@@ -156,6 +162,12 @@
     <Compile Include="LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Principal\PaginaPrincipal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Principal\PaginaPrincipal.Designer.cs">
+      <DependentUpon>PaginaPrincipal.cs</DependentUpon>
+    </Compile>
     <Compile Include="SelectRolForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -185,6 +197,9 @@
     <EmbeddedResource Include="ABM Visibilidad\VisibilidadesForm.resx">
       <DependentUpon>VisibilidadesForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Calificar\Calificar.resx">
+      <DependentUpon>Calificar.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Facturas\FacturasVendedor.resx">
       <DependentUpon>FacturasVendedor.cs</DependentUpon>
     </EmbeddedResource>
@@ -202,6 +217,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Principal\PaginaPrincipal.resx">
+      <DependentUpon>PaginaPrincipal.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -265,7 +283,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ABM Rubro\" />
-    <Folder Include="Calificar\" />
     <Folder Include="ComprarOfertar\" />
     <Folder Include="Generar Publicación\" />
     <Folder Include="Historial Cliente\" />
