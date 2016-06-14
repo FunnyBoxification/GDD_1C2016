@@ -111,6 +111,36 @@ namespace MercadoNegocio
             }
         }
 
+        public DataTable obtenerVisibilidades()
+        {
+            try
+            {
+                var dt = new DataTable();
+                DBConn.openConnection();
+                String sqlRequest;
+                sqlRequest = "SELECT Id_Visibilidad, Descripcion FROM PMS.VISIBILIDADES ";
+
+                SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
+
+
+                using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                {
+                    adapter.Fill(dt);
+                }
+
+                command.Dispose();
+                DBConn.closeConnection();
+                return dt;
+
+            }
+            catch (Exception ex)
+            {
+                DBConn.closeConnection();
+                throw (new Exception("Error en ObtenerVisibilidades" + ex.Message));
+            }                  
+
+        }
+
         public DataTable getTop5VendedoresConArticulosNoVendidos(String anio, String trimestre, int idVisibilidad)
         {
             var dt = new DataTable();

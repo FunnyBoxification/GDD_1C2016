@@ -73,22 +73,46 @@
     <Compile Include="ABM Rol\Modificacion_Rol.Designer.cs">
       <DependentUpon>Modificacion_Rol.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABM Usuario\Alta_Usuario.cs">
+    <Compile Include="ABM Visibilidad\ABM Usuario\AltaModUsuarioForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ABM Usuario\Alta_Usuario.Designer.cs">
+    <Compile Include="ABM Visibilidad\ABM Usuario\AltaModUsuarioForm.Designer.cs">
+      <DependentUpon>AltaModUsuarioForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Visibilidad\ABM Usuario\Alta_Usuario.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Visibilidad\ABM Usuario\Alta_Usuario.Designer.cs">
       <DependentUpon>Alta_Usuario.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABM Usuario\Listado_Usuarios.cs">
+    <Compile Include="ABM Visibilidad\ABM Usuario\Datos.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ABM Visibilidad\ABM Usuario\Datos.Designer.cs">
+      <DependentUpon>Datos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Visibilidad\ABM Usuario\DatosCliente.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ABM Visibilidad\ABM Usuario\DatosCliente.Designer.cs">
+      <DependentUpon>DatosCliente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Visibilidad\ABM Usuario\DatosEmpresa.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ABM Visibilidad\ABM Usuario\DatosEmpresa.Designer.cs">
+      <DependentUpon>DatosEmpresa.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Visibilidad\ABM Usuario\Listado_Usuarios.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ABM Usuario\Listado_Usuarios.Designer.cs">
+    <Compile Include="ABM Visibilidad\ABM Usuario\Listado_Usuarios.Designer.cs">
       <DependentUpon>Listado_Usuarios.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABM Usuario\Modificacion_Usuarios.cs">
+    <Compile Include="ABM Visibilidad\ABM Usuario\Modificacion_Usuarios.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ABM Usuario\Modificacion_Usuarios.Designer.cs">
+    <Compile Include="ABM Visibilidad\ABM Usuario\Modificacion_Usuarios.Designer.cs">
       <DependentUpon>Modificacion_Usuarios.cs</DependentUpon>
     </Compile>
     <Compile Include="ABM Visibilidad\AltaModVisibForm.cs">
@@ -99,7 +123,6 @@
     </Compile>
     <Compile Include="ABM Visibilidad\VisibilidadesDS.cs">
       <DependentUpon>VisibilidadesDS.xsd</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="ABM Visibilidad\VisibilidadesDS.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -125,6 +148,12 @@
     </Compile>
     <Compile Include="Facturas\FacturasVendedor.Designer.cs">
       <DependentUpon>FacturasVendedor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Historial Cliente\HistorialForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Historial Cliente\HistorialForm.Designer.cs">
+      <DependentUpon>HistorialForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Listado Estadistico\ListadoClientesComprasForm.cs">
       <SubType>Form</SubType>
@@ -185,10 +214,22 @@
     <EmbeddedResource Include="ABM Rol\Modificacion_Rol.resx">
       <DependentUpon>Modificacion_Rol.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ABM Usuario\Listado_Usuarios.resx">
+    <EmbeddedResource Include="ABM Visibilidad\ABM Usuario\AltaModUsuarioForm.resx">
+      <DependentUpon>AltaModUsuarioForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Visibilidad\ABM Usuario\Datos.resx">
+      <DependentUpon>Datos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Visibilidad\ABM Usuario\DatosCliente.resx">
+      <DependentUpon>DatosCliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Visibilidad\ABM Usuario\DatosEmpresa.resx">
+      <DependentUpon>DatosEmpresa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Visibilidad\ABM Usuario\Listado_Usuarios.resx">
       <DependentUpon>Listado_Usuarios.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ABM Usuario\Modificacion_Usuarios.resx">
+    <EmbeddedResource Include="ABM Visibilidad\ABM Usuario\Modificacion_Usuarios.resx">
       <DependentUpon>Modificacion_Usuarios.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ABM Visibilidad\AltaModVisibForm.resx">
@@ -202,6 +243,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Facturas\FacturasVendedor.resx">
       <DependentUpon>FacturasVendedor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Historial Cliente\HistorialForm.resx">
+      <DependentUpon>HistorialForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Listado Estadistico\ListadoClientesComprasForm.resx">
       <DependentUpon>ListadoClientesComprasForm.cs</DependentUpon>
@@ -285,7 +329,6 @@
     <Folder Include="ABM Rubro\" />
     <Folder Include="ComprarOfertar\" />
     <Folder Include="Generar Publicación\" />
-    <Folder Include="Historial Cliente\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MercadoEN\MercadoEN.csproj">
