@@ -60,7 +60,7 @@ namespace WindowsFormsApplication1.ABM_Rol
         private void button2_Click(object sender, EventArgs e)
         {
             var negocio = new RolesNegocio(SqlServerDBConnection.Instance());
-            var nombre = textBox1.Text;
+            var nombre = textBox1.Text != "" ? textBox1.Text : null;
             int Habilitado = comboBox1.SelectedIndex;
             dataGridView1.DataSource = negocio.searchRoles(nombre, Habilitado);
         }
