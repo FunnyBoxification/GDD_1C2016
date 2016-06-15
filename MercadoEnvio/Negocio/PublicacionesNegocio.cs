@@ -10,7 +10,7 @@ using MercadoEN;
 
 namespace MercadoNegocio
 {
-    class PublicacionesNegocio
+    public class PublicacionesNegocio
     {
         SqlServerDBConnection DBConn { get; set; }
 
@@ -36,7 +36,7 @@ namespace MercadoNegocio
                 sqlRequest += "FROM PMS.PUBLICACIONES p  ";
                 sqlRequest += "WHERE  p.Id_Tipo = (SELECT t.Id_Tipo FROM PMS.TIPO_PUBLICACION t WHERE t.Descripcion = @tipo) ";
                 if (Idpubli != null || Idpubli != "") sqlRequest += " and p.Id_Publicacion = @idpubli";
-                if (descripcion != null || descripcion != "") sqlRequest += " and e.p.Descripcion = @descripcion";
+                if (descripcion != null || descripcion != "") sqlRequest += " and p.Descripcion = @descripcion";
                 SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
                 command.Parameters.Add("@tipo", SqlDbType.NVarChar).Value = tipo;
                 if (Idpubli != null || Idpubli != "") command.Parameters.Add("@idpubli", SqlDbType.Int).Value = Convert.ToInt32(Idpubli);
@@ -62,31 +62,23 @@ namespace MercadoNegocio
 
        
 
-        public void ProcedureCliente(int tipo, int modo, int IdCod, string username, string password, string nombreRazon, string ApellidCui,
-                                string Doccto,string tiporub, string fechaCiud, string mail, string telef, string direcc,
-                                string nro, string piso, string dpto, string local)
+        public void ProcedurePublicacion(int tipo, int modo, int IdCod )//poner parametros)
         {
             try
             {
                 var proc = "PMS.";
                 if(modo == 0)
                 {
-                    proc += "ALTA_USUARIO_";
+                    proc += "ALTA_PUBLICACION";
                 }else
                 {
-                    proc += "MODIFICACION_USUARIO_";
+                    proc += "MODIFICACION_PUBLICACION";
                 }
-                if(tipo == 0)
-                {
-                    proc += "CLIENTE";
-                }else
-                {
-                    proc += "EMPRESA";
-                }
+                
                 DBConn.openConnection();
                 using (SqlCommand cmd = new SqlCommand(proc, DBConn.Connection))
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandType = CommandType.StoredProcedure; // aca van todos los parametros. Tipo de publi (compra subasta es uno de ellos
                     if (modo == 1)
                     {
                         cmd.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = IdCod;

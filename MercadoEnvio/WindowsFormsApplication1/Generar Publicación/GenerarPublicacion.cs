@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MercadoNegocio;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,6 +13,8 @@ namespace WindowsFormsApplication1.Generar_Publicación
 {
     public partial class GenerarPublicacion : Form
     {
+        public PublicacionesNegocio publNegocio { get; set; }
+        public SqlServerDBConnection instance { get; set; }
         public GenerarPublicacion()
         {
             InitializeComponent();
@@ -21,7 +24,16 @@ namespace WindowsFormsApplication1.Generar_Publicación
         {
             tbxCod.Text = "";
             tbxDesc.Text = "";
+            dgvPublicaciones.Rows.Clear();
             
+        }
+
+        private void btnGenerar_Click(object sender, EventArgs e)
+        {
+            publNegocio = new PublicacionesNegocio(instance = new SqlServerDBConnection());
+
+            var frm = new AltaPublicacion(publNegocio, cbxTipo.SelectedIndex);
+            frm.Show();
         }
     }
 }

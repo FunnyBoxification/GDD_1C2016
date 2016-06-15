@@ -149,6 +149,12 @@
     <Compile Include="Facturas\FacturasVendedor.Designer.cs">
       <DependentUpon>FacturasVendedor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Generar Publicación\AltaPublicacion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Generar Publicación\AltaPublicacion.Designer.cs">
+      <DependentUpon>AltaPublicacion.cs</DependentUpon>
+    </Compile>
     <Compile Include="Generar Publicación\dsPublicaciones.cs">
       <DependentUpon>dsPublicaciones.xsd</DependentUpon>
     </Compile>
@@ -257,6 +263,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Facturas\FacturasVendedor.resx">
       <DependentUpon>FacturasVendedor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Generar Publicación\AltaPublicacion.resx">
+      <DependentUpon>AltaPublicacion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Generar Publicación\GenerarPublicacion.resx">
       <DependentUpon>GenerarPublicacion.cs</DependentUpon>

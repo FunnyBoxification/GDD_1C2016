@@ -28,19 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.Tipo = new System.Windows.Forms.Label();
             this.Filtros = new System.Windows.Forms.GroupBox();
-            this.cbxTipo = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label = new System.Windows.Forms.Label();
-            this.tbxCod = new System.Windows.Forms.TextBox();
-            this.dgvPublicaciones = new System.Windows.Forms.DataGridView();
-            this.tbxDesc = new System.Windows.Forms.TextBox();
-            this.btnLimpiar = new System.Windows.Forms.Button();
             this.btnBuscar = new System.Windows.Forms.Button();
+            this.btnLimpiar = new System.Windows.Forms.Button();
+            this.tbxDesc = new System.Windows.Forms.TextBox();
+            this.tbxCod = new System.Windows.Forms.TextBox();
+            this.label = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cbxTipo = new System.Windows.Forms.ComboBox();
+            this.dgvPublicaciones = new System.Windows.Forms.DataGridView();
             this.btnGenerar = new System.Windows.Forms.Button();
+            this.dsPublicaciones = new WindowsFormsApplication1.Generar_Publicación.dsPublicaciones();
+            this.dsPublicacionesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.Filtros.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPublicaciones)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dsPublicaciones)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dsPublicacionesBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // Tipo
@@ -69,56 +74,14 @@
             this.Filtros.TabStop = false;
             this.Filtros.Text = "Filtros";
             // 
-            // cbxTipo
+            // btnBuscar
             // 
-            this.cbxTipo.FormattingEnabled = true;
-            this.cbxTipo.Location = new System.Drawing.Point(60, 30);
-            this.cbxTipo.Name = "cbxTipo";
-            this.cbxTipo.Size = new System.Drawing.Size(121, 21);
-            this.cbxTipo.TabIndex = 1;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(216, 33);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(113, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Código de Publicación";
-            // 
-            // label
-            // 
-            this.label.AutoSize = true;
-            this.label.Location = new System.Drawing.Point(504, 32);
-            this.label.Name = "label";
-            this.label.Size = new System.Drawing.Size(63, 13);
-            this.label.TabIndex = 3;
-            this.label.Text = "Descripcion";
-            // 
-            // tbxCod
-            // 
-            this.tbxCod.Location = new System.Drawing.Point(335, 31);
-            this.tbxCod.Name = "tbxCod";
-            this.tbxCod.Size = new System.Drawing.Size(143, 20);
-            this.tbxCod.TabIndex = 5;
-            // 
-            // dgvPublicaciones
-            // 
-            this.dgvPublicaciones.AllowUserToAddRows = false;
-            this.dgvPublicaciones.AllowUserToDeleteRows = false;
-            this.dgvPublicaciones.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvPublicaciones.Location = new System.Drawing.Point(13, 98);
-            this.dgvPublicaciones.Name = "dgvPublicaciones";
-            this.dgvPublicaciones.ReadOnly = true;
-            this.dgvPublicaciones.Size = new System.Drawing.Size(1050, 501);
-            this.dgvPublicaciones.TabIndex = 2;
-            // 
-            // tbxDesc
-            // 
-            this.tbxDesc.Location = new System.Drawing.Point(573, 29);
-            this.tbxDesc.Name = "tbxDesc";
-            this.tbxDesc.Size = new System.Drawing.Size(286, 20);
-            this.tbxDesc.TabIndex = 6;
+            this.btnBuscar.Location = new System.Drawing.Point(970, 28);
+            this.btnBuscar.Name = "btnBuscar";
+            this.btnBuscar.Size = new System.Drawing.Size(75, 23);
+            this.btnBuscar.TabIndex = 8;
+            this.btnBuscar.Text = "Buscar";
+            this.btnBuscar.UseVisualStyleBackColor = true;
             // 
             // btnLimpiar
             // 
@@ -130,14 +93,58 @@
             this.btnLimpiar.UseVisualStyleBackColor = true;
             this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
             // 
-            // btnBuscar
+            // tbxDesc
             // 
-            this.btnBuscar.Location = new System.Drawing.Point(970, 28);
-            this.btnBuscar.Name = "btnBuscar";
-            this.btnBuscar.Size = new System.Drawing.Size(75, 23);
-            this.btnBuscar.TabIndex = 8;
-            this.btnBuscar.Text = "Buscar";
-            this.btnBuscar.UseVisualStyleBackColor = true;
+            this.tbxDesc.Location = new System.Drawing.Point(573, 29);
+            this.tbxDesc.Name = "tbxDesc";
+            this.tbxDesc.Size = new System.Drawing.Size(286, 20);
+            this.tbxDesc.TabIndex = 6;
+            // 
+            // tbxCod
+            // 
+            this.tbxCod.Location = new System.Drawing.Point(335, 31);
+            this.tbxCod.Name = "tbxCod";
+            this.tbxCod.Size = new System.Drawing.Size(143, 20);
+            this.tbxCod.TabIndex = 5;
+            // 
+            // label
+            // 
+            this.label.AutoSize = true;
+            this.label.Location = new System.Drawing.Point(504, 32);
+            this.label.Name = "label";
+            this.label.Size = new System.Drawing.Size(63, 13);
+            this.label.TabIndex = 3;
+            this.label.Text = "Descripcion";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(216, 33);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(113, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Código de Publicación";
+            // 
+            // cbxTipo
+            // 
+            this.cbxTipo.FormattingEnabled = true;
+            this.cbxTipo.Location = new System.Drawing.Point(60, 30);
+            this.cbxTipo.Name = "cbxTipo";
+            this.cbxTipo.Size = new System.Drawing.Size(121, 21);
+            this.cbxTipo.TabIndex = 1;
+            // 
+            // dgvPublicaciones
+            // 
+            this.dgvPublicaciones.AllowUserToAddRows = false;
+            this.dgvPublicaciones.AllowUserToDeleteRows = false;
+            this.dgvPublicaciones.AutoGenerateColumns = false;
+            this.dgvPublicaciones.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvPublicaciones.DataSource = this.dsPublicacionesBindingSource;
+            this.dgvPublicaciones.Location = new System.Drawing.Point(13, 98);
+            this.dgvPublicaciones.Name = "dgvPublicaciones";
+            this.dgvPublicaciones.ReadOnly = true;
+            this.dgvPublicaciones.Size = new System.Drawing.Size(1050, 501);
+            this.dgvPublicaciones.TabIndex = 2;
             // 
             // btnGenerar
             // 
@@ -147,6 +154,17 @@
             this.btnGenerar.TabIndex = 3;
             this.btnGenerar.Text = "Generar Publicacion";
             this.btnGenerar.UseVisualStyleBackColor = true;
+            this.btnGenerar.Click += new System.EventHandler(this.btnGenerar_Click);
+            // 
+            // dsPublicaciones
+            // 
+            this.dsPublicaciones.DataSetName = "dsPublicaciones";
+            this.dsPublicaciones.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // dsPublicacionesBindingSource
+            // 
+            this.dsPublicacionesBindingSource.DataSource = this.dsPublicaciones;
+            this.dsPublicacionesBindingSource.Position = 0;
             // 
             // GenerarPublicacion
             // 
@@ -161,6 +179,8 @@
             this.Filtros.ResumeLayout(false);
             this.Filtros.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPublicaciones)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dsPublicaciones)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dsPublicacionesBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -178,5 +198,9 @@
         private System.Windows.Forms.Button btnLimpiar;
         private System.Windows.Forms.TextBox tbxDesc;
         private System.Windows.Forms.Button btnGenerar;
+        private System.Windows.Forms.BindingSource dsPublicacionesBindingSource;
+        private dsPublicaciones dsPublicaciones;
+       // private System.Windows.Forms.BindingSource dsPublicacionesBindingSource;
+       // private dsPublicaciones dsPublicaciones;
     }
 }
