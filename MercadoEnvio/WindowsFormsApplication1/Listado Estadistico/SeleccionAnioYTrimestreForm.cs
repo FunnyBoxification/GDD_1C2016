@@ -17,8 +17,12 @@ namespace WindowsFormsApplication1.Listado_Estadistico
         {
             InitializeComponent();
             var negocio = new ListadoEstadisticoNegocio(SqlServerDBConnection.Instance());
-            comboBox1.DataSource = negocio.getAniosPublicaciones();
+            //comboBox1.DataSource = negocio.getAniosPublicaciones();
 
+            foreach (DataRow trimestre in negocio.getAniosPublicaciones().Rows)
+            {
+                comboBox1.Items.Add(trimestre[0]);
+            }
             var trimestres = negocio.getTrimestres();
             foreach (var trimestre in trimestres)
             {
@@ -38,24 +42,24 @@ namespace WindowsFormsApplication1.Listado_Estadistico
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (comboBox3.SelectedText.Equals("Vendedores con prods no vendidos"))
+            if (comboBox3.Text.Equals("Vendedores con prods no vendidos"))
             {
-                var form = new ListadoEstadisticoForm();
+                var form = new ListadoEstadisticoForm(comboBox1.Text,comboBox2.Text);
                 form.Show();
             }
-            else if (comboBox3.SelectedText.Equals("Clientes con mayor cantidad de productos comprados"))
+            else if (comboBox3.Text.Equals("Clientes con mayor cantidad de productos comprados"))
             {
-                var form = new ListadoClientesComprasForm();
+                var form = new ListadoClientesComprasForm(comboBox1.Text, comboBox2.Text);
                 form.Show();
             }
-            else if (comboBox3.SelectedText.Equals("Vendedores con mayor cantidad de facturas"))
+            else if (comboBox3.Text.Equals("Vendedores con mayor cantidad de facturas"))
             {
-                var form = new ListadoVendedoresCantidadFacturas();
+                var form = new ListadoVendedoresCantidadFacturas(comboBox1.Text, comboBox2.Text);
                 form.Show();
             }
             else
             {
-                var form = new ListadoVendedoresMontoFactura();
+                var form = new ListadoVendedoresMontoFactura(comboBox1.Text,comboBox2.Text);
                 form.Show();
             }
         }

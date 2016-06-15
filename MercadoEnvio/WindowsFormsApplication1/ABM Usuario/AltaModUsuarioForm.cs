@@ -95,7 +95,7 @@ namespace WindowsFormsApplication1.ABM_Usuario
         private void btnGrabar_Click(object sender, EventArgs e)
         {
             int modo;
-            if (IdCod != null) {modo = 1; }else{ modo = 0;};
+            if (IdCod != null) {modo = 0; }else{ modo = 1;};
               
             if (Tipo == 0)
             {                

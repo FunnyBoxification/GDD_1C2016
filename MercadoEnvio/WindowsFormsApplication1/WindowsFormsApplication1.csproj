@@ -273,6 +273,9 @@
     <EmbeddedResource Include="Listado Estadistico\ListadoVendedoresCantidadFacturas.resx">
       <DependentUpon>ListadoVendedoresCantidadFacturas.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Listado Estadistico\ListadoVendedoresMontoFactura.resx">
+      <DependentUpon>ListadoVendedoresMontoFactura.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Listado Estadistico\SeleccionAnioYTrimestreForm.resx">
       <DependentUpon>SeleccionAnioYTrimestreForm.cs</DependentUpon>
     </EmbeddedResource>
