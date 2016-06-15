@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MercadoNegocio;
+using MercadoEN;
 
 namespace WindowsFormsApplication1.Generar_Publicación
 {
@@ -33,6 +34,35 @@ namespace WindowsFormsApplication1.Generar_Publicación
         public AltaPublicacion(PublicacionesNegocio publNegocio, int tipo)
         {
             // TODO: Complete member initialization
+            InitializeComponent();
+
+            foreach (DataRow row in publNegocio.obtenerVisibilidades().Rows)
+            {
+                var item = new ComboboxItem();
+                item.Text = row["Descripcion"].ToString();
+                item.Value = Int32.Parse(row["Id_Visibilidad"].ToString());
+
+                this.cbxVisibilidad.Items.Add(item);
+            }
+
+            foreach (DataRow row in publNegocio.getRubros().Rows)
+            {
+                var item = new ComboboxItem();
+                item.Text = row["Descripcion"].ToString();
+                item.Value = Int32.Parse(row["Id_Rubro"].ToString());
+
+                this.cbxRubro.Items.Add(item);
+            }
+
+            foreach (DataRow row in publNegocio.getTipos().Rows)
+            {
+                var item = new ComboboxItem();
+                item.Text = row["Descripcion"].ToString();
+                item.Value = Int32.Parse(row["Id_Tipo"].ToString());
+
+                this.cbxTipo.Items.Add(item);
+            }
+
             this.publNegocio = publNegocio;
             this.Tipo = tipo;
         }
@@ -41,7 +71,6 @@ namespace WindowsFormsApplication1.Generar_Publicación
         {
             tbxVendedor.Enabled = false;
             dtpInicio.Enabled = false;
-            tbxTipo.Enabled = false;
             tbxCosto.Enabled = false;
             
         }
@@ -58,16 +87,14 @@ namespace WindowsFormsApplication1.Generar_Publicación
                 var Fecha = this.dtpInicio.ToString();
                 var FechaVencimiento = this.dptVencimiento.ToString();
                 var Precio = this.tbxPrecio.Text;
-                String Id_Visibilidad = null; // Falta
-                String Id_Tipo = null; //Falta
-                String Id_Rubro = null; //Falta
-                String Id_Estado = null; //Falta
+                var Id_Visibilidad = (this.cbxVisibilidad.SelectedItem as ComboboxItem) != null ? (this.cbxVisibilidad.SelectedItem as ComboboxItem).Value : -1;
+                Int32 Id_Tipo = (this.cbxVisibilidad.SelectedItem as ComboboxItem) != null ? (this.cbxVisibilidad.SelectedItem as ComboboxItem).Value : -1;  //Falta pasarlo a combo
+                var Id_Rubro = (this.cbxRubro.SelectedItem as ComboboxItem) != null ? (this.cbxRubro.SelectedItem as ComboboxItem).Value : -1; ; //Falta
+                Int32 Id_Estado = 2; //El estado 2 Es el de borrador
                 publNegocio.ProcedurePublicacion(Tipo, modo, IdCod, 
                                                 Descripcion,Stock,Fecha,
                                                 FechaVencimiento,Precio,Id_Visibilidad,
                                                 Id_Tipo,Id_Rubro,Id_Estado);
-                                           
-                
                
                 
             }

@@ -51,7 +51,7 @@
             this.label13 = new System.Windows.Forms.Label();
             this.chbPreguntas = new System.Windows.Forms.CheckBox();
             this.btnGrabar = new System.Windows.Forms.Button();
-            this.tbxTipo = new System.Windows.Forms.TextBox();
+            this.cbxTipo = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // label1
@@ -249,19 +249,20 @@
             this.btnGrabar.UseVisualStyleBackColor = true;
             this.btnGrabar.Click += new System.EventHandler(this.btnGrabar_Click);
             // 
-            // tbxTipo
+            // cbxTipo
             // 
-            this.tbxTipo.Location = new System.Drawing.Point(288, 276);
-            this.tbxTipo.Name = "tbxTipo";
-            this.tbxTipo.Size = new System.Drawing.Size(100, 20);
-            this.tbxTipo.TabIndex = 26;
+            this.cbxTipo.FormattingEnabled = true;
+            this.cbxTipo.Location = new System.Drawing.Point(288, 270);
+            this.cbxTipo.Name = "cbxTipo";
+            this.cbxTipo.Size = new System.Drawing.Size(100, 21);
+            this.cbxTipo.TabIndex = 26;
             // 
             // AltaPublicacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(463, 373);
-            this.Controls.Add(this.tbxTipo);
+            this.Controls.Add(this.cbxTipo);
             this.Controls.Add(this.btnGrabar);
             this.Controls.Add(this.chbPreguntas);
             this.Controls.Add(this.label13);
@@ -318,6 +319,6 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.CheckBox chbPreguntas;
         private System.Windows.Forms.Button btnGrabar;
-        private System.Windows.Forms.TextBox tbxTipo;
+        private System.Windows.Forms.ComboBox cbxTipo;
     }
 }

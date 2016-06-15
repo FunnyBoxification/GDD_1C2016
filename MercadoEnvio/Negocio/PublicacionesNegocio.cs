@@ -19,6 +19,35 @@ namespace MercadoNegocio
             DBConn = dbConnection;
         }
 
+        public DataTable getRubros()
+        {
+            try
+            {
+                var dt = new DataTable();
+                DBConn.openConnection();
+                String sqlRequest;
+                sqlRequest = "SELECT Id_Rubro, Descripcion FROM PMS.RUBROS";
+
+                SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
+
+
+                using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                {
+                    adapter.Fill(dt);
+                }
+
+                command.Dispose();
+                DBConn.closeConnection();
+                return dt;
+
+            }
+            catch (Exception ex)
+            {
+                DBConn.closeConnection();
+                throw (new Exception("Error en GetRubros" + ex.Message));
+            }
+        }
+
         public DataTable getTipos()
         {
             var dt = new DataTable();
@@ -45,6 +74,36 @@ namespace MercadoNegocio
                 DBConn.closeConnection();
                 throw (new Exception("Error en searchFacturasAlVendedor: " + ex.Message));
             }
+        }
+
+        public DataTable obtenerVisibilidades()
+        {
+            try
+            {
+                var dt = new DataTable();
+                DBConn.openConnection();
+                String sqlRequest;
+                sqlRequest = "SELECT Id_Visibilidad, Descripcion FROM PMS.VISIBILIDADES ";
+
+                SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
+
+
+                using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                {
+                    adapter.Fill(dt);
+                }
+
+                command.Dispose();
+                DBConn.closeConnection();
+                return dt;
+
+            }
+            catch (Exception ex)
+            {
+                DBConn.closeConnection();
+                throw (new Exception("Error en ObtenerVisibilidades" + ex.Message));
+            }
+
         }
 
        
@@ -103,10 +162,10 @@ namespace MercadoNegocio
             String Fecha,
             String FechaVencimiento,
             String Precio,
-            String Id_Visibilidad,
-            String Id_Tipo,
-            String Id_Rubro,
-            String Id_Estado)
+            int Id_Visibilidad,
+            int Id_Tipo,
+            int Id_Rubro,
+            int Id_Estado)
         {
             try
             {
