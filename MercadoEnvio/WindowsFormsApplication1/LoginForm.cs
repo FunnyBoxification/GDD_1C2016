@@ -33,11 +33,6 @@ namespace WindowsFormsApplication1
         }
 
 
-
-
-
-
-
         private void btLogin_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtUsuario.Text) || string.IsNullOrWhiteSpace(txtPass.Text))
@@ -81,6 +76,8 @@ namespace WindowsFormsApplication1
                 {
                     //TODO
                     //ACCEDER A la aplicacion el unico rol que tiene el usuario
+                    Principal.PaginaPrincipal form = new Principal.PaginaPrincipal((dt.Rows[0][0]).ToString(),userId);
+                    form.ShowDialog();
                 }
 
             }

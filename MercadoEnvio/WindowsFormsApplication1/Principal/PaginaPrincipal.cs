@@ -15,18 +15,13 @@ namespace WindowsFormsApplication1.Principal
     {
         public List<String> ListaFuncionalidades;
 
-        public String rol;
-        public String passValue
-        {
-            get{return rol;}
-            set { rol = value; }
-        }
-
-        public PaginaPrincipal()
+        public int Userid;
+        public PaginaPrincipal(String rol,int id)
         {
             InitializeComponent();
             var negocio = new MercadoNegocio.Principal(SqlServerDBConnection.Instance());
             ListaFuncionalidades = negocio.getFuncionalidades(rol);
+            this.Userid = id;
             if (ListaFuncionalidades.Any(p => p.ToLower().Contains("rol"))){
                 ABMRol.Visible = true;
             }

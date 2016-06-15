@@ -20,79 +20,6 @@ namespace MercadoNegocio
         }
        
 
-
-        public void DeleteVisib(int IdVisib)
-        {
-
-            try
-            {
-                DBConn.openConnection();
-                using (SqlCommand cmd = new SqlCommand("PMS.BAJA_VISIBILIDAD", DBConn.Connection))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add("@user", SqlDbType.VarChar).Value = IdVisib;
-                    cmd.ExecuteNonQuery();
-                }
-                DBConn.closeConnection();
-            }
-            catch (Exception e)
-            {
-                DBConn.closeConnection();
-                throw (new Exception("No se pudo editar la cantidad de intentos fallidos : " + e.Message));
-
-            }
-        }
-
-
-
-        public void AltaVisibilidad(string descripcion, Decimal porcentaje, Decimal precio)
-        {
-            try
-            {
-                DBConn.openConnection();
-                using (SqlCommand cmd = new SqlCommand("PMS.ALTA_VISIBILIDAD", DBConn.Connection))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add("@Descripcion", SqlDbType.VarChar).Value = descripcion;
-                    cmd.Parameters.Add("@porcentaje", SqlDbType.Decimal).Value = porcentaje;
-                    cmd.Parameters.Add("@precio", SqlDbType.Decimal).Value = precio;
-                    cmd.ExecuteNonQuery();
-                }
-                DBConn.closeConnection();
-            }
-            catch (Exception e)
-            {
-                DBConn.closeConnection();
-                throw (new Exception("No se pudo editar la cantidad de intentos fallidos : " + e.Message));
-
-            }
-        }
-
-        public void ModifVisibilidad(int IdCod, string descripcion, decimal porcentaje, decimal precio)
-        {
-            try
-            {
-                DBConn.openConnection();
-                using (SqlCommand cmd = new SqlCommand("PMS.MODIFICACION_VISIBILIDAD", DBConn.Connection))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add("@Id_Visibilidad", SqlDbType.VarChar).Value = descripcion;
-                    cmd.Parameters.Add("@Descripcion", SqlDbType.VarChar).Value = descripcion;
-                    cmd.Parameters.Add("@porcentaje", SqlDbType.Decimal).Value = porcentaje;
-                    cmd.Parameters.Add("@precio", SqlDbType.Decimal).Value = precio;
-                    cmd.ExecuteNonQuery();
-                }
-                DBConn.closeConnection();
-            }
-            catch (Exception e)
-            {
-                DBConn.closeConnection();
-                throw (new Exception("No se pudo editar la cantidad de intentos fallidos : " + e.Message));
-
-            }
-        }
-
-
         public DataTable BuscarEmpresas(string razonSocial, string cuit, string email)
         {
             try
@@ -100,9 +27,9 @@ namespace MercadoNegocio
                 var dt = new DataTable();
                 DBConn.openConnection();
                 String sqlRequest;
-                sqlRequest = "SELECT  u.Id_Usuarios, u.User_Nombre, u.User_Password, e.RAzonSocial, e.Cuit_Empresa, e.Mail, e.DomCalle, e.NroCalle, e.Piso, ";
-                sqlRequest += "e.CodigoPostal, e.Telefono, e.Contacto, ";
-                sqlRequest += "(select r.Descripcion FROM PMS.RUBROS where r.Id_Rubro = e.Id_Rubro), c.FechaCreacion,  u.Habilitado";
+                sqlRequest = "SELECT  u.Id_Usuarios as \"Código Usuario\", u.User_Nombre as \"Nombre Usuario\", u.User_Password, e.RAzonSocial as \"Razon Social\", e.Cuit_Empresa as \"CUIT\", e.Mail, e.DomCalle as \"Domicilio\", e.NroCalle as \"Numero\", e.Piso, ";
+                sqlRequest += "e.CodigoPostal as \"Código Postal\", e.Telefono, e.Contacto, ";
+                sqlRequest += "(select r.Descripcion FROM PMS.RUBROS where r.Id_Rubro = e.Id_Rubro) as \"Rubro\", c.FechaCreacion as \"FechaCreacion\",  u.Habilitado";
                 sqlRequest += " FROM PMS.USUARIOS u, PMS.EMPRESAS e";
                 sqlRequest += "WHERE u.Id_Usuario = e.Id_Empresa ";
                 if (razonSocial != null || razonSocial != "") sqlRequest += " and e.RazonSocial = @razonSocial";
@@ -178,17 +105,17 @@ namespace MercadoNegocio
                 var proc = "PMS.";
                 if(modo == 0)
                 {
-                    proc += "ALTA_";
+                    proc += "ALTA_USUARIO_";
                 }else
                 {
-                    proc += "MODIICACION_";
+                    proc += "MODIFICACION_USUARIO_";
                 }
                 if(tipo == 0)
                 {
                     proc += "CLIENTE";
                 }else
                 {
-                    proc += "MODIICACION_";
+                    proc += "EMPRESA";
                 }
                 DBConn.openConnection();
                 using (SqlCommand cmd = new SqlCommand(proc, DBConn.Connection))
@@ -208,7 +135,7 @@ namespace MercadoNegocio
                     cmd.Parameters.Add("@TipoDocumento", SqlDbType.VarChar).Value = tiporub;
                     cmd.Parameters.Add("¨@FechaNac", SqlDbType.VarChar).Value = fechaCiud;
                     }else
-                    {
+                    { //empresa
                     cmd.Parameters.Add("@RazonSocial", SqlDbType.Int).Value = nombreRazon;
                     cmd.Parameters.Add("@Cuit_Empresa", SqlDbType.VarChar).Value = ApellidCui;
                     cmd.Parameters.Add("¨@Contacto", SqlDbType.VarChar).Value = Doccto;

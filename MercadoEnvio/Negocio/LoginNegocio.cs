@@ -23,8 +23,6 @@ namespace MercadoNegocio
 
         public int loginUser(string username, string password)
         {
-
-
             try
             {
                 DBConn.openConnection();

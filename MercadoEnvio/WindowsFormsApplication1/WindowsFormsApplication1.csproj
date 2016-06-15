@@ -32,7 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>WindowsFormsApplication1.Program</StartupObject>
+    <StartupObject>
+    </StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <NoWin32Manifest>true</NoWin32Manifest>
@@ -155,6 +156,26 @@
     <Compile Include="Facturas\FacturasVendedor.Designer.cs">
       <DependentUpon>FacturasVendedor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Generar Publicación\AltaPublicacion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Generar Publicación\AltaPublicacion.Designer.cs">
+      <DependentUpon>AltaPublicacion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Generar Publicación\dsPublicaciones.cs">
+      <DependentUpon>dsPublicaciones.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Generar Publicación\dsPublicaciones.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsPublicaciones.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Generar Publicación\GenerarPublicacion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Generar Publicación\GenerarPublicacion.Designer.cs">
+      <DependentUpon>GenerarPublicacion.cs</DependentUpon>
+    </Compile>
     <Compile Include="Historial Cliente\HistorialForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -253,6 +274,12 @@
     <EmbeddedResource Include="Facturas\FacturasVendedor.resx">
       <DependentUpon>FacturasVendedor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Generar Publicación\AltaPublicacion.resx">
+      <DependentUpon>AltaPublicacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Generar Publicación\GenerarPublicacion.resx">
+      <DependentUpon>GenerarPublicacion.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Historial Cliente\HistorialForm.resx">
       <DependentUpon>HistorialForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -312,6 +339,17 @@
     <None Include="ABM Visibilidad\VisibilidadesDS.xss">
       <DependentUpon>VisibilidadesDS.xsd</DependentUpon>
     </None>
+    <None Include="Generar Publicación\dsPublicaciones.xsc">
+      <DependentUpon>dsPublicaciones.xsd</DependentUpon>
+    </None>
+    <None Include="Generar Publicación\dsPublicaciones.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsPublicaciones.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Generar Publicación\dsPublicaciones.xss">
+      <DependentUpon>dsPublicaciones.xsd</DependentUpon>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -339,7 +377,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ABM Rubro\" />
-    <Folder Include="Generar Publicación\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MercadoEN\MercadoEN.csproj">

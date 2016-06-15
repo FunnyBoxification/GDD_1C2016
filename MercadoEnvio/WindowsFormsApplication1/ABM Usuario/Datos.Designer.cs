@@ -1,4 +1,6 @@
-﻿namespace WindowsFormsApplication1.ABM_Visibilidad
+﻿using System;
+
+namespace WindowsFormsApplication1.ABM_Usuarios
 {
     partial class Datos
     {
