@@ -38,14 +38,14 @@
             this.label = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.cbxTipo = new System.Windows.Forms.ComboBox();
-            this.dgvPublicaciones = new System.Windows.Forms.DataGridView();
             this.dsPublicacionesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.dsPublicaciones = new WindowsFormsApplication1.Generar_Publicación.dsPublicaciones();
             this.btnGenerar = new System.Windows.Forms.Button();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Filtros.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvPublicaciones)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dsPublicacionesBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dsPublicaciones)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // Tipo
@@ -134,19 +134,6 @@
             this.cbxTipo.Size = new System.Drawing.Size(121, 21);
             this.cbxTipo.TabIndex = 1;
             // 
-            // dgvPublicaciones
-            // 
-            this.dgvPublicaciones.AllowUserToAddRows = false;
-            this.dgvPublicaciones.AllowUserToDeleteRows = false;
-            this.dgvPublicaciones.AutoGenerateColumns = false;
-            this.dgvPublicaciones.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvPublicaciones.DataSource = this.dsPublicacionesBindingSource;
-            this.dgvPublicaciones.Location = new System.Drawing.Point(13, 98);
-            this.dgvPublicaciones.Name = "dgvPublicaciones";
-            this.dgvPublicaciones.ReadOnly = true;
-            this.dgvPublicaciones.Size = new System.Drawing.Size(1050, 501);
-            this.dgvPublicaciones.TabIndex = 2;
-            // 
             // dsPublicacionesBindingSource
             // 
             this.dsPublicacionesBindingSource.DataSource = this.dsPublicaciones;
@@ -167,21 +154,29 @@
             this.btnGenerar.UseVisualStyleBackColor = true;
             this.btnGenerar.Click += new System.EventHandler(this.btnGenerar_Click);
             // 
+            // dataGridView1
+            // 
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(12, 97);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.Size = new System.Drawing.Size(1051, 512);
+            this.dataGridView1.TabIndex = 4;
+            // 
             // GenerarPublicacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1075, 662);
+            this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.btnGenerar);
-            this.Controls.Add(this.dgvPublicaciones);
             this.Controls.Add(this.Filtros);
             this.Name = "GenerarPublicacion";
             this.Text = "Generar Publicacion";
             this.Filtros.ResumeLayout(false);
             this.Filtros.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvPublicaciones)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dsPublicacionesBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dsPublicaciones)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -194,13 +189,13 @@
         private System.Windows.Forms.Label label;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cbxTipo;
-        private System.Windows.Forms.DataGridView dgvPublicaciones;
         private System.Windows.Forms.Button btnBuscar;
         private System.Windows.Forms.Button btnLimpiar;
         private System.Windows.Forms.TextBox tbxDesc;
         private System.Windows.Forms.Button btnGenerar;
         private System.Windows.Forms.BindingSource dsPublicacionesBindingSource;
         private dsPublicaciones dsPublicaciones;
+        private System.Windows.Forms.DataGridView dataGridView1;
        // private System.Windows.Forms.BindingSource dsPublicacionesBindingSource;
        // private dsPublicaciones dsPublicaciones;
     }

@@ -65,6 +65,12 @@ namespace WindowsFormsApplication1.Generar_Publicación
 
             this.publNegocio = publNegocio;
             this.Tipo = tipo;
+
+
+            /**
+             * ACA FIJARSE SI ES ALTA O MODIFICACION, EN EL CASO QUE SEA MODIFICACION, SETEAR 
+             * LA DATA CORRESPONDIENTE DE LA PUBLICACION
+             * */
         }
 
         private void AltaPublicacion_Load(object sender, EventArgs e)

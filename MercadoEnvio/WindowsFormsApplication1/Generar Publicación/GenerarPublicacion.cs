@@ -21,6 +21,7 @@ namespace WindowsFormsApplication1.Generar_Publicación
             InitializeComponent();
 
             publNegocio = new PublicacionesNegocio(SqlServerDBConnection.Instance());
+            
 
             foreach (DataRow row in publNegocio.getTipos().Rows)
             {
@@ -38,7 +39,7 @@ namespace WindowsFormsApplication1.Generar_Publicación
         {
             tbxCod.Text = "";
             tbxDesc.Text = "";
-            dgvPublicaciones.Rows.Clear();
+            dataGridView1.DataSource = new DataTable(); 
         }
 
         private void btnGenerar_Click(object sender, EventArgs e)
@@ -57,7 +58,7 @@ namespace WindowsFormsApplication1.Generar_Publicación
             String Id_Publicacion = tbxCod.Text != "" ? tbxCod.Text : null;
             String Descripcion = tbxDesc.Text != "" ? tbxDesc.Text : null;
 
-            dgvPublicaciones.DataSource = publNegocio.BuscarPublicaciones(Id_Publicacion, TipoPublicacion, Descripcion);
+            dataGridView1.DataSource = publNegocio.BuscarPublicaciones(Id_Publicacion, TipoPublicacion, Descripcion);
 
         }
 

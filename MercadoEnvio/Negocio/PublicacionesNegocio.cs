@@ -125,16 +125,16 @@ namespace MercadoNegocio
                 sqlRequest += "WHERE 1=1 ";
                 if (tipo != null)
                 {
-                    sqlRequest += "AND p.Id_Tipo = (SELECT t.Id_Tipo FROM PMS.TIPO_PUBLICACION t WHERE t.Descripcion = @tipo ) ";
+                    sqlRequest += "AND p.Id_Tipo = (SELECT t.Id_Tipo FROM PMS.TIPO_PUBLICACION t WHERE t.Descripcion = '" + tipo+"' ) ";
                 }
-                if (Idpubli != null && Idpubli != "") sqlRequest += " and p.Id_Publicacion = @idpubli";
+                if (Idpubli != null && Idpubli != "") sqlRequest += " and p.Id_Publicacion = " + Idpubli + " ";
                 
-                if (descripcion != null && descripcion != "") sqlRequest += " and p.Descripcion = @descripcion";
+                if (descripcion != null && descripcion != "") sqlRequest += " and p.Descripcion = '"+descripcion+"'";
                 SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
                 
-                if (tipo != null)  command.Parameters.Add("@tipo", SqlDbType.NVarChar).Value = tipo;
+                /*if (tipo != null)  command.Parameters.Add("@tipo", SqlDbType.NVarChar).Value = tipo;
                 if (Idpubli != null && Idpubli != "") command.Parameters.Add("@idpubli", SqlDbType.Int).Value = Convert.ToInt32(Idpubli);
-                if (descripcion != null && descripcion != "") command.Parameters.Add(" @email", SqlDbType.NVarChar).Value = descripcion;
+                if (descripcion != null && descripcion != "") command.Parameters.Add(" @descripcion", SqlDbType.NVarChar).Value = descripcion;*/
                
                 using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                 {
