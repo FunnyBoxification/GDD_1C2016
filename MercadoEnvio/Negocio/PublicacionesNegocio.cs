@@ -83,30 +83,30 @@ namespace MercadoNegocio
                     {
                         cmd.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = IdCod;
                     }
-                    cmd.Parameters.Add("@Username", SqlDbType.VarChar).Value = username;
-                    cmd.Parameters.Add("¨@Password", SqlDbType.VarChar).Value = password;
-                    if(tipo == 0)
-                    {                //Cliente    
-                    cmd.Parameters.Add("@Nombre", SqlDbType.Int).Value = nombreRazon;
-                    cmd.Parameters.Add("@Apellido", SqlDbType.VarChar).Value = ApellidCui;
-                    cmd.Parameters.Add("¨@Documento", SqlDbType.VarChar).Value = Doccto;
-                    cmd.Parameters.Add("@TipoDocumento", SqlDbType.VarChar).Value = tiporub;
-                    cmd.Parameters.Add("¨@FechaNac", SqlDbType.VarChar).Value = fechaCiud;
-                    }else
-                    { //empresa
-                    cmd.Parameters.Add("@RazonSocial", SqlDbType.Int).Value = nombreRazon;
-                    cmd.Parameters.Add("@Cuit_Empresa", SqlDbType.VarChar).Value = ApellidCui;
-                    cmd.Parameters.Add("¨@Contacto", SqlDbType.VarChar).Value = Doccto;
-                    cmd.Parameters.Add("@Rubro", SqlDbType.VarChar).Value = tiporub;
-                    cmd.Parameters.Add("¨@Ciudad", SqlDbType.VarChar).Value = fechaCiud;
-                    }
-                    cmd.Parameters.Add("@Mail", SqlDbType.Int).Value = mail;
-                    cmd.Parameters.Add("@Telefono", SqlDbType.VarChar).Value = telef;
-                    cmd.Parameters.Add("¨@Direccion", SqlDbType.VarChar).Value = direcc;
-                    cmd.Parameters.Add("@Nro", SqlDbType.VarChar).Value = nro;
-                    cmd.Parameters.Add("¨@Piso", SqlDbType.VarChar).Value = piso;
-                    cmd.Parameters.Add("@Departamento", SqlDbType.VarChar).Value = dpto;
-                    cmd.Parameters.Add("¨@Localidad", SqlDbType.VarChar).Value = local;
+                    //cmd.Parameters.Add("@Username", SqlDbType.VarChar).Value = username;
+                    //cmd.Parameters.Add("¨@Password", SqlDbType.VarChar).Value = password;
+                    //if(tipo == 0)
+                    //{                //Cliente    
+                    //cmd.Parameters.Add("@Nombre", SqlDbType.Int).Value = nombreRazon;
+                    //cmd.Parameters.Add("@Apellido", SqlDbType.VarChar).Value = ApellidCui;
+                    //cmd.Parameters.Add("¨@Documento", SqlDbType.VarChar).Value = Doccto;
+                    //cmd.Parameters.Add("@TipoDocumento", SqlDbType.VarChar).Value = tiporub;
+                    //cmd.Parameters.Add("¨@FechaNac", SqlDbType.VarChar).Value = fechaCiud;
+                    //}else
+                    //{ //empresa
+                    //cmd.Parameters.Add("@RazonSocial", SqlDbType.Int).Value = nombreRazon;
+                    //cmd.Parameters.Add("@Cuit_Empresa", SqlDbType.VarChar).Value = ApellidCui;
+                    //cmd.Parameters.Add("¨@Contacto", SqlDbType.VarChar).Value = Doccto;
+                    //cmd.Parameters.Add("@Rubro", SqlDbType.VarChar).Value = tiporub;
+                    //cmd.Parameters.Add("¨@Ciudad", SqlDbType.VarChar).Value = fechaCiud;
+                    //}
+                    //cmd.Parameters.Add("@Mail", SqlDbType.Int).Value = mail;
+                    //cmd.Parameters.Add("@Telefono", SqlDbType.VarChar).Value = telef;
+                    //cmd.Parameters.Add("¨@Direccion", SqlDbType.VarChar).Value = direcc;
+                    //cmd.Parameters.Add("@Nro", SqlDbType.VarChar).Value = nro;
+                    //cmd.Parameters.Add("¨@Piso", SqlDbType.VarChar).Value = piso;
+                    //cmd.Parameters.Add("@Departamento", SqlDbType.VarChar).Value = dpto;
+                    //cmd.Parameters.Add("¨@Localidad", SqlDbType.VarChar).Value = local;
                     cmd.ExecuteNonQuery();
                 }
                 DBConn.closeConnection();

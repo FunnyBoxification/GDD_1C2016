@@ -32,7 +32,7 @@
             this.txbUsername = new System.Windows.Forms.TextBox();
             this.txbPassw = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.datos1 = new WindowsFormsApplication1.ABM_Visibilidad.Datos();
+            this.datos1 = new WindowsFormsApplication1.ABM_Usuarios.Datos();
             this.datosCliente1 = new WindowsFormsApplication1.ABM_Usuario.DatosCliente();
             this.datosEmpresa1 = new WindowsFormsApplication1.ABM_Usuario.DatosEmpresa();
             this.btnGrabar = new System.Windows.Forms.Button();
@@ -143,7 +143,7 @@
 
         private System.Windows.Forms.Label UserName;
         private System.Windows.Forms.TextBox txbUsername;
-        private ABM_Visibilidad.Datos datos1;
+        private ABM_Usuarios.Datos datos1;
         private System.Windows.Forms.TextBox txbPassw;
         private System.Windows.Forms.Label label1;
         private DatosCliente datosCliente1;

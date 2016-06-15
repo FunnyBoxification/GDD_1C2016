@@ -53,18 +53,18 @@ namespace WindowsFormsApplication1.Generar_Publicación
               
             if (Tipo == 1) //compra
             {                
-                    publNegocio.ProcedurePublicacion(Tipo, modo, IdCod,
-                                           t//pasar datos);
+                    publNegocio.ProcedurePublicacion(Tipo, modo, IdCod);
+                                           //pasar datos);
                 
                
                 
             }
             else//Subasta
             {
-                publNegocio.ProcedurePublicacion(Tipo, modo, IdCod,
+                publNegocio.ProcedurePublicacion(Tipo, modo, IdCod);
                                           //pasar datos );
             }
         }
-        }
+        
     }
 }
