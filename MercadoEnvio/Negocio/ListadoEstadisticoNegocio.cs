@@ -111,6 +111,35 @@ namespace MercadoNegocio
             }
         }
 
+        public DataTable getRubros()
+        {
+            try
+            {
+                var dt = new DataTable();
+                DBConn.openConnection();
+                String sqlRequest;
+                sqlRequest = "SELECT Id_Rubro, Descripcion FROM PMS.RUBROS";
+
+                SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
+
+
+                using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                {
+                    adapter.Fill(dt);
+                }
+
+                command.Dispose();
+                DBConn.closeConnection();
+                return dt;
+
+            }
+            catch (Exception ex)
+            {
+                DBConn.closeConnection();
+                throw (new Exception("Error en GetRubros" + ex.Message));
+            }  
+        }
+
         public DataTable obtenerVisibilidades()
         {
             try
@@ -152,9 +181,13 @@ namespace MercadoNegocio
 
                 DBConn.openConnection();
                 String sqlRequest;
-                sqlRequest = "SELECT TOP 5 Id_Usuario, MAX(Stock) FROM PMS.Publicaciones ";
-                sqlRequest += "WHERE Id_Visibilidad = @IdVisibilidad AND Fecha BETWEEN CONVERT(date,@InicioTrimestre) AND CONVERT(date,@FinTrimestre) ";
-                sqlRequest += "ORDER BY MAX(Stock) Fecha, Id_Visibilidad GROUP BY Id_Usuario";
+                sqlRequest = "SELECT TOP 5 Id_Usuario, DATEPART(mm,Fecha) as \"Mes\", Id_Visibilidad, MAX(Stock) as Max_Stock  FROM PMS.Publicaciones WHERE 1=1 ";
+                if (idVisibilidad != -1) 
+                {
+                    sqlRequest += "AND Id_Visibilidad = @IdVisibilidad ";
+                }
+                sqlRequest += "AND Fecha BETWEEN CONVERT(date,@InicioTrimestre) AND CONVERT(date,@FinTrimestre) ";
+                sqlRequest += "GROUP BY Id_Usuario, DATEPART(mm,Fecha), Id_Visibilidad ORDER BY MAX(Stock), DATEPART(mm,Fecha), Id_Visibilidad";
 
                 SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
                 command.Parameters.Add("@IdVisibilidad", SqlDbType.Int).Value = idVisibilidad;
@@ -187,10 +220,10 @@ namespace MercadoNegocio
 
                 DBConn.openConnection();
                 String sqlRequest;
-                sqlRequest = "SELECT TOP 5 COUNT(compras.Id_Compra),compras.Id_Cliente_Comprador FROM PMS.COMPRAS compras ";
+                sqlRequest = "SELECT TOP 5 compras.Id_Cliente_Comprador as \"Id Cliente \", COUNT(compras.Id_Compra) as \"Cantidad de Compras \" FROM PMS.COMPRAS compras ";
                 sqlRequest += "LEFT JOIN PMS.PUBLICACIONES publicaciones ON publicaciones.Id_Publicacion = compras.Id_Publicacion ";
                 sqlRequest += "WHERE publicaciones.Id_Rubro = @IdRubro AND compras.Fecha BETWEEN CONVERT(date,@InicioTrimestre) AND CONVERT(date,@FinTrimestre) ";
-                sqlRequest += "ORDER BY COUNT(compras.Id_Compra) GROUP BY compras.Id_Cliente_Comprador";
+                sqlRequest += " GROUP BY compras.Id_Cliente_Comprador ORDER BY COUNT(compras.Id_Compra)";
 
                 SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
                 command.Parameters.Add("@IdRubro", SqlDbType.Int).Value = idRubro;

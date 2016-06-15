@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using WindowsFormsApplication1.ABM_Rol;
 using WindowsFormsApplication1.Facturas;
 using WindowsFormsApplication1.Historial_Cliente;
+using WindowsFormsApplication1.Listado_Estadistico;
 
 
 namespace WindowsFormsApplication1
@@ -23,7 +24,7 @@ namespace WindowsFormsApplication1
             Application.SetCompatibleTextRenderingDefault(false);
 
             //SqlServerDBConnection.Instance().openConnection();
-            Application.Run(new ABM_Usuario.Listado_Usuarios());
+            Application.Run(new Listado_Estadistico.SeleccionAnioYTrimestreForm());
         }
     }
 }
