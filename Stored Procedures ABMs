@@ -551,7 +551,7 @@ DECLARE @MONTO numeric(18,2)
 
 DECLARE db_cursor CURSOR FOR  
 select p.Id_Publicacion,o.Monto,o.Id_Cliente from PMS.PUBLICACIONES p join PMS.OFERTAS o ON p.Id_Publicacion=o.Id_Publicacion
- where p.Id_Tipo=2 and p.FechaVencimiento<@Fecha and
+ where p.Id_Tipo=2 and p.FechaVencimiento<@Fecha and o.Id_Estado=4
 OPEN db_cursor   
 FETCH NEXT FROM db_cursor INTO @ID_PUBLICACION,@MONTO,@ID_CLIENTE
 
