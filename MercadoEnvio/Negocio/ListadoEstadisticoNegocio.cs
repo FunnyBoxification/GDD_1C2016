@@ -222,7 +222,12 @@ namespace MercadoNegocio
                 String sqlRequest;
                 sqlRequest = "SELECT TOP 5 compras.Id_Cliente_Comprador as \"Id Cliente \", COUNT(compras.Id_Compra) as \"Cantidad de Compras \" FROM PMS.COMPRAS compras ";
                 sqlRequest += "LEFT JOIN PMS.PUBLICACIONES publicaciones ON publicaciones.Id_Publicacion = compras.Id_Publicacion ";
-                sqlRequest += "WHERE publicaciones.Id_Rubro = @IdRubro AND compras.Fecha BETWEEN CONVERT(date,@InicioTrimestre) AND CONVERT(date,@FinTrimestre) ";
+                sqlRequest += "WHERE 1=1 AND";
+                if (idRubro != -1)
+                {
+                    sqlRequest += " publicaciones.Id_Rubro = @IdRubro ";
+                }
+                sqlRequest += "AND compras.Fecha BETWEEN CONVERT(date,@InicioTrimestre) AND CONVERT(date,@FinTrimestre) ";
                 sqlRequest += " GROUP BY compras.Id_Cliente_Comprador ORDER BY COUNT(compras.Id_Compra)";
 
                 SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);

@@ -44,7 +44,7 @@ namespace WindowsFormsApplication1.Listado_Estadistico
         private void button2_Click(object sender, EventArgs e)
         {
             var negocio = new ListadoEstadisticoNegocio(SqlServerDBConnection.Instance());
-            var rubro = (this.comboBox1.SelectedItem as ComboboxItem).Value;
+            var rubro = (this.comboBox1.SelectedItem as ComboboxItem) != null ? (this.comboBox1.SelectedItem as ComboboxItem).Value : -1;
             this.dataGridView1.DataSource = negocio.getTop5ClientesConArticulosComprados(anio, trimestre, rubro);
         }
     }
