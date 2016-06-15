@@ -10,35 +10,37 @@ using MercadoEN;
 
 namespace MercadoNegocio
 {
-    public class UsuariosNegocio
+    class PublicacionesNegocio
     {
         SqlServerDBConnection DBConn { get; set; }
 
-        public UsuariosNegocio(SqlServerDBConnection dbConnection)
+        public PublicacionesNegocio(SqlServerDBConnection dbConnection)
         {
             DBConn = dbConnection;
         }
        
 
-        public DataTable BuscarEmpresas(string razonSocial, string cuit, string email)
+        public DataTable BuscarPublicaciones(string Idpubli, string tipo, string descripcion)
         {
             try
             {
                 var dt = new DataTable();
                 DBConn.openConnection();
                 String sqlRequest;
-                sqlRequest = "SELECT  u.Id_Usuarios as \"Código Usuario\", u.User_Nombre as \"Nombre Usuario\", u.User_Password, e.RAzonSocial as \"Razon Social\", e.Cuit_Empresa as \"CUIT\", e.Mail, e.DomCalle as \"Domicilio\", e.NroCalle as \"Numero\", e.Piso, ";
-                sqlRequest += "e.CodigoPostal as \"Código Postal\", e.Telefono, e.Contacto, ";
-                sqlRequest += "(select r.Descripcion FROM PMS.RUBROS where r.Id_Rubro = e.Id_Rubro) as \"Rubro\", c.FechaCreacion as \"FechaCreacion\",  u.Habilitado";
-                sqlRequest += " FROM PMS.USUARIOS u, PMS.EMPRESAS e";
-                sqlRequest += "WHERE u.Id_Usuario = e.Id_Empresa ";
-                if (razonSocial != null || razonSocial != "") sqlRequest += " and e.RazonSocial = @razonSocial";
-                if (cuit != null || cuit != "") sqlRequest += " and e.Cuit_Empresa = @cuit";
-                if (email != null || email != "") sqlRequest += " and e.Mail = @email";
+                sqlRequest = "SELECT p.Id_Publicacion, p.Descripcion, p.Stock  , p.Fecha  ,p.FechaVencimiento  ,   p.Precio  , ";
+                sqlRequest += " (SELECT u.User_Nombre FROM PMS.USUARIOS u  WHERE u.Id_Usuario = p.Id_Usuario) as Vendedor, ";
+                sqlRequest += " (SELECT v.Descripcion FROM PMS.VISIBILIDADES v WHERE v.Id_Visibilidad = p.Id_Visibilidad) as Visibilidad, ";
+                sqlRequest += " (SELECT t.Descripcion FROM PMS.TIPO_PUBLICACION t WHERE t.Id_Tipo = p.Id_Tipo) as Tipo , ";
+                sqlRequest += " (SELECT r.Descripcion FROM PMS.RUBROS r WHERE r.Id_Rubro = r.Id_Rubro) as Rubro, ";
+                sqlRequest += " (SELECT e.Descripcion FROM PMS.PUBLICACION_ESTADOS e WHERE e.Id_Estado = e.Id_Estado) As Estado ";   
+                sqlRequest += "FROM PMS.PUBLICACIONES p  ";
+                sqlRequest += "WHERE  p.Id_Tipo = (SELECT t.Id_Tipo FROM PMS.TIPO_PUBLICACION t WHERE t.Descripcion = @tipo) ";
+                if (Idpubli != null || Idpubli != "") sqlRequest += " and p.Id_Publicacion = @idpubli";
+                if (descripcion != null || descripcion != "") sqlRequest += " and e.p.Descripcion = @descripcion";
                 SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
-                if (razonSocial != null || razonSocial != "") command.Parameters.Add("@razonSocial", SqlDbType.NVarChar).Value = razonSocial;
-                if (cuit != null || cuit != "") command.Parameters.Add("@cuit", SqlDbType.NVarChar).Value = cuit;
-                if (email != null || email != "") command.Parameters.Add(" @email", SqlDbType.NVarChar).Value = email;
+                command.Parameters.Add("@tipo", SqlDbType.NVarChar).Value = tipo;
+                if (Idpubli != null || Idpubli != "") command.Parameters.Add("@idpubli", SqlDbType.Int).Value = Convert.ToInt32(Idpubli);
+                if (descripcion != null || descripcion != "") command.Parameters.Add(" @email", SqlDbType.NVarChar).Value = descripcion;
                
                 using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                 {
@@ -58,43 +60,7 @@ namespace MercadoNegocio
             }
         }
 
-        public DataTable BuscarClientes(string nombre, string apellido, int dni, string email)
-        {
-            try
-            {
-                var dt = new DataTable();
-                DBConn.openConnection();
-                String sqlRequest;
-                sqlRequest = "SELECT u.Id_Usuario, u.User_Nombre, u.User_Password, c.Nombre, c.Apellido, c.Dni_Cliente, c.FechaNacimiento, c.Mail, c.DomCalle, c.NroCalle, c.Piso, c.Cod_Postal, c.Telefono, c.FechaCreacion, u.Habilitado";
-                sqlRequest += " FROM PMS.USUARIOS u, PMS.Clientes c";
-                sqlRequest += " WHERE u.Id_Usuarios = c.Id_Cliente ";
-                if (nombre != null && nombre != "") sqlRequest += " and c.Nombre = @nombre";
-                if (apellido != null && apellido != "") sqlRequest += " and c.Apellido = @apellido";
-                if (dni != null && dni != 0) sqlRequest += " and c.Dni_Cliente = @dni";
-                if (email != null && email != "") sqlRequest += " and c.Mail = @email";
-                SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
-                if (nombre != null && nombre != "") command.Parameters.Add("@nombre", SqlDbType.NVarChar).Value = nombre;
-                if (apellido != null && apellido != "") command.Parameters.Add("@apellido", SqlDbType.NVarChar).Value = apellido;
-                if (dni != null && dni != 0) command.Parameters.Add("@apellido", SqlDbType.Int).Value = dni;
-                if (email != null && email != "") command.Parameters.Add(" @email", SqlDbType.NVarChar).Value = email;
-
-                using (SqlDataAdapter adapter = new SqlDataAdapter(command))
-                {
-                    adapter.Fill(dt);
-                    return dt;
-                }
-
-
-                command.Dispose();
-                DBConn.closeConnection();
-
-            }
-            catch (Exception ex)
-            {
-                DBConn.closeConnection();
-                throw (new Exception("Error en la busqueda de clientes" + ex.Message));
-            }
-        }
+       
 
         public void ProcedureCliente(int tipo, int modo, int IdCod, string username, string password, string nombreRazon, string ApellidCui,
                                 string Doccto,string tiporub, string fechaCiud, string mail, string telef, string direcc,
@@ -160,6 +126,5 @@ namespace MercadoNegocio
 
             }
         }
-       
     }
 }

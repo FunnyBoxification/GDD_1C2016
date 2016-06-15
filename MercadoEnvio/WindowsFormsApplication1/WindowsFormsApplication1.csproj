@@ -73,46 +73,46 @@
     <Compile Include="ABM Rol\Modificacion_Rol.Designer.cs">
       <DependentUpon>Modificacion_Rol.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABM Visibilidad\ABM Usuario\AltaModUsuarioForm.cs">
+    <Compile Include="ABM Usuario\AltaModUsuarioForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ABM Visibilidad\ABM Usuario\AltaModUsuarioForm.Designer.cs">
+    <Compile Include="ABM Usuario\AltaModUsuarioForm.Designer.cs">
       <DependentUpon>AltaModUsuarioForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABM Visibilidad\ABM Usuario\Alta_Usuario.cs">
+    <Compile Include="ABM Usuario\Alta_Usuario.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ABM Visibilidad\ABM Usuario\Alta_Usuario.Designer.cs">
+    <Compile Include="ABM Usuario\Alta_Usuario.Designer.cs">
       <DependentUpon>Alta_Usuario.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABM Visibilidad\ABM Usuario\Datos.cs">
+    <Compile Include="ABM Usuario\Datos.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ABM Visibilidad\ABM Usuario\Datos.Designer.cs">
+    <Compile Include="ABM Usuario\Datos.Designer.cs">
       <DependentUpon>Datos.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABM Visibilidad\ABM Usuario\DatosCliente.cs">
+    <Compile Include="ABM Usuario\DatosCliente.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ABM Visibilidad\ABM Usuario\DatosCliente.Designer.cs">
+    <Compile Include="ABM Usuario\DatosCliente.Designer.cs">
       <DependentUpon>DatosCliente.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABM Visibilidad\ABM Usuario\DatosEmpresa.cs">
+    <Compile Include="ABM Usuario\DatosEmpresa.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ABM Visibilidad\ABM Usuario\DatosEmpresa.Designer.cs">
+    <Compile Include="ABM Usuario\DatosEmpresa.Designer.cs">
       <DependentUpon>DatosEmpresa.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABM Visibilidad\ABM Usuario\Listado_Usuarios.cs">
+    <Compile Include="ABM Usuario\Listado_Usuarios.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ABM Visibilidad\ABM Usuario\Listado_Usuarios.Designer.cs">
+    <Compile Include="ABM Usuario\Listado_Usuarios.Designer.cs">
       <DependentUpon>Listado_Usuarios.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABM Visibilidad\ABM Usuario\Modificacion_Usuarios.cs">
+    <Compile Include="ABM Usuario\Modificacion_Usuarios.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ABM Visibilidad\ABM Usuario\Modificacion_Usuarios.Designer.cs">
+    <Compile Include="ABM Usuario\Modificacion_Usuarios.Designer.cs">
       <DependentUpon>Modificacion_Usuarios.cs</DependentUpon>
     </Compile>
     <Compile Include="ABM Visibilidad\AltaModVisibForm.cs">
@@ -148,6 +148,20 @@
     </Compile>
     <Compile Include="Facturas\FacturasVendedor.Designer.cs">
       <DependentUpon>FacturasVendedor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Generar Publicación\dsPublicaciones.cs">
+      <DependentUpon>dsPublicaciones.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Generar Publicación\dsPublicaciones.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsPublicaciones.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Generar Publicación\GenerarPublicacion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Generar Publicación\GenerarPublicacion.Designer.cs">
+      <DependentUpon>GenerarPublicacion.cs</DependentUpon>
     </Compile>
     <Compile Include="Historial Cliente\HistorialForm.cs">
       <SubType>Form</SubType>
@@ -214,22 +228,22 @@
     <EmbeddedResource Include="ABM Rol\Modificacion_Rol.resx">
       <DependentUpon>Modificacion_Rol.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ABM Visibilidad\ABM Usuario\AltaModUsuarioForm.resx">
+    <EmbeddedResource Include="ABM Usuario\AltaModUsuarioForm.resx">
       <DependentUpon>AltaModUsuarioForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ABM Visibilidad\ABM Usuario\Datos.resx">
+    <EmbeddedResource Include="ABM Usuario\Datos.resx">
       <DependentUpon>Datos.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ABM Visibilidad\ABM Usuario\DatosCliente.resx">
+    <EmbeddedResource Include="ABM Usuario\DatosCliente.resx">
       <DependentUpon>DatosCliente.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ABM Visibilidad\ABM Usuario\DatosEmpresa.resx">
+    <EmbeddedResource Include="ABM Usuario\DatosEmpresa.resx">
       <DependentUpon>DatosEmpresa.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ABM Visibilidad\ABM Usuario\Listado_Usuarios.resx">
+    <EmbeddedResource Include="ABM Usuario\Listado_Usuarios.resx">
       <DependentUpon>Listado_Usuarios.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ABM Visibilidad\ABM Usuario\Modificacion_Usuarios.resx">
+    <EmbeddedResource Include="ABM Usuario\Modificacion_Usuarios.resx">
       <DependentUpon>Modificacion_Usuarios.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ABM Visibilidad\AltaModVisibForm.resx">
@@ -243,6 +257,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Facturas\FacturasVendedor.resx">
       <DependentUpon>FacturasVendedor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Generar Publicación\GenerarPublicacion.resx">
+      <DependentUpon>GenerarPublicacion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Historial Cliente\HistorialForm.resx">
       <DependentUpon>HistorialForm.cs</DependentUpon>
@@ -300,6 +317,17 @@
     <None Include="ABM Visibilidad\VisibilidadesDS.xss">
       <DependentUpon>VisibilidadesDS.xsd</DependentUpon>
     </None>
+    <None Include="Generar Publicación\dsPublicaciones.xsc">
+      <DependentUpon>dsPublicaciones.xsd</DependentUpon>
+    </None>
+    <None Include="Generar Publicación\dsPublicaciones.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsPublicaciones.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Generar Publicación\dsPublicaciones.xss">
+      <DependentUpon>dsPublicaciones.xsd</DependentUpon>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -328,7 +356,6 @@
   <ItemGroup>
     <Folder Include="ABM Rubro\" />
     <Folder Include="ComprarOfertar\" />
-    <Folder Include="Generar Publicación\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MercadoEN\MercadoEN.csproj">
