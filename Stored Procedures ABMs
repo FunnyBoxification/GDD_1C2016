@@ -196,8 +196,6 @@ create procedure PMS.ALTA_USUARIO_CLIENTE
 			@User_Nombre nvarchar(255)
 			,@User_Password binary(32)
 			,@Habilitado numeric(18,0)
-           ,@Primera_Vez numeric(18,0)
-           ,@Reputacion numeric(18,0)
            ,@Dni_Cliente numeric(18,0)
            ,@Apellido nvarchar(255)
            ,@Nombre nvarchar(255)
@@ -208,6 +206,9 @@ create procedure PMS.ALTA_USUARIO_CLIENTE
            ,@Piso numeric(18,0)
            ,@Depto nvarchar(50)
            ,@Cod_Postal nvarchar(50)
+		   ,@TipoDoc nvarchar(50)
+		   ,@Fecha	datetime
+		   ,@Telefono nvarchar(50)
 		   ,@id numeric(18,0) output
 as begin
 
@@ -223,8 +224,8 @@ INSERT INTO [PMS].[USUARIOS]
            ,HASHBYTES('SHA2_256',@User_Password)
            ,@Habilitado
            ,0
-           ,@Primera_Vez
-           ,@Reputacion)
+           ,0
+           ,null)
 
 
 set @id=(select Id_usuario from PMS.USUARIOS where User_Nombre=@User_Nombre);
@@ -239,7 +240,10 @@ INSERT INTO [PMS].[CLIENTES]
            ,[NroCalle]
            ,[Piso]
            ,[Depto]
-           ,[Cod_Postal])
+           ,[Cod_Postal]
+		   ,Tipo_Doc
+		   ,FechaCreacion
+		   ,Telefono)
      VALUES
            (@id
            ,@Dni_Cliente
@@ -251,7 +255,10 @@ INSERT INTO [PMS].[CLIENTES]
            ,@NroCalle
            ,@Piso
            ,@Depto
-           ,@Cod_Postal)
+           ,@Cod_Postal
+		   ,@TipoDoc
+		   ,@Fecha
+		   ,@Telefono)
 end
 go
 
@@ -259,8 +266,6 @@ create procedure PMS.ALTA_USUARIO_EMPRESA
 			@User_Nombre nvarchar(255)
 			,@User_Password binary(32)
 			,@Habilitado numeric(18,0)
-           ,@Primera_Vez numeric(18,0)
-           ,@Reputacion numeric(18,0)
            ,@Cuit_Empresa nvarchar(50)
            ,@RazonSocial nvarchar(255)
            ,@FechaCreacion datetime
@@ -270,6 +275,8 @@ create procedure PMS.ALTA_USUARIO_EMPRESA
            ,@Piso numeric(18,0)
            ,@Depto nvarchar(50)
            ,@CodigoPostal nvarchar(50)
+		   ,@NombreContacto nvarchar(50)
+		   ,@Telefono nvarchar(50)
 		   ,@id numeric(18,0) output
 as begin
 
@@ -285,8 +292,8 @@ INSERT INTO [PMS].[USUARIOS]
            ,HASHBYTES('SHA2_256',@User_Password)
            ,@Habilitado
            ,0
-           ,@Primera_Vez
-           ,@Reputacion)
+           ,0
+           ,null)
 
 set @id=(select Id_usuario from PMS.USUARIOS where User_Nombre=@User_Nombre);
 
@@ -300,7 +307,9 @@ INSERT INTO [PMS].[EMPRESAS]
            ,[NroCalle]
            ,[Piso]
            ,[Depto]
-           ,[CodigoPostal])
+           ,[CodigoPostal]
+		   ,NombreContacto
+		   ,Telefono)
      VALUES
            (@id
            ,@Cuit_Empresa
@@ -311,7 +320,9 @@ INSERT INTO [PMS].[EMPRESAS]
            ,@NroCalle
            ,@Piso
            ,@Depto
-           ,@CodigoPostal)
+           ,@CodigoPostal
+		   ,@NombreContacto
+		   ,@Telefono)
 end
 go
 
@@ -506,7 +517,7 @@ where Id_Usuario=@ID_USER
 END
 GO
 
-CREATE PROCEDURE ALTA_CALIFICACION
+CREATE PROCEDURE PMS.ALTA_CALIFICACION
 		@Id_Compra numeric(18,0)
         ,@Cantidad_Estrellas numeric(18,0)
         ,@Descripcion nvarchar(255)
@@ -530,7 +541,7 @@ UPDATE [PMS].[COMPRAS]
 END
 GO
 
-CREATE PROCEDURE SUBASTAS_TERMIANDAS
+CREATE PROCEDURE PMS.SUBASTAS_TERMINADAS
 		@Fecha datetime
 AS
 BEGIN
@@ -540,7 +551,7 @@ DECLARE @MONTO numeric(18,2)
 
 DECLARE db_cursor CURSOR FOR  
 select p.Id_Publicacion,o.Monto,o.Id_Cliente from PMS.PUBLICACIONES p join PMS.OFERTAS o ON p.Id_Publicacion=o.Id_Publicacion
- where p.Id_Tipo=2 and p.FechaVencimiento<@Fecha
+ where p.Id_Tipo=2 and p.FechaVencimiento<@Fecha and o.Id_Estado=4
 OPEN db_cursor   
 FETCH NEXT FROM db_cursor INTO @ID_PUBLICACION,@MONTO,@ID_CLIENTE
 
@@ -554,6 +565,10 @@ END
 END
 GO
 
+CREATE TRIGGER ALTA_FACTURA_VENTA
+ON PMS.COMPRAS
+AFTER INSERT
+AS
 BEGIN 
 DECLARE @NUMERO numeric(18,0)
 SET @NUMERO =(select max(Numero)from FACTURAS)
@@ -580,3 +595,107 @@ select @TOTAL=Precio from VISIBILIDADES WHERE Id_Visibilidad=(select Id_Visibili
 EXEC PMS.ALTA_FACTURA @NUMERO,@FECHA,@TOTAL,0,0,@ID,'Comision por Publicacion'
 END
 GO
+
+create procedure PMS.MODIFICACION_USUARIO_CLIENTE
+			@id numeric(18,0)
+			,@User_Nombre nvarchar(255)
+			,@User_Password binary(32)
+			,@Habilitado numeric(18,0)
+           ,@Dni_Cliente numeric(18,0)
+           ,@Apellido nvarchar(255)
+           ,@Nombre nvarchar(255)
+           ,@FechaNacimiento datetime
+           ,@Mail nvarchar(255)
+           ,@DomCalle nvarchar(255)
+           ,@NroCalle numeric(18,0)
+           ,@Piso numeric(18,0)
+           ,@Depto nvarchar(50)
+           ,@Cod_Postal nvarchar(50)
+		   ,@TipoDoc nvarchar(50)
+		   ,@Telefono nvarchar(50)
+		   
+as begin
+
+update [PMS].[USUARIOS]
+set
+           [User_Nombre] = @User_Nombre
+           ,[User_Password]= HASHBYTES('SHA2_256',@User_Password)
+           ,[Habilitado]= @Habilitado
+where Id_Usuario=@id
+
+
+UPDATE [PMS].[CLIENTES]
+SET
+           [Dni_Cliente] =@Dni_Cliente
+           ,[Apellido] = @Apellido
+           ,[Nombre] = @Nombre
+           ,[FechaNacimiento]= @FechaNacimiento
+           ,[Mail]= @Mail
+           ,[DomCalle]= @DomCalle
+           ,[NroCalle]= @NroCalle
+           ,[Piso]= @Piso
+           ,[Depto]=  @Depto
+           ,[Cod_Postal]= @Cod_Postal
+		   ,Tipo_Doc=@TipoDoc
+		   ,Telefono=@Telefono
+WHERE Id_Cliente=@id
+end
+go
+
+create procedure PMS.MODIFICACION_USUARIO_EMPRESA
+			@id numeric(18,0)
+			,@User_Nombre nvarchar(255)
+			,@User_Password binary(32)
+			,@Habilitado numeric(18,0)
+           ,@Cuit_Empresa nvarchar(50)
+           ,@RazonSocial nvarchar(255)
+           ,@Mail nvarchar(50)
+           ,@DomCalle nvarchar(100)
+           ,@NroCalle numeric(18,0)
+           ,@Piso numeric(18,0)
+           ,@Depto nvarchar(50)
+           ,@CodigoPostal nvarchar(50)
+		   ,@NombreContacto nvarchar(50)
+		   ,@Telefono nvarchar(50)
+as begin
+
+UPDATE [PMS].[USUARIOS]
+SET
+           [User_Nombre] = @User_Nombre
+           ,[User_Password]= HASHBYTES('SHA2_256',@User_Password)
+           ,[Habilitado] = @Habilitado
+WHERE Id_Usuario =@id
+
+UPDATE [PMS].[EMPRESAS]
+SET
+           [Cuit_Empresa]= @Cuit_Empresa
+           ,[RazonSocial] =@RazonSocial
+           ,[Mail]= @Mail
+           ,[DomCalle]= @DomCalle
+           ,[NroCalle]= @NroCalle
+           ,[Piso]= @Piso
+           ,[Depto]= @Depto
+           ,[CodigoPostal]= @CodigoPostal
+		   ,NombreContacto= @NombreContacto
+		   ,Telefono= @Telefono
+WHERE Id_Empresa=@id
+end
+go
+
+create procedure PMS.BAJA_USUARIO_EMPRESA
+			@id numeric(18,0)
+as begin
+update PMS.USUARIOS
+set Habilitado= 0
+where Id_Usuario=@id
+end
+go
+
+create procedure PMS.BAJA_USUARIO_CLIENTE
+			@id numeric(18,0)
+as begin
+update PMS.USUARIOS
+set Habilitado= 0
+where Id_Usuario=@id
+end
+go
