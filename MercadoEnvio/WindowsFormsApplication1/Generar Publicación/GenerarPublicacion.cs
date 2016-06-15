@@ -62,5 +62,10 @@ namespace WindowsFormsApplication1.Generar_Publicación
 
         }
 
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
     }
 }

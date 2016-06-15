@@ -27,10 +27,10 @@ namespace MercadoNegocio
             {
                 DBConn.openConnection();
                 String sqlRequest = "SELECT Nombre FROM PMS.FUNCIONALIDADES WHERE Id_Funcionalidad IN ";
-                sqlRequest += "(SELECT Id_Funcionalidad FROM PMS.FUNCIONALIDES_ROLES WHERE Nombre=@Nombre )";
+                sqlRequest += "(SELECT Id_Funcionalidad FROM PMS.FUNCIONALIDES_ROLES WHERE Id_Rol IN (SELECT Id_Rol FROM PMS.ROLES WHERE Nombre='"+nombre+"' ))";
 
                 SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
-                command.Parameters.Add("@Nombre", SqlDbType.VarChar).Value = nombre;
+                //command.Parameters.Add("@Nombre", SqlDbType.VarChar).Value = nombre;
 
                 using (var reader = command.ExecuteReader())
                 {

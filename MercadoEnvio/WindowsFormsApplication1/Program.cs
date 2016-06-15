@@ -29,8 +29,8 @@ namespace WindowsFormsApplication1
             Application.SetCompatibleTextRenderingDefault(false);
             //terminarSubastas();
             //SqlServerDBConnection.Instance().openConnection();
-            //Application.Run(new LoginForm());
-            Application.Run(new Generar_Publicación.GenerarPublicacion());
+            Application.Run(new LoginForm());
+            //Application.Run(new Generar_Publicación.GenerarPublicacion());
         }
         
         static int terminarSubastas()

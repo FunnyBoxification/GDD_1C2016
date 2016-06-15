@@ -84,43 +84,43 @@ namespace WindowsFormsApplication1.Principal
 
         private void ABMVisibilidad_Click(object sender, EventArgs e)
         {
-            WindowsFormsApplication1.ABM_Rol.Listado_Roles FormRol = new WindowsFormsApplication1.ABM_Rol.Listado_Roles();
+            var FormRol = new WindowsFormsApplication1.ABM_Visibilidad.VisibilidadesForm();
             FormRol.Show();
         }
 
         private void ABMPublicacion_Click(object sender, EventArgs e)
         {
-            WindowsFormsApplication1.ABM_Rol.Listado_Roles FormRol = new WindowsFormsApplication1.ABM_Rol.Listado_Roles();
+           var FormRol = new WindowsFormsApplication1.Generar_Publicación.GenerarPublicacion();
             FormRol.Show();
         }
 
         private void ComprarOfertar_Click(object sender, EventArgs e)
         {
-            WindowsFormsApplication1.ABM_Rol.Listado_Roles FormRol = new WindowsFormsApplication1.ABM_Rol.Listado_Roles();
+            var FormRol = new WindowsFormsApplication1.ComprarOfertar.ComprarOfertarListadoForm();
             FormRol.Show();
         }
 
         private void Calificar_Click(object sender, EventArgs e)
         {
-            WindowsFormsApplication1.ABM_Rol.Listado_Roles FormRol = new WindowsFormsApplication1.ABM_Rol.Listado_Roles();
+            var FormRol = new WindowsFormsApplication1.Calificar.Calificar();
             FormRol.Show();
         }
 
         private void Historial_Click(object sender, EventArgs e)
         {
-            WindowsFormsApplication1.ABM_Rol.Listado_Roles FormRol = new WindowsFormsApplication1.ABM_Rol.Listado_Roles();
+            var FormRol = new WindowsFormsApplication1.Historial_Cliente.HistorialForm(Userid);
             FormRol.Show();
         }
 
         private void Listado_Click(object sender, EventArgs e)
         {
-            WindowsFormsApplication1.ABM_Rol.Listado_Roles FormRol = new WindowsFormsApplication1.ABM_Rol.Listado_Roles();
+            var FormRol = new WindowsFormsApplication1.Listado_Estadistico.SeleccionAnioYTrimestreForm();
             FormRol.Show();
         }
 
         private void Facturas_Click(object sender, EventArgs e)
         {
-            WindowsFormsApplication1.ABM_Rol.Listado_Roles FormRol = new WindowsFormsApplication1.ABM_Rol.Listado_Roles();
+            var FormRol = new WindowsFormsApplication1.Facturas.FacturasVendedor();
             FormRol.Show();
         }
     }
