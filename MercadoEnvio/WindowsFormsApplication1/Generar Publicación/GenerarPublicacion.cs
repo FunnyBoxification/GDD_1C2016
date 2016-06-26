@@ -64,6 +64,16 @@ namespace WindowsFormsApplication1.Generar_Publicación
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            publNegocio = new PublicacionesNegocio(instance = new SqlServerDBConnection());
+
+            if (e.RowIndex != -1)
+            {
+                var idPublicacion = dataGridView1.Rows[e.RowIndex].Cells["Id_Publicacion"].Value.ToString();
+
+                var frm = new AltaPublicacion(publNegocio, idPublicacion);
+                frm.Show();
+            }
+
 
         }
 

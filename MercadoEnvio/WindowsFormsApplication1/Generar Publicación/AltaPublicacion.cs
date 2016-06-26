@@ -31,6 +31,49 @@ namespace WindowsFormsApplication1.Generar_Publicación
             InitializeComponent();
         }
 
+        //En caso de modificacion
+        public AltaPublicacion(PublicacionesNegocio publNegocio, String idPublicacion)
+        {
+            InitializeComponent();
+
+            //Busco la info de la publicacion
+            DataTable publicacionDt = publNegocio.BuscarPublicaciones(idPublicacion, null, null);
+
+            foreach (DataRow row in publNegocio.obtenerVisibilidades().Rows)
+            {
+                var item = new ComboboxItem();
+                item.Text = row["Descripcion"].ToString();
+                item.Value = Int32.Parse(row["Id_Visibilidad"].ToString());
+
+                this.cbxVisibilidad.Items.Add(item);
+            }
+
+            foreach (DataRow row in publNegocio.getRubros().Rows)
+            {
+                var item = new ComboboxItem();
+                item.Text = row["Descripcion"].ToString();
+                item.Value = Int32.Parse(row["Id_Rubro"].ToString());
+
+                this.cbxRubro.Items.Add(item);
+            }
+
+            foreach (DataRow row in publNegocio.getTipos().Rows)
+            {
+                var item = new ComboboxItem();
+                item.Text = row["Descripcion"].ToString();
+                item.Value = Int32.Parse(row["Id_Tipo"].ToString());
+
+                this.cbxTipo.Items.Add(item);
+            }
+
+            this.publNegocio = publNegocio;
+            //this.Tipo = tipo;
+
+            tbxDescripcion.Text = publicacionDt.Rows[0]["Descripcion"].ToString();
+            tbxCosto.Text = publicacionDt.Rows[0]["Precio"].ToString();
+            tbxPrecio.Text = publicacionDt.Rows[0]["Precio"].ToString();
+        }
+
         public AltaPublicacion(PublicacionesNegocio publNegocio, int tipo)
         {
             // TODO: Complete member initialization
