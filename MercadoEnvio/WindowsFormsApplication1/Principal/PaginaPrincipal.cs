@@ -72,7 +72,7 @@ namespace WindowsFormsApplication1.Principal
 
         private void ABMUser_Click(object sender, EventArgs e)
         {
-            WindowsFormsApplication1.ABM_Rol.Listado_Roles FormRol = new WindowsFormsApplication1.ABM_Rol.Listado_Roles();
+            var FormRol = new WindowsFormsApplication1.ABM_Usuario.Listado_Usuarios();
             FormRol.Show();
         }
 
