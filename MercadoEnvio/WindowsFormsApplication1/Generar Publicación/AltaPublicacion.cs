@@ -37,7 +37,7 @@ namespace WindowsFormsApplication1.Generar_Publicación
             InitializeComponent();
 
             //Busco la info de la publicacion
-            DataTable publicacionDt = publNegocio.BuscarPublicaciones(idPublicacion, null, null);
+            DataTable publicacionDt = publNegocio.BuscarPublicacionSeleccionada(idPublicacion);
 
             foreach (DataRow row in publNegocio.obtenerVisibilidades().Rows)
             {
@@ -73,12 +73,42 @@ namespace WindowsFormsApplication1.Generar_Publicación
             tbxCosto.Text = publicacionDt.Rows[0]["Precio"].ToString();
             tbxPrecio.Text = publicacionDt.Rows[0]["Precio"].ToString();
             tbxStock.Text = publicacionDt.Rows[0]["Stock"].ToString();
-            tbxVendedor.Text = publicacionDt.Rows[0]["Vendedor"].ToString();
+            tbxVendedor.Text = publicacionDt.Rows[0]["Id_Usuario"].ToString();
             dtpInicio.Value = DateTime.Parse(publicacionDt.Rows[0]["Fecha"].ToString());
             dptVencimiento.Value = DateTime.Parse(publicacionDt.Rows[0]["FechaVencimiento"].ToString());
-            cbxVisibilidad.SelectedIndex = Int32.Parse(publicacionDt.Rows[0]["Id_Visibilidad"].ToString());
-            cbxRubro.SelectedIndex = Int32.Parse(publicacionDt.Rows[0]["Id_Rubro"].ToString());
+
+            int a = 0;
+            foreach (DataRow row in publNegocio.obtenerVisibilidades().Rows)
+            {
+                if (row["Id_Visibilidad"].Equals(Int32.Parse(publicacionDt.Rows[0]["Id_Visibilidad"].ToString())))
+                {
+                    cbxVisibilidad.SelectedIndex = a;
+                }
+                a++;
+            }
+
+            a = 0;
+            foreach (DataRow row in publNegocio.getRubros().Rows)
+            {
+                if (row["Id_Rubro"].Equals(Int32.Parse(publicacionDt.Rows[0]["Id_Rubro"].ToString())))
+                {
+                    cbxRubro.SelectedIndex = a;
+                }
+                a++;
+            }
+
+
             cbxTipo.SelectedIndex = Int32.Parse(publicacionDt.Rows[0]["Id_Tipo"].ToString());
+            a = 0;
+            foreach (DataRow row in publNegocio.getTipos().Rows)
+            {
+                if (row["Id_Tipo"].Equals(Int32.Parse(publicacionDt.Rows[0]["Id_Tipo"].ToString())))
+                {
+                    cbxTipo.SelectedIndex = a;
+                }
+                a++;
+            }
+
             chbPreguntas.Checked = Int32.Parse(publicacionDt.Rows[0]["AceptaPreguntas"].ToString()) == 1;
         }
 

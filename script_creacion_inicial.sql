@@ -107,6 +107,7 @@ BEGIN
 		Id_Tipo					numeric(18,0),
 		Id_Rubro				numeric(18,0),
 		Id_Estado				numeric(18,0),
+		AceptaPreguntas			numeric(18,0),
 		PRIMARY KEY(Id_Publicacion),
 		FOREIGN KEY(Id_Visibilidad) REFERENCES PMS.VISIBILIDADES(Id_visibilidad),
 		FOREIGN KEY(Id_Usuario) 	REFERENCES PMS.USUARIOS(Id_Usuario),
@@ -373,7 +374,8 @@ BEGIN
 			(SELECT top 1 e.Id_Estado
 			   FROM PMS.PUBLICACION_ESTADOS e
 			  WHERE e.Descripcion = Publicacion_Estado
-			    AND Publicacion_Cod = Publicacion_Cod)			
+			    AND Publicacion_Cod = Publicacion_Cod)	,
+			0		
 	FROM gd_esquema.Maestra WHERE Publicacion_Cod is not null;
 
 	INSERT INTO PMS.OFERTAS	

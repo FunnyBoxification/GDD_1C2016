@@ -106,6 +106,33 @@ namespace MercadoNegocio
 
         }
 
+
+        public DataTable BuscarPublicacionSeleccionada(String Idpubli)
+        {
+            try
+            {
+                var dt = new DataTable();
+                DBConn.openConnection();
+                String sqlRequest;
+                sqlRequest = "SELECT * FROM PMS.PUBLICACIONES WHERE Id_Publicacion = " + Idpubli;
+                SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
+                
+                using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                {
+                    adapter.Fill(dt);
+                    command.Dispose();
+                    DBConn.closeConnection();
+                    return dt;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                DBConn.closeConnection();
+                throw (new Exception("Error en la Busqueda de empresas" + ex.Message));
+            }
+        }
+
        
 
         public DataTable BuscarPublicaciones(String Idpubli, String tipo, String descripcion)
