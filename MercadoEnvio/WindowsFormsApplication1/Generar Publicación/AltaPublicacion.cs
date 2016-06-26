@@ -72,6 +72,14 @@ namespace WindowsFormsApplication1.Generar_Publicación
             tbxDescripcion.Text = publicacionDt.Rows[0]["Descripcion"].ToString();
             tbxCosto.Text = publicacionDt.Rows[0]["Precio"].ToString();
             tbxPrecio.Text = publicacionDt.Rows[0]["Precio"].ToString();
+            tbxStock.Text = publicacionDt.Rows[0]["Stock"].ToString();
+            tbxVendedor.Text = publicacionDt.Rows[0]["Vendedor"].ToString();
+            dtpInicio.Value = DateTime.Parse(publicacionDt.Rows[0]["Fecha"].ToString());
+            dptVencimiento.Value = DateTime.Parse(publicacionDt.Rows[0]["FechaVencimiento"].ToString());
+            cbxVisibilidad.SelectedIndex = Int32.Parse(publicacionDt.Rows[0]["Id_Visibilidad"].ToString());
+            cbxRubro.SelectedIndex = Int32.Parse(publicacionDt.Rows[0]["Id_Rubro"].ToString());
+            cbxTipo.SelectedIndex = Int32.Parse(publicacionDt.Rows[0]["Id_Tipo"].ToString());
+            chbPreguntas.Checked = Int32.Parse(publicacionDt.Rows[0]["AceptaPreguntas"].ToString()) == 1;
         }
 
         public AltaPublicacion(PublicacionesNegocio publNegocio, int tipo)
