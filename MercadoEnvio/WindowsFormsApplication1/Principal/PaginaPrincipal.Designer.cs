@@ -42,9 +42,9 @@
             // 
             // ABMRol
             // 
-            this.ABMRol.Location = new System.Drawing.Point(12, 12);
+            this.ABMRol.Location = new System.Drawing.Point(82, 12);
             this.ABMRol.Name = "ABMRol";
-            this.ABMRol.Size = new System.Drawing.Size(75, 23);
+            this.ABMRol.Size = new System.Drawing.Size(123, 23);
             this.ABMRol.TabIndex = 0;
             this.ABMRol.Text = "Roles";
             this.ABMRol.UseVisualStyleBackColor = true;
@@ -53,20 +53,20 @@
             // 
             // ABMUser
             // 
-            this.ABMUser.Location = new System.Drawing.Point(12, 41);
+            this.ABMUser.Location = new System.Drawing.Point(82, 41);
             this.ABMUser.Name = "ABMUser";
-            this.ABMUser.Size = new System.Drawing.Size(75, 23);
+            this.ABMUser.Size = new System.Drawing.Size(123, 23);
             this.ABMUser.TabIndex = 1;
-            this.ABMUser.Text = "Users";
+            this.ABMUser.Text = "Usuarios";
             this.ABMUser.UseVisualStyleBackColor = true;
             this.ABMUser.Visible = false;
             this.ABMUser.Click += new System.EventHandler(this.ABMUser_Click);
             // 
             // ABMRubro
             // 
-            this.ABMRubro.Location = new System.Drawing.Point(12, 71);
+            this.ABMRubro.Location = new System.Drawing.Point(82, 71);
             this.ABMRubro.Name = "ABMRubro";
-            this.ABMRubro.Size = new System.Drawing.Size(75, 23);
+            this.ABMRubro.Size = new System.Drawing.Size(123, 23);
             this.ABMRubro.TabIndex = 2;
             this.ABMRubro.Text = "Rubros";
             this.ABMRubro.UseVisualStyleBackColor = true;
@@ -75,9 +75,9 @@
             // 
             // ABMVisibilidad
             // 
-            this.ABMVisibilidad.Location = new System.Drawing.Point(12, 100);
+            this.ABMVisibilidad.Location = new System.Drawing.Point(82, 100);
             this.ABMVisibilidad.Name = "ABMVisibilidad";
-            this.ABMVisibilidad.Size = new System.Drawing.Size(75, 23);
+            this.ABMVisibilidad.Size = new System.Drawing.Size(123, 23);
             this.ABMVisibilidad.TabIndex = 3;
             this.ABMVisibilidad.Text = "Visibilidades";
             this.ABMVisibilidad.UseVisualStyleBackColor = true;
@@ -86,9 +86,9 @@
             // 
             // ABMPublicacion
             // 
-            this.ABMPublicacion.Location = new System.Drawing.Point(12, 129);
+            this.ABMPublicacion.Location = new System.Drawing.Point(82, 129);
             this.ABMPublicacion.Name = "ABMPublicacion";
-            this.ABMPublicacion.Size = new System.Drawing.Size(75, 23);
+            this.ABMPublicacion.Size = new System.Drawing.Size(123, 23);
             this.ABMPublicacion.TabIndex = 4;
             this.ABMPublicacion.Text = "Publicacion";
             this.ABMPublicacion.UseVisualStyleBackColor = true;
@@ -97,9 +97,9 @@
             // 
             // ComprarOfertar
             // 
-            this.ComprarOfertar.Location = new System.Drawing.Point(12, 158);
+            this.ComprarOfertar.Location = new System.Drawing.Point(82, 158);
             this.ComprarOfertar.Name = "ComprarOfertar";
-            this.ComprarOfertar.Size = new System.Drawing.Size(75, 23);
+            this.ComprarOfertar.Size = new System.Drawing.Size(123, 23);
             this.ComprarOfertar.TabIndex = 5;
             this.ComprarOfertar.Text = "Comprar";
             this.ComprarOfertar.UseVisualStyleBackColor = true;
@@ -108,9 +108,9 @@
             // 
             // Calificar
             // 
-            this.Calificar.Location = new System.Drawing.Point(12, 187);
+            this.Calificar.Location = new System.Drawing.Point(82, 187);
             this.Calificar.Name = "Calificar";
-            this.Calificar.Size = new System.Drawing.Size(75, 23);
+            this.Calificar.Size = new System.Drawing.Size(123, 23);
             this.Calificar.TabIndex = 6;
             this.Calificar.Text = "Calificar";
             this.Calificar.UseVisualStyleBackColor = true;
@@ -119,9 +119,9 @@
             // 
             // Historial
             // 
-            this.Historial.Location = new System.Drawing.Point(12, 216);
+            this.Historial.Location = new System.Drawing.Point(82, 216);
             this.Historial.Name = "Historial";
-            this.Historial.Size = new System.Drawing.Size(75, 23);
+            this.Historial.Size = new System.Drawing.Size(123, 23);
             this.Historial.TabIndex = 7;
             this.Historial.Text = "Historial";
             this.Historial.UseVisualStyleBackColor = true;
@@ -130,9 +130,9 @@
             // 
             // Listado
             // 
-            this.Listado.Location = new System.Drawing.Point(12, 245);
+            this.Listado.Location = new System.Drawing.Point(82, 245);
             this.Listado.Name = "Listado";
-            this.Listado.Size = new System.Drawing.Size(75, 23);
+            this.Listado.Size = new System.Drawing.Size(123, 23);
             this.Listado.TabIndex = 8;
             this.Listado.Text = "Listado";
             this.Listado.UseVisualStyleBackColor = true;
@@ -141,9 +141,9 @@
             // 
             // Facturas
             // 
-            this.Facturas.Location = new System.Drawing.Point(12, 274);
+            this.Facturas.Location = new System.Drawing.Point(82, 274);
             this.Facturas.Name = "Facturas";
-            this.Facturas.Size = new System.Drawing.Size(75, 23);
+            this.Facturas.Size = new System.Drawing.Size(123, 23);
             this.Facturas.TabIndex = 9;
             this.Facturas.Text = "Facturas";
             this.Facturas.UseVisualStyleBackColor = true;
@@ -166,7 +166,7 @@
             this.Controls.Add(this.ABMUser);
             this.Controls.Add(this.ABMRol);
             this.Name = "PaginaPrincipal";
-            this.Text = "PaginaPrincipal";
+            this.Text = "Menu Principal";
             this.ResumeLayout(false);
 
         }

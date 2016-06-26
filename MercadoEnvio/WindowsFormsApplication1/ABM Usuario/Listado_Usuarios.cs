@@ -84,6 +84,22 @@ namespace WindowsFormsApplication1.ABM_Usuario
                     if(txbDniCuit.Text == ""){ dni = 0;}else{dni = Convert.ToInt32(txbDniCuit.Text);}
                     dgvUsuarios.DataSource = usuNegocio.BuscarClientes(txbNomRaz.Text, txbApellido.Text, dni, txbEmail.Text);
                 }
+
+                dgvUsuarios.Columns[0].Width = 60;
+                dgvUsuarios.Columns[0].HeaderText = "Hab";
+
+                foreach(DataGridViewRow row in dgvUsuarios.Rows)
+                {
+                    if (Convert.ToDecimal(row.Cells[0].Value) == 1)
+                    {
+                        row.Cells[0].Style.BackColor = Color.Green;
+                    }
+                    else
+                    {
+                        row.Cells[0].Style.BackColor = Color.Green;
+                    }
+                }
+    
             }
             catch(Exception ex)
             {
@@ -130,7 +146,7 @@ namespace WindowsFormsApplication1.ABM_Usuario
                                                   Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Passwod"].Value),
                                                   Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["RazonSocial"].Value),
                                                   Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["CUIT"].Value),
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Coontacto"].Value),
+                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Contacto"].Value),
                                                   Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Rubro"].Value),
                                                   Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Ciudad"].Value),
                                                   Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Mail"].Value),

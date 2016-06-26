@@ -18,7 +18,8 @@ BEGIN
 		Habilitado					numeric(18,0) DEFAULT 1,
 		Intentos_login			numeric(18,0) DEFAULT 0,
 		Primera_Vez				numeric(18,0),
-		Reputacion				numeric(18,0)
+		Reputacion				numeric(18,0),
+		FechaCreacion			datetime,
 		PRIMARY KEY(Id_Usuario)
 	);
 
@@ -64,7 +65,6 @@ BEGIN
 		Depto					nvarchar(50),
 		Cod_Postal				nvarchar(50),
 		Tipo_Doc				nvarchar(50),
-		FechaCreacion			datetime,
 		Telefono				nvarchar(50),
 		PRIMARY KEY(Id_Cliente)
 	);
