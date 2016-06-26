@@ -30,7 +30,9 @@ namespace WindowsFormsApplication1
             //terminarSubastas();
             //SqlServerDBConnection.Instance().openConnection();
             //Application.Run(new LoginForm());
+
             Application.Run(new LoginForm());
+
         }
         
         static int terminarSubastas()
