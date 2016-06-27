@@ -1,3 +1,5 @@
+BEGIN TRAN TRANSACCION_INICIAL;
+
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -375,7 +377,7 @@ BEGIN
 			   FROM PMS.PUBLICACION_ESTADOS e
 			  WHERE e.Descripcion = Publicacion_Estado
 			    AND Publicacion_Cod = Publicacion_Cod)	,
-			0		
+			0 as AceptaPreguntas		
 	FROM gd_esquema.Maestra WHERE Publicacion_Cod is not null;
 
 	INSERT INTO PMS.OFERTAS	
@@ -1256,5 +1258,6 @@ UPDATE PMS.USUARIOS SET Habilitado = 0 WHERE Id_Usuario = @userId
 
 END
 GO
---/TriggerIntentosFallidos
 
+COMMIT TRAN TRANSACCION_INICIAL;
+GO
