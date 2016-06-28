@@ -21,7 +21,7 @@ BEGIN
 		Intentos_login			numeric(18,0) DEFAULT 0,
 		Primera_Vez				numeric(18,0),
 		Reputacion				numeric(18,0),
-		FechaCreacion			datetime,
+
 		PRIMARY KEY(Id_Usuario)
 	);
 
@@ -68,6 +68,7 @@ BEGIN
 		Cod_Postal				nvarchar(50),
 		Tipo_Doc				nvarchar(50),
 		Telefono				nvarchar(50),
+		FechaCreacion			datetime,
 		PRIMARY KEY(Id_Cliente)
 	);
 
@@ -258,8 +259,10 @@ BEGIN
 		   Publ_Cli_Depto,		
 		   Publ_Cli_Cod_Postal,
 		   'DNI' AS Tipo_Doc,
-		   NULL AS FechaCreacion,
-		   NULL as Telefono
+
+
+		   NULL as Telefono,
+		   (SELECT GETDATE()) AS FechaCreacion
 	INTO #TempClientes
 	FROM gd_esquema.Maestra
 	WHERE Publ_Cli_Dni is not null
@@ -278,7 +281,8 @@ BEGIN
 		   Cli_Cod_Postal,
 		   'DNI',
 		   NULL,
-		   NULL
+
+		   (SELECT GETDATE())
 	FROM gd_esquema.Maestra
 	WHERE Cli_Dni not in (select Cli_Dni from #TempClientes) AND Cli_Dni IS NOT NULL;
 	
@@ -376,8 +380,8 @@ BEGIN
 			(SELECT top 1 e.Id_Estado
 			   FROM PMS.PUBLICACION_ESTADOS e
 			  WHERE e.Descripcion = Publicacion_Estado
-			    AND Publicacion_Cod = Publicacion_Cod)	,
-			0 as AceptaPreguntas		
+			     AND Publicacion_Cod = Publicacion_Cod)	,
+			0 as AceptaPreguntas	
 	FROM gd_esquema.Maestra WHERE Publicacion_Cod is not null;
 
 	INSERT INTO PMS.OFERTAS	
