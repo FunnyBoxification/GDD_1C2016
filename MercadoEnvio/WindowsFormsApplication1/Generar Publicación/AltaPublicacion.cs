@@ -164,11 +164,6 @@ namespace WindowsFormsApplication1.Generar_Publicación
 
         private void btnGrabar_Click(object sender, EventArgs e)
         {
-            int modo;
-            if (IdCod != null) {modo = 0; }else{ modo = 1;};
-              
-            if (Tipo == 1) //compra
-            {
                 var Descripcion = this.tbxDescripcion.Text;
                 var Stock = this.tbxStock.Text;
                 var Fecha = this.dtpInicio.ToString();
@@ -183,13 +178,6 @@ namespace WindowsFormsApplication1.Generar_Publicación
                                                 FechaVencimiento,Precio,Id_Visibilidad,
                                                 Id_Tipo,Id_Rubro,Id_Estado);
                
-                
-            }
-            else//Subasta
-            {
-                //publNegocio.ProcedurePublicacion(Tipo, modo, IdCod);
-                                          //pasar datos );
-            }
         }
         
     }

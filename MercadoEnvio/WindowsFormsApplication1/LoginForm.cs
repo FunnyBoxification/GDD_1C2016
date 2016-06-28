@@ -64,6 +64,7 @@ namespace WindowsFormsApplication1
                 
                 loginNegocio.limpiarIntentos(user);
                 MessageBox.Show("Usuario logueado exitosamente");
+                UsuarioLogueado.Instance().userId = userId.ToString();
                 DataTable dt = loginNegocio.getRolesDT(userId);
 
                 if (dt.Rows.Count > 1)

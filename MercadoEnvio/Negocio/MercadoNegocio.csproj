@@ -50,6 +50,7 @@
     <Compile Include="PublicacionesNegocio.cs" />
     <Compile Include="RolesNegocio.cs" />
     <Compile Include="SqlServerDBConnection.cs" />
+    <Compile Include="UsuarioLogueado.cs" />
     <Compile Include="UsuariosNegocio.cs" />
     <Compile Include="VisibilidadesNegocio.cs" />
   </ItemGroup>
