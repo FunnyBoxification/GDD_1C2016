@@ -17,11 +17,11 @@ BEGIN
 		Id_Usuario				numeric(18,0) IDENTITY(1,1) NOT NULL,
 		User_Nombre				nvarchar(255),
 		User_Password			binary(32),
+		FechaCreacion			datetime,
 		Habilitado					numeric(18,0) DEFAULT 1,
 		Intentos_login			numeric(18,0) DEFAULT 0,
 		Primera_Vez				numeric(18,0),
-		Reputacion				numeric(18,0),
-
+		Reputacion				numeric(18,0)		
 		PRIMARY KEY(Id_Usuario)
 	);
 
@@ -36,8 +36,7 @@ BEGIN
 	(	
 		Id_Empresa				numeric(18,0) NOT NULL,
 		Cuit_Empresa			nvarchar(50) UNIQUE,	
-		RazonSocial				nvarchar(255),		
-		FechaCreacion			datetime,
+		RazonSocial				nvarchar(255),	
 		Mail					nvarchar(50),
 		DomCalle				nvarchar(100),
 		NroCalle				numeric(18,0),
@@ -68,7 +67,6 @@ BEGIN
 		Cod_Postal				nvarchar(50),
 		Tipo_Doc				nvarchar(50),
 		Telefono				nvarchar(50),
-		FechaCreacion			datetime,
 		PRIMARY KEY(Id_Cliente)
 	);
 
@@ -110,7 +108,7 @@ BEGIN
 		Id_Tipo					numeric(18,0),
 		Id_Rubro				numeric(18,0),
 		Id_Estado				numeric(18,0),
-		AceptaPreguntas			numeric(18,0),
+		AceptaPreguntas			numeric(18,0) DEFAULT 0,
 		PRIMARY KEY(Id_Publicacion),
 		FOREIGN KEY(Id_Visibilidad) REFERENCES PMS.VISIBILIDADES(Id_visibilidad),
 		FOREIGN KEY(Id_Usuario) 	REFERENCES PMS.USUARIOS(Id_Usuario),
@@ -231,8 +229,7 @@ BEGIN
 	
 	SELECT DISTINCT			
 		   Publ_Empresa_Cuit,
-		   Publ_Empresa_Razon_Social,		   
-		   Publ_Empresa_Fecha_Creacion,	
+		   Publ_Empresa_Razon_Social,
 		   Publ_Empresa_Mail,
 		   Publ_Empresa_Dom_Calle,
 		   Publ_Empresa_Nro_Calle,
@@ -259,10 +256,8 @@ BEGIN
 		   Publ_Cli_Depto,		
 		   Publ_Cli_Cod_Postal,
 		   'DNI' AS Tipo_Doc,
-
-
-		   NULL as Telefono,
-		   (SELECT GETDATE()) AS FechaCreacion
+		   NULL AS FechaCreacion,
+		   NULL as Telefono
 	INTO #TempClientes
 	FROM gd_esquema.Maestra
 	WHERE Publ_Cli_Dni is not null
@@ -281,8 +276,7 @@ BEGIN
 		   Cli_Cod_Postal,
 		   'DNI',
 		   NULL,
-
-		   (SELECT GETDATE())
+		   NULL
 	FROM gd_esquema.Maestra
 	WHERE Cli_Dni not in (select Cli_Dni from #TempClientes) AND Cli_Dni IS NOT NULL;
 	
@@ -292,7 +286,6 @@ BEGIN
 		   ROW_NUMBER() OVER (ORDER BY (SELECT NULL)),
 		   Publ_Empresa_Cuit,
 		   Publ_Empresa_Razon_Social,
-		   Publ_Empresa_Fecha_Creacion,
 		   Publ_Empresa_Mail,
 		   Publ_Empresa_Dom_Calle,
 		   Publ_Empresa_Nro_Calle,
@@ -323,13 +316,19 @@ BEGIN
 	
 	
 
-	INSERT INTO PMS.USUARIOS (User_Nombre, Habilitado, User_Password)
-	SELECT RazonSocial, 1, HASHBYTES('SHA2_256','1234')
+	INSERT INTO PMS.USUARIOS (User_Nombre, Habilitado, User_Password,FechaCreacion)
+	SELECT RazonSocial, 1, HASHBYTES('SHA2_256','1234'),
+	(select Publ_Empresa_Fecha_Creacion 
+	   from gd_esquema.Maestra
+	  where Publ_Empresa_Cuit = Cuit_Empresa
+		and Publ_Empresa_Fecha_Creacion is not null )
 	FROM PMS.EMPRESAS
 	ORDER BY Id_Empresa;
 	
-	INSERT INTO PMS.USUARIOS (User_Nombre, Habilitado, User_Password)
-	SELECT (Nombre + Apellido), 1 , HASHBYTES('SHA2_256','1234')
+	INSERT INTO PMS.USUARIOS (User_Nombre, Habilitado, User_Password, FechaCreacion)
+	SELECT (Nombre + Apellido), 1 , HASHBYTES('SHA2_256','1234'),
+	(select MIN(Publicacion_Fecha)
+	   from gd_esquema.Maestra)
 	FROM PMS.CLIENTES
 	ORDER BY Id_Cliente;
 
@@ -380,8 +379,7 @@ BEGIN
 			(SELECT top 1 e.Id_Estado
 			   FROM PMS.PUBLICACION_ESTADOS e
 			  WHERE e.Descripcion = Publicacion_Estado
-			     AND Publicacion_Cod = Publicacion_Cod)	,
-			0 as AceptaPreguntas	
+			    AND Publicacion_Cod = Publicacion_Cod)	
 	FROM gd_esquema.Maestra WHERE Publicacion_Cod is not null;
 
 	INSERT INTO PMS.OFERTAS	
@@ -772,7 +770,6 @@ create procedure PMS.ALTA_EMPRESA
 			@Id_Empresa numeric(18,0)
            ,@Cuit_Empresa nvarchar(50)
            ,@RazonSocial nvarchar(255)
-           ,@FechaCreacion datetime
            ,@Mail nvarchar(50)
            ,@DomCalle nvarchar(100)
            ,@NroCalle numeric(18,0)
@@ -784,7 +781,6 @@ INSERT INTO [PMS].[EMPRESAS]
            ([Id_Empresa]
            ,[Cuit_Empresa]
            ,[RazonSocial]
-           ,[FechaCreacion]
            ,[Mail]
            ,[DomCalle]
            ,[NroCalle]
@@ -808,10 +804,8 @@ go
 create procedure PMS.ALTA_USUARIO_CLIENTE
 			@User_Nombre nvarchar(255)
 			,@User_Password binary(32)
-			,@Habilitado numeric(18,0)
-           ,@Primera_Vez numeric(18,0)
-           ,@Reputacion numeric(18,0)
            ,@Dni_Cliente numeric(18,0)
+		   ,@Tipo_Dni nvarchar(50)
            ,@Apellido nvarchar(255)
            ,@Nombre nvarchar(255)
            ,@FechaNacimiento datetime
@@ -821,12 +815,28 @@ create procedure PMS.ALTA_USUARIO_CLIENTE
            ,@Piso numeric(18,0)
            ,@Depto nvarchar(50)
            ,@Cod_Postal nvarchar(50)
+		   ,@Telefono nvarchar(50)
+		   ,@Localidad nvarhar(50)
+		   ,@FechaCreacion datetime
 		   ,@id numeric(18,0) output
 as begin
+IF EXISTS (select * from PMS.USUARIOS u  WHERE @User_Nombre = u.User_Nombre)
+ BEGIN
+    RAISERROR ('Duplicate UserName', 16, 1)
+ END
+ IF EXISTS (select * from PMS.CLIENTES c  WHERE @Dni_Cliente = e.Dni_Cliente)
+ BEGIN
+    RAISERROR ('Duplicate RazonSocial', 16, 1)
+ END
+ IF EXISTS (select * from PMS.CLIENTES e  WHERE @Mail = e.Mail)
+ BEGIN
+    RAISERROR ('Duplicate Mail', 16, 1)
+ END
 
 INSERT INTO [PMS].[USUARIOS]
            ([User_Nombre]
            ,[User_Password]
+		   ,[FechaCreacion]
            ,[Habilitado]
            ,[Intentos_login]
            ,[Primera_Vez]
@@ -834,27 +844,30 @@ INSERT INTO [PMS].[USUARIOS]
      VALUES
            (@User_Nombre
            ,HASHBYTES('SHA2_256',@User_Password)
-           ,@Habilitado
+		   ,@FechaCreacion
+           ,1
            ,0
-           ,@Primera_Vez
-           ,@Reputacion)
+           ,null
+           ,null)
 
 
 set @id=(select Id_usuario from PMS.USUARIOS where User_Nombre=@User_Nombre);
 INSERT INTO [PMS].[CLIENTES]
-           ([Id_Cliente]
-           ,[Dni_Cliente]
-           ,[Apellido]
-           ,[Nombre]
-           ,[FechaNacimiento]
-           ,[Mail]
-           ,[DomCalle]
-           ,[NroCalle]
-           ,[Piso]
-           ,[Depto]
-           ,[Cod_Postal])
-     VALUES
-           (@id
+           ([Id_Cliente]			
+           ,[Dni_Cliente]            
+           ,[Apellido]               
+           ,[Nombre]                 
+           ,[FechaNacimiento]        
+           ,[Mail]                   
+           ,[DomCalle]               
+           ,[NroCalle]               
+           ,[Piso]                   
+           ,[Depto]                  
+           ,[Cod_Postal]
+		   ,[Tipo_Doc]
+		   ,[Telefono])              
+     VALUES                          
+           (@id                      
            ,@Dni_Cliente
            ,@Apellido
            ,@Nombre
@@ -864,16 +877,15 @@ INSERT INTO [PMS].[CLIENTES]
            ,@NroCalle
            ,@Piso
            ,@Depto
-           ,@Cod_Postal)
+           ,@Cod_Postal
+		   ,@Tipo_Doc
+		   ,@Telefono)
 end
 go
 
 create procedure PMS.ALTA_USUARIO_EMPRESA
 			@User_Nombre nvarchar(255)
 			,@User_Password binary(32)
-			,@Habilitado numeric(18,0)
-           ,@Primera_Vez numeric(18,0)
-           ,@Reputacion numeric(18,0)
            ,@Cuit_Empresa nvarchar(50)
            ,@RazonSocial nvarchar(255)
            ,@FechaCreacion datetime
@@ -883,40 +895,72 @@ create procedure PMS.ALTA_USUARIO_EMPRESA
            ,@Piso numeric(18,0)
            ,@Depto nvarchar(50)
            ,@CodigoPostal nvarchar(50)
-		   ,@id numeric(18,0) output
+		   ,@Telefono nvarchar(50)
+		   ,@Contacto nvarchar(50)
+		   ,@Localidad nvarchar(50)
+		   ,@Ciudad nvarchar(50)
+		   ,@Rubro nvarchar(50)
+		   ,@Id numeric(18,0) output
 as begin
 
-INSERT INTO [PMS].[USUARIOS]
-           ([User_Nombre]
-           ,[User_Password]
-           ,[Habilitado]
-           ,[Intentos_login]
-           ,[Primera_Vez]
-           ,[Reputacion])
-     VALUES
+declar @Id_Rubro numeric(18,0)
+
+IF EXISTS (select * from PMS.USUARIOS u  WHERE @User_Nombre = u.User_Nombre)
+ BEGIN
+    RAISERROR ('Duplicate UserName', 16, 1)
+ END
+ IF EXISTS (select * from PMS.EMPRESAS e  WHERE @RazonSocial = e.RazonSocial)
+ BEGIN
+    RAISERROR ('Duplicate RazonSocial', 16, 1)
+ END
+ IF EXISTS (select * from PMS.EMPRESAS e  WHERE @Cuit_Empresa = e.Cuit_Empresa)
+ BEGIN
+    RAISERROR ('Duplicate Cuit', 16, 1)
+ END
+ IF EXISTS (select * from PMS.EMPRESAS e  WHERE @Mail = e.Mail)
+ BEGIN
+    RAISERROR ('Duplicate Mail', 16, 1)
+ END
+
+
+INSERT INTO [PMS].[USUARIOS]					
+           ([User_Nombre]				    	
+           ,[User_Password]                 	
+		   ,[FechaCreacion]
+           ,[Habilitado]                    	
+           ,[Intentos_login]                	
+           ,[Primera_Vez]                   	
+           ,[Reputacion])                   	
+     VALUES                                 	
            (@User_Nombre
            ,HASHBYTES('SHA2_256',@User_Password)
-           ,@Habilitado
+		   ,system.DATE
+           ,1
            ,0
-           ,@Primera_Vez
-           ,@Reputacion)
+           ,null
+           ,null)
 
 set @id=(select Id_usuario from PMS.USUARIOS where User_Nombre=@User_Nombre);
+set @Id_Rubro=(select Id_Rubro from PMS.RUBROS where Descripcion = @Rubro);
 
-INSERT INTO [PMS].[EMPRESAS]
-           ([Id_Empresa]
-           ,[Cuit_Empresa]
-           ,[RazonSocial]
-           ,[FechaCreacion]
-           ,[Mail]
-           ,[DomCalle]
-           ,[NroCalle]
-           ,[Piso]
-           ,[Depto]
-           ,[CodigoPostal])
-     VALUES
-           (@id
-           ,@Cuit_Empresa
+INSERT INTO [PMS].[EMPRESAS]		
+           ([Id_Empresa]           
+           ,[Cuit_Empresa]         
+           ,[RazonSocial]          
+           ,[Mail]                 
+           ,[DomCalle]             
+           ,[NroCalle]             
+           ,[Piso]                 
+           ,[Depto]                
+           ,[CodigoPostal]
+		   ,[NombreContacto]
+		   ,[Ciudad]
+		   ,[Telefono]
+		   ,[Id_Rubro]				   
+		   )         			
+     VALUES	                        	
+           (@id                     
+           ,@Cuit_Empresa           
            ,@RazonSocial
            ,@FechaCreacion
            ,@Mail
@@ -924,7 +968,10 @@ INSERT INTO [PMS].[EMPRESAS]
            ,@NroCalle
            ,@Piso
            ,@Depto
-           ,@CodigoPostal)
+           ,@CodigoPostal
+		   ,@NombreContacto
+		   ,@Telefono,
+		   ,@Id_Rubro)
 end
 go
 
