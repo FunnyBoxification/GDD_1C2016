@@ -816,7 +816,7 @@ create procedure PMS.ALTA_USUARIO_CLIENTE
            ,@Depto nvarchar(50)
            ,@Cod_Postal nvarchar(50)
 		   ,@Telefono nvarchar(50)
-		   ,@Localidad nvarhar(50)
+		   ,@Localidad nvarchar(50)
 		   ,@FechaCreacion datetime
 		   ,@id numeric(18,0) output
 as begin
@@ -824,11 +824,11 @@ IF EXISTS (select * from PMS.USUARIOS u  WHERE @User_Nombre = u.User_Nombre)
  BEGIN
     RAISERROR ('Duplicate UserName', 16, 1)
  END
- IF EXISTS (select * from PMS.CLIENTES c  WHERE @Dni_Cliente = e.Dni_Cliente)
+ IF EXISTS (select * from PMS.CLIENTES c  WHERE @Dni_Cliente = c.Dni_Cliente)
  BEGIN
     RAISERROR ('Duplicate RazonSocial', 16, 1)
  END
- IF EXISTS (select * from PMS.CLIENTES e  WHERE @Mail = e.Mail)
+ IF EXISTS (select * from PMS.CLIENTES c  WHERE @Mail = c.Mail)
  BEGIN
     RAISERROR ('Duplicate Mail', 16, 1)
  END
@@ -852,7 +852,7 @@ INSERT INTO [PMS].[USUARIOS]
 
 
 set @id=(select Id_usuario from PMS.USUARIOS where User_Nombre=@User_Nombre);
-INSERT INTO [PMS].[CLIENTES]
+INSERT INTO [PMS].[CLIENTES]      
            ([Id_Cliente]			
            ,[Dni_Cliente]            
            ,[Apellido]               
@@ -903,7 +903,7 @@ create procedure PMS.ALTA_USUARIO_EMPRESA
 		   ,@Id numeric(18,0) output
 as begin
 
-declare @Id_Rubro numeric(18,0)
+declare @Id_Rubro1 numeric(18,0)
 
 IF EXISTS (select * from PMS.USUARIOS u  WHERE @User_Nombre = u.User_Nombre)
  BEGIN
@@ -934,7 +934,7 @@ INSERT INTO [PMS].[USUARIOS]
      VALUES                                 	
            (@User_Nombre
            ,HASHBYTES('SHA2_256',@User_Password)
-		   ,system.DATE
+		   ,GETDATE()
            ,1
            ,0
            ,null
@@ -942,7 +942,7 @@ INSERT INTO [PMS].[USUARIOS]
 
 set @id=(select Id_usuario from PMS.USUARIOS where User_Nombre=@User_Nombre);
 DECLARE @Id_Rubro numeric(18,0);
-set @Id_Rubro=(select Id_Rubro from PMS.RUBROS where Descripcion = @Rubro);
+set @Id_Rubro1=(select Id_Rubro from PMS.RUBROS where Descripcion = @Rubro);
 
 INSERT INTO [PMS].[EMPRESAS]		
            ([Id_Empresa]           
