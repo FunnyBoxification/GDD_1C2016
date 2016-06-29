@@ -776,34 +776,34 @@ create procedure PMS.ALTA_EMPRESA
            ,@Piso numeric(18,0)
            ,@Depto nvarchar(50)
            ,@CodigoPostal nvarchar(50)
-as begin
-INSERT INTO [PMS].[EMPRESAS]
-           ([Id_Empresa]
-           ,[Cuit_Empresa]
-           ,[RazonSocial]
-           ,[Mail]
-           ,[DomCalle]
-           ,[NroCalle]
-           ,[Piso]
-           ,[Depto]
-           ,[CodigoPostal])
-     VALUES
-           (@Id_Empresa
-           ,@Cuit_Empresa
-           ,@RazonSocial
-           ,@FechaCreacion
-           ,@Mail
-           ,@DomCalle
-           ,@NroCalle
-           ,@Piso
-           ,@Depto
-           ,@CodigoPostal)
-end
+as 
+begin
+	INSERT INTO [PMS].[EMPRESAS]
+			   ([Id_Empresa]
+			   ,[Cuit_Empresa]
+			   ,[RazonSocial]
+			   ,[Mail]
+			   ,[DomCalle]
+			   ,[NroCalle]
+			   ,[Piso]
+			   ,[Depto]
+			   ,[CodigoPostal]) 
+	VALUES
+			   (@Id_Empresa
+			   ,@Cuit_Empresa
+			   ,@RazonSocial
+			   ,@Mail
+			   ,@DomCalle
+			   ,@NroCalle
+			   ,@Piso
+			   ,@Depto
+			   ,@CodigoPostal);
+	end
 go
 
 create procedure PMS.ALTA_USUARIO_CLIENTE
 			@User_Nombre nvarchar(255)
-			,@User_Password binary(32)
+		   ,@User_Password binary(32)
            ,@Dni_Cliente numeric(18,0)
 		   ,@Tipo_Dni nvarchar(50)
            ,@Apellido nvarchar(255)
@@ -878,7 +878,7 @@ INSERT INTO [PMS].[CLIENTES]
            ,@Piso
            ,@Depto
            ,@Cod_Postal
-		   ,@Tipo_Doc
+		   ,@Tipo_Dni
 		   ,@Telefono)
 end
 go
@@ -903,7 +903,7 @@ create procedure PMS.ALTA_USUARIO_EMPRESA
 		   ,@Id numeric(18,0) output
 as begin
 
-declar @Id_Rubro numeric(18,0)
+declare @Id_Rubro numeric(18,0)
 
 IF EXISTS (select * from PMS.USUARIOS u  WHERE @User_Nombre = u.User_Nombre)
  BEGIN
@@ -941,6 +941,7 @@ INSERT INTO [PMS].[USUARIOS]
            ,null)
 
 set @id=(select Id_usuario from PMS.USUARIOS where User_Nombre=@User_Nombre);
+DECLARE @Id_Rubro numeric(18,0);
 set @Id_Rubro=(select Id_Rubro from PMS.RUBROS where Descripcion = @Rubro);
 
 INSERT INTO [PMS].[EMPRESAS]		
@@ -969,8 +970,8 @@ INSERT INTO [PMS].[EMPRESAS]
            ,@Piso
            ,@Depto
            ,@CodigoPostal
-		   ,@NombreContacto
-		   ,@Telefono,
+		   ,@Contacto
+		   ,@Telefono
 		   ,@Id_Rubro)
 end
 go
