@@ -135,7 +135,7 @@ namespace MercadoNegocio
 
        
 
-        public DataTable BuscarPublicaciones(String Idpubli, String tipo, String descripcion)
+        public DataTable BuscarPublicaciones(String Idpubli, String tipo, String descripcion,String userid)
         {
             try
             {
@@ -150,6 +150,10 @@ namespace MercadoNegocio
                 sqlRequest += " (SELECT e.Descripcion FROM PMS.PUBLICACION_ESTADOS e WHERE e.Id_Estado = p.Id_Estado) As Estado ";   
                 sqlRequest += "FROM PMS.PUBLICACIONES p  ";
                 sqlRequest += "WHERE 1=1 ";
+                if (userid != null)
+                {
+                    sqlRequest += "AND p.Id_Usuario <> " + userid+" ";
+                }
                 if (tipo != null)
                 {
                     sqlRequest += "AND p.Id_Tipo = (SELECT t.Id_Tipo FROM PMS.TIPO_PUBLICACION t WHERE t.Descripcion = '" + tipo+"' ) ";

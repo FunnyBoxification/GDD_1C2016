@@ -66,6 +66,7 @@ namespace WindowsFormsApplication1
                 MessageBox.Show("Usuario logueado exitosamente");
                 UsuarioLogueado.Instance().userId = userId.ToString();
                 DataTable dt = loginNegocio.getRolesDT(userId);
+                UsuarioLogueado.Instance().rol = (dt.Rows[0][0]).ToString();
 
                 if (dt.Rows.Count > 1)
                 {

@@ -33,6 +33,11 @@ namespace WindowsFormsApplication1.Generar_Publicación
                 cbxTipo.Items.Add(item);
             }
 
+            if (UsuarioLogueado.Instance().rol == "Administrador")
+            {
+                btnGenerar.Enabled = false;
+            }
+
         }
 
         private void btnLimpiar_Click(object sender, EventArgs e)
@@ -57,8 +62,14 @@ namespace WindowsFormsApplication1.Generar_Publicación
             String TipoPublicacion = (cbxTipo.SelectedItem as ComboboxItem) != null ? (cbxTipo.SelectedItem as ComboboxItem).Text : null;
             String Id_Publicacion = tbxCod.Text != "" ? tbxCod.Text : null;
             String Descripcion = tbxDesc.Text != "" ? tbxDesc.Text : null;
+            String userID = null;
 
-            dataGridView1.DataSource = publNegocio.BuscarPublicaciones(Id_Publicacion, TipoPublicacion, Descripcion);
+            if (UsuarioLogueado.Instance().rol != "Adminstrador")
+            {
+                userID = UsuarioLogueado.Instance().userId;
+            }
+
+            dataGridView1.DataSource = publNegocio.BuscarPublicaciones(Id_Publicacion, TipoPublicacion, Descripcion,userID);
 
         }
 

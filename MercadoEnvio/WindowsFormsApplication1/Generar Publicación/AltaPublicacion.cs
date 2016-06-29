@@ -21,6 +21,7 @@ namespace WindowsFormsApplication1.Generar_Publicación
 
         public int IdCod { get; set; }
         public int Tipo { get; set; } // compra 1  subasta 2
+        public int Modo { get; set; } // alta 0  mod 1
 
 
         public VisibilidadesNegocio visibNegocio { get; set; }
@@ -73,6 +74,11 @@ namespace WindowsFormsApplication1.Generar_Publicación
             tbxCosto.Text = publicacionDt.Rows[0]["Precio"].ToString();
             tbxPrecio.Text = publicacionDt.Rows[0]["Precio"].ToString();
             tbxStock.Text = publicacionDt.Rows[0]["Stock"].ToString();
+            if(UsuarioLogueado.Instance().rol == "Cliente" || UsuarioLogueado.Instance().rol == "Empresa") 
+            {
+                tbxVendedor.Enabled = false;
+                //tbxVendedor.Text = UsuarioLogueado.Instance().userId;
+            }
             tbxVendedor.Text = publicacionDt.Rows[0]["Id_Usuario"].ToString();
             dtpInicio.Value = DateTime.Parse(publicacionDt.Rows[0]["Fecha"].ToString());
             dptVencimiento.Value = DateTime.Parse(publicacionDt.Rows[0]["FechaVencimiento"].ToString());
@@ -110,6 +116,7 @@ namespace WindowsFormsApplication1.Generar_Publicación
             }
 
             chbPreguntas.Checked = Int32.Parse(publicacionDt.Rows[0]["AceptaPreguntas"].ToString()) == 1;
+            this.Modo = 0;
         }
 
         public AltaPublicacion(PublicacionesNegocio publNegocio, int tipo)
@@ -144,14 +151,16 @@ namespace WindowsFormsApplication1.Generar_Publicación
                 this.cbxTipo.Items.Add(item);
             }
 
+            if (UsuarioLogueado.Instance().rol == "Cliente" || UsuarioLogueado.Instance().rol == "Empresa")
+            {
+                tbxVendedor.Enabled = false;
+                tbxVendedor.Text = UsuarioLogueado.Instance().userId;
+            }
+
             this.publNegocio = publNegocio;
             this.Tipo = tipo;
+            this.Modo = 1;
 
-
-            /**
-             * ACA FIJARSE SI ES ALTA O MODIFICACION, EN EL CASO QUE SEA MODIFICACION, SETEAR 
-             * LA DATA CORRESPONDIENTE DE LA PUBLICACION
-             * */
         }
 
         private void AltaPublicacion_Load(object sender, EventArgs e)
@@ -169,11 +178,12 @@ namespace WindowsFormsApplication1.Generar_Publicación
                 var Fecha = this.dtpInicio.ToString();
                 var FechaVencimiento = this.dptVencimiento.ToString();
                 var Precio = this.tbxPrecio.Text;
+                var idUsuario = Int32.Parse(tbxVendedor.Text);
                 var Id_Visibilidad = (this.cbxVisibilidad.SelectedItem as ComboboxItem) != null ? (this.cbxVisibilidad.SelectedItem as ComboboxItem).Value : -1;
                 Int32 Id_Tipo = (this.cbxVisibilidad.SelectedItem as ComboboxItem) != null ? (this.cbxVisibilidad.SelectedItem as ComboboxItem).Value : -1;  //Falta pasarlo a combo
                 var Id_Rubro = (this.cbxRubro.SelectedItem as ComboboxItem) != null ? (this.cbxRubro.SelectedItem as ComboboxItem).Value : -1; ; //Falta
                 Int32 Id_Estado = 2; //El estado 2 Es el de borrador
-                publNegocio.ProcedurePublicacion(Tipo, modo, IdCod, 
+                publNegocio.ProcedurePublicacion(Tipo, this.Modo, idUsuario, 
                                                 Descripcion,Stock,Fecha,
                                                 FechaVencimiento,Precio,Id_Visibilidad,
                                                 Id_Tipo,Id_Rubro,Id_Estado);
