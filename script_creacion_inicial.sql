@@ -427,7 +427,7 @@ BEGIN
 	SELECT DISTINCT 
 		Item_Factura_Monto,			
 		Item_Factura_Cantidad,
-		CASE WHEN (Compra_Fecha IS NOT NULL) THEN 'Comision por venta'
+		CASE WHEN (Item_Factura_Monto = Publicacion_Precio * Publicacion_Visibilidad_Porcentaje) THEN 'Comision por venta'
 			 ELSE 'Comision por publicacion' END,		
 		Factura_Nro,
 		Publicacion_Cod	
