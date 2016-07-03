@@ -65,6 +65,11 @@ namespace MercadoNegocio
                     {
                         sqlRequest += " WHERE Id_Estado <> 2";
                     }
+                    if (publicacionDt.Rows[0]["Id_Tipo"].ToString() == "2")
+                    {
+                        //Si es subasta no puede finalizar manualmente la publicacion, se finaliza cuando vence
+                        sqlRequest += " AND Id_Estado <> 4";
+                    }
                 }
 
                 SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);

@@ -134,7 +134,7 @@ namespace WindowsFormsApplication1.Generar_Publicación
             }
 
             a = 0;
-            foreach (DataRow row in publNegocio.getEstados(null).Rows)
+            foreach (DataRow row in publNegocio.getEstados(idPublicacion).Rows)
             {
                 if (Int32.Parse(row["Id_Estado"].ToString()).Equals(Int32.Parse(publicacionDt.Rows[0]["Id_Estado"].ToString())))
                 {
@@ -236,8 +236,6 @@ namespace WindowsFormsApplication1.Generar_Publicación
                 var Id_Rubro = (this.cbxRubro.SelectedItem as ComboboxItem) != null ? (this.cbxRubro.SelectedItem as ComboboxItem).Value : -1; //Falta
                 var AceptaPreguntas = this.chbPreguntas.Checked;
                 Int32 Id_Estado = (this.cbxEstado.SelectedItem as ComboboxItem) != null ? (this.cbxEstado.SelectedItem as ComboboxItem).Value : -1; ; //El estado 2 Es el de borrador
-                //QUEDA CAMBIAR QUE SE PONGA BIEN EL INDICE DEL COMBO DE ESTADO DE PUBLICACION
-                // SI LA PUSEO Y DESPUES LO VUELVO A ABRIR ME MARCA COMO FINALIZADA
                 publNegocio.ProcedurePublicacion(idPublicacion, Tipo, this.Modo, idUsuario, 
                                                 Descripcion,Stock,Fecha,
                                                 FechaVencimiento,Precio,Id_Visibilidad,
