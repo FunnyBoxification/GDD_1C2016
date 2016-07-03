@@ -1067,7 +1067,7 @@ CREATE PROCEDURE PMS.ALTA_COMPRAS
            ,@Id_Publicacion numeric(18,0)
 		   ,@id numeric(18,0) output
 AS BEGIN
-if @Cantidad> (select Stock from PMS.PUBLICACIONES where Id_Publicacion=@Id_Publicacion)
+if (select top 1 Stock from PMS.PUBLICACIONES where Id_Publicacion=@Id_Publicacion) <= @Cantidad
 begin
 ;throw 50999,'cantidad a comprar mayor a stock',1;
 end
@@ -1075,7 +1075,7 @@ else if @Id_Cliente_Comprador=(select Id_Usuario from PMS.PUBLICACIONES where Id
 begin
 ; throw 50999,'comprador no puede ser el vendedor',1;
 end
-else if 2>(select count(Id_Compra) from PMS.COMPRAS where Id_Cliente_Comprador=@Id_Cliente_Comprador and Id_Calificacion is null)
+else if (select count(Id_Compra) from PMS.COMPRAS where Id_Cliente_Comprador=@Id_Cliente_Comprador and Id_Calificacion is null) > 2
 begin
 ; throw 50999,'3 compras sin calificar',1;
 end
