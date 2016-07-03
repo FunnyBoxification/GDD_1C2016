@@ -19,6 +19,7 @@ GO
 	drop proc PMS.LimpiarIntentos
 	drop proc PMS.MODIFICACION_ROLES
 	drop proc PMS.SUBASTAS_TERMIANDAS
+	drop proc PMS.MODIFICACION_PUBLICACION
 	drop proc PMS.upd_Rol
 
 	drop function PMS.getEstrellasDadas

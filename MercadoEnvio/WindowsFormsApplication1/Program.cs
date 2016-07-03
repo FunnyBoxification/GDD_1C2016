@@ -29,7 +29,15 @@ namespace WindowsFormsApplication1
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            terminarSubastas();
+            try
+            {
+                terminarSubastas();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error en TerminarSubastas. " + ex.Message);
+                Environment.Exit(1);
+            }
             //SqlServerDBConnection.Instance().openConnection();
             //Application.Run(new LoginForm());
 
