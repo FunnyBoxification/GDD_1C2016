@@ -1060,16 +1060,13 @@ CREATE PROCEDURE PMS.ALTA_COMPRAS
            ,@Fecha datetime
            ,@Id_Cliente_Comprador numeric(18,0)
            ,@Id_Publicacion numeric(18,0)
-		   ,@Numero numeric(18,0)
-           ,@Total numeric(18,2)
-           ,@Id_FormaPago numeric(11,0)
 		   ,@id numeric(18,0) output
 AS BEGIN
-if @Cantidad> (select stock from PUBLICACIONES where Id_Publicacion=@Id_Publicacion)
+if @Cantidad> (select Stock from PMS.PUBLICACIONES where Id_Publicacion=@Id_Publicacion)
 begin
 ;throw 50999,'cantidad a comprar mayor a stock',1;
 end
-else if @Id_Cliente_Comprador=(select Id_usuario from PUBLICACIONES where Id_Publicacion=@Id_Publicacion)
+else if @Id_Cliente_Comprador=(select Id_Usuario from PMS.PUBLICACIONES where Id_Publicacion=@Id_Publicacion)
 begin
 ; throw 50999,'comprador no puede ser el vendedor',1;
 end
@@ -1232,6 +1229,7 @@ BEGIN
 DECLARE @ID_CLIENTE numeric (18,0)
 DECLARE @ID_PUBLICACION numeric(18,0)
 DECLARE @MONTO numeric(18,2)
+DECLARE @Id_Compra numeric(18,0)
 
 DECLARE db_cursor CURSOR FOR  
 select p.Id_Publicacion,o.Monto,o.Id_Cliente from PMS.PUBLICACIONES p join PMS.OFERTAS o ON p.Id_Publicacion=o.Id_Publicacion
@@ -1241,8 +1239,8 @@ FETCH NEXT FROM db_cursor INTO @ID_PUBLICACION,@MONTO,@ID_CLIENTE
 
 WHILE @@FETCH_STATUS = 0
 BEGIN
-EXECUTE PMS.ALTA_COMPRAS 1,@MONTO,@Fecha,@ID_CLIENTE,@ID_PUBLICACION,1,1,1
-update PUBLICACIONES
+EXECUTE PMS.ALTA_COMPRAS 1,@Fecha,@ID_CLIENTE,@ID_PUBLICACION,@Id_Compra output
+update PMS.PUBLICACIONES
 set Id_Estado=4
 where Id_Publicacion=@ID_PUBLICACION;
 END
