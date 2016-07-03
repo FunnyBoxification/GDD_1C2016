@@ -503,6 +503,10 @@ SET
 Descripcion='Activa'
 where Id_Estado=1;
 
+update PMS.PUBLICACIONES 
+set Id_Estado= 4
+where Id_Publicacion in (select f.Id_Publicacion from PMS.ITEMFACTURA f where Descripcion != 'Comision por venta')
+
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
