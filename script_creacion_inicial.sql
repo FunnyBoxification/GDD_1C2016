@@ -256,7 +256,6 @@ BEGIN
 		   Publ_Cli_Depto,		
 		   Publ_Cli_Cod_Postal,
 		   'DNI' AS Tipo_Doc,
-		   NULL AS FechaCreacion,
 		   NULL as Telefono
 	INTO #TempClientes
 	FROM gd_esquema.Maestra
@@ -275,7 +274,6 @@ BEGIN
 		   Cli_Depto,		
 		   Cli_Cod_Postal,
 		   'DNI',
-		   NULL,
 		   NULL
 	FROM gd_esquema.Maestra
 	WHERE Cli_Dni not in (select Cli_Dni from #TempClientes) AND Cli_Dni IS NOT NULL;
@@ -318,7 +316,7 @@ BEGIN
 
 	INSERT INTO PMS.USUARIOS (User_Nombre, Habilitado, User_Password,FechaCreacion)
 	SELECT RazonSocial, 1, HASHBYTES('SHA2_256','1234'),
-	(select Publ_Empresa_Fecha_Creacion 
+	(select TOP 1 Publ_Empresa_Fecha_Creacion 
 	   from gd_esquema.Maestra
 	  where Publ_Empresa_Cuit = Cuit_Empresa
 		and Publ_Empresa_Fecha_Creacion is not null )
@@ -379,7 +377,8 @@ BEGIN
 			(SELECT top 1 e.Id_Estado
 			   FROM PMS.PUBLICACION_ESTADOS e
 			  WHERE e.Descripcion = Publicacion_Estado
-			    AND Publicacion_Cod = Publicacion_Cod)	
+			    AND Publicacion_Cod = Publicacion_Cod),
+				0	
 	FROM gd_esquema.Maestra WHERE Publicacion_Cod is not null;
 
 	INSERT INTO PMS.OFERTAS	
@@ -976,9 +975,9 @@ INSERT INTO [PMS].[EMPRESAS]
 end
 go
 
-CREATE PROCEDURE PMS.ALTA_PUBLICACION
-       @Id_Publicacion numeric(18,0)
-       ,@Descripcion nvarchar(255)
+CREATE PROCEDURE PMS.MODIFICACION_PUBLICACION
+			@Id_Publicacion numeric(18,0)
+		   ,@Descripcion nvarchar(255)
            ,@Stock numeric(18,0)
            ,@Fecha datetime
            ,@FechaVencimiento datetime
@@ -988,6 +987,41 @@ CREATE PROCEDURE PMS.ALTA_PUBLICACION
            ,@Id_Tipo numeric(18,0)
            ,@Id_Rubro numeric(18,0)
            ,@Id_Estado numeric(18,0)
+		   ,@AceptaPreguntas numeric(18,0)
+	   
+                    
+AS 
+BEGIN 
+     SET NOCOUNT ON 
+
+UPDATE PMS.PUBLICACIONES SET 
+      [Descripcion] = @Descripcion
+      ,[Stock] = @Stock
+      ,[Fecha] = @Fecha
+      ,[FechaVencimiento] = @FechaVencimiento
+      ,[Precio] = @Precio
+      ,[Id_Usuario] = @Id_Usuario
+      ,[Id_Visibilidad] = @Id_Visibilidad
+      ,[Id_Tipo] = @Id_Tipo
+      ,[Id_Rubro] = @Id_Rubro
+      ,[Id_Estado] = @Id_Estado
+	  ,[AceptaPreguntas] = @AceptaPreguntas
+WHERE [Id_Publicacion] = @Id_Publicacion
+END
+GO
+
+CREATE PROCEDURE PMS.ALTA_PUBLICACION
+       @Descripcion nvarchar(255)
+           ,@Stock numeric(18,0)
+           ,@Fecha datetime
+           ,@FechaVencimiento datetime
+           ,@Precio numeric(18,2)
+           ,@Id_Usuario numeric(18,0)
+           ,@Id_Visibilidad numeric(18,0)
+           ,@Id_Tipo numeric(18,0)
+           ,@Id_Rubro numeric(18,0)
+           ,@Id_Estado numeric(18,0)
+		   ,@AceptaPreguntas numeric(18,0)
 	   
                     
 AS 

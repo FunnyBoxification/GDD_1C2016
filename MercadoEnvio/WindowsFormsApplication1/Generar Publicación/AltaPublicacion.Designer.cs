@@ -52,6 +52,8 @@
             this.chbPreguntas = new System.Windows.Forms.CheckBox();
             this.btnGrabar = new System.Windows.Forms.Button();
             this.cbxTipo = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.cbxEstado = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // label1
@@ -232,7 +234,7 @@
             // chbPreguntas
             // 
             this.chbPreguntas.AutoSize = true;
-            this.chbPreguntas.Location = new System.Drawing.Point(44, 275);
+            this.chbPreguntas.Location = new System.Drawing.Point(44, 326);
             this.chbPreguntas.Name = "chbPreguntas";
             this.chbPreguntas.Size = new System.Drawing.Size(160, 17);
             this.chbPreguntas.TabIndex = 24;
@@ -257,11 +259,32 @@
             this.cbxTipo.Size = new System.Drawing.Size(100, 21);
             this.cbxTipo.TabIndex = 26;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(45, 279);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(40, 13);
+            this.label3.TabIndex = 28;
+            this.label3.Text = "Estado";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
+            // 
+            // cbxEstado
+            // 
+            this.cbxEstado.FormattingEnabled = true;
+            this.cbxEstado.Location = new System.Drawing.Point(104, 276);
+            this.cbxEstado.Name = "cbxEstado";
+            this.cbxEstado.Size = new System.Drawing.Size(100, 21);
+            this.cbxEstado.TabIndex = 27;
+            this.cbxEstado.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
             // AltaPublicacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(463, 373);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.cbxEstado);
             this.Controls.Add(this.cbxTipo);
             this.Controls.Add(this.btnGrabar);
             this.Controls.Add(this.chbPreguntas);
@@ -320,5 +343,7 @@
         private System.Windows.Forms.CheckBox chbPreguntas;
         private System.Windows.Forms.Button btnGrabar;
         private System.Windows.Forms.ComboBox cbxTipo;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ComboBox cbxEstado;
     }
 }

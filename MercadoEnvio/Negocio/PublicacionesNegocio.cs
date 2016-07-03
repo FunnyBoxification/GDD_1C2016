@@ -48,6 +48,42 @@ namespace MercadoNegocio
             }
         }
 
+        public DataTable getEstados(String idPublicacion)
+        {
+            var dt = new DataTable();
+
+            try
+            {
+
+                DBConn.openConnection();
+                String sqlRequest;
+                sqlRequest = "SELECT Id_Estado, Descripcion FROM PMS.PUBLICACION_ESTADOS";
+                if (idPublicacion != null)
+                {
+                    var publicacionDt = this.BuscarPublicacionSeleccionada(idPublicacion);
+                    if (publicacionDt.Rows[0]["Id_Estado"].ToString() != "2")
+                    {
+                        sqlRequest += " WHERE Id_Estado <> 2";
+                    }
+                }
+
+                SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
+
+                using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                {
+                    adapter.Fill(dt);
+                    command.Dispose();
+                    DBConn.closeConnection();
+                    return dt;
+                }
+            }
+            catch (Exception ex)
+            {
+                DBConn.closeConnection();
+                throw (new Exception("Error en getEstados: " + ex.Message));
+            }
+        }
+
         public DataTable getTipos()
         {
             var dt = new DataTable();
@@ -185,23 +221,25 @@ namespace MercadoNegocio
 
        
 
-        public void ProcedurePublicacion(int tipo, 
+        public void ProcedurePublicacion(int idPublicacion,
+            int tipo, 
             int modo, 
             int IdCod,
             String Descripcion,
             String Stock,
-            String Fecha,
-            String FechaVencimiento,
+            DateTime Fecha,
+            DateTime FechaVencimiento,
             String Precio,
             int Id_Visibilidad,
             int Id_Tipo,
             int Id_Rubro,
-            int Id_Estado)
+            int Id_Estado,
+            bool AceptaPreguntas)
         {
             try
             {
                 var proc = "PMS.";
-                if(modo == 0)
+                if(modo == 1)
                 {
                     proc += "ALTA_PUBLICACION";
                 }else
@@ -214,16 +252,21 @@ namespace MercadoNegocio
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
 
+                    if (modo == 0)
+                    {
+                        cmd.Parameters.Add("@Id_Publicacion", SqlDbType.Int).Value = idPublicacion;
+                    }
                     cmd.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = IdCod;
                     cmd.Parameters.Add("@Descripcion", SqlDbType.NVarChar).Value = Descripcion;
-                    cmd.Parameters.Add("@Stock", SqlDbType.Int).Value = Stock;
+                    cmd.Parameters.Add("@Stock", SqlDbType.Int).Value = Int32.Parse(Stock);
                     cmd.Parameters.Add("@Fecha", SqlDbType.DateTime).Value = Fecha;
                     cmd.Parameters.Add("@FechaVencimiento", SqlDbType.DateTime).Value = FechaVencimiento;
-                    cmd.Parameters.Add("@Precio", SqlDbType.Int).Value = Precio;
+                    cmd.Parameters.Add("@Precio", SqlDbType.Int).Value = Decimal.Parse(Precio);
                     cmd.Parameters.Add("@Id_Visibilidad", SqlDbType.Int).Value = Id_Visibilidad;
                     cmd.Parameters.Add("@Id_Tipo", SqlDbType.Int).Value = Id_Tipo;
                     cmd.Parameters.Add("@Id_Rubro", SqlDbType.Int).Value = Id_Rubro;
                     cmd.Parameters.Add("@Id_Estado", SqlDbType.Int).Value = Id_Estado;
+                    cmd.Parameters.Add("@AceptaPreguntas", SqlDbType.Int).Value = AceptaPreguntas ? 1 : 0;
 
                     cmd.ExecuteNonQuery();
                 }
