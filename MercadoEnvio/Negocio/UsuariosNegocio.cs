@@ -29,7 +29,7 @@ namespace MercadoNegocio
                 String sqlRequest;
                 sqlRequest = "SELECT  u.Habilitado, u.Id_Usuarios as \"Código Usuario\", u.User_Nombre as \"Nombre Usuario\", e.RAzonSocial as \"Razon Social\", e.Cuit_Empresa as \"CUIT\", e.Mail, e.DomCalle as \"Domicilio\", e.NroCalle as \"Numero\", e.Piso, ";
                 sqlRequest += "e.CodigoPostal as \"Código Postal\", e.Telefono, e.Contacto, ";
-                sqlRequest += "(select r.Descripcion FROM PMS.RUBROS r where r.Id_Rubro = e.Id_Rubro) as \"Rubro\", u.FechaCreacion as \"Fecha Creacion\" ";
+                sqlRequest += "(select r.Descripcion FROM PMS.RUBROS r where r.Id_Rubro = e.Id_Rubro) as \"Rubro\" ";
                 sqlRequest += " FROM PMS.USUARIOS u, PMS.EMPRESAS e";
                 sqlRequest += " WHERE u.Id_Usuario = e.Id_Empresa ";
                 if (razonSocial != null && razonSocial != "") sqlRequest += " and e.RazonSocial = @razonSocial";
