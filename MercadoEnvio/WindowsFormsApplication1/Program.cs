@@ -12,6 +12,8 @@ using WindowsFormsApplication1.ABM_Rol;
 using WindowsFormsApplication1.Facturas;
 using WindowsFormsApplication1.Historial_Cliente;
 using WindowsFormsApplication1.Listado_Estadistico;
+using System.Configuration;
+using System.Collections.Specialized;
 
 
 namespace WindowsFormsApplication1
@@ -27,7 +29,7 @@ namespace WindowsFormsApplication1
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //terminarSubastas();
+            terminarSubastas();
             //SqlServerDBConnection.Instance().openConnection();
             //Application.Run(new LoginForm());
 
@@ -37,11 +39,7 @@ namespace WindowsFormsApplication1
         
         static int terminarSubastas()
         {
-            string fileName = "fecha.txt";
-            string path = Path.Combine(Environment.CurrentDirectory, fileName);
-            string text = File.ReadAllText(path, Encoding.UTF8);
-            DateTime fecha = DateTime.ParseExact(text, "yyyy-MM-dd HH:mm:ss",
-                System.Globalization.CultureInfo.InvariantCulture);
+            DateTime fecha = DateTime.Parse(ConfigurationManager.AppSettings["FechaDelDia"]);
             SqlServerDBConnection DBConn = SqlServerDBConnection.Instance();
             
             int result = -1;
