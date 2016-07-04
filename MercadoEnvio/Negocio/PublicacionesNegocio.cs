@@ -193,7 +193,7 @@ namespace MercadoNegocio
                 sqlRequest += "WHERE 1=1 ";
                 if (userid != null)
                 {
-                    sqlRequest += "AND p.Id_Usuario <> " + userid+" ";
+                    sqlRequest += "AND p.Id_Usuario = " + userid+" ";
                 }
                 if (tipo != null)
                 {
@@ -270,7 +270,7 @@ namespace MercadoNegocio
                     cmd.Parameters.Add("@Id_Visibilidad", SqlDbType.Int).Value = Id_Visibilidad;
                     cmd.Parameters.Add("@Id_Tipo", SqlDbType.Int).Value = Id_Tipo;
                     cmd.Parameters.Add("@Id_Rubro", SqlDbType.Int).Value = Id_Rubro;
-                    cmd.Parameters.Add("@Id_Estado", SqlDbType.Int).Value = Id_Estado;
+                    cmd.Parameters.Add("@Id_Estado", SqlDbType.Int).Value = Id_Estado == -1 ? 2 : Id_Estado;
                     cmd.Parameters.Add("@AceptaPreguntas", SqlDbType.Int).Value = AceptaPreguntas ? 1 : 0;
 
                     cmd.ExecuteNonQuery();

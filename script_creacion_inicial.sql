@@ -77,6 +77,7 @@ BEGIN
 		Precio					numeric(18,2),
 		Porcentaje				numeric(18,2),
 		Habilitado				numeric(18,0) DEFAULT 1,
+		Costo_Envio				numeric(18,0) DEFAULT 5
 		PRIMARY KEY(Id_Visibilidad)
 	);
 	
@@ -336,7 +337,7 @@ BEGIN
 			Publicacion_Visibilidad_Desc,
 			Publicacion_Visibilidad_Precio,		
 			Publicacion_Visibilidad_Porcentaje,
-			1
+			1, 5
 	FROM gd_esquema.Maestra 
 	WHERE Publicacion_Visibilidad_Cod IS NOT NULL;
 
@@ -1267,7 +1268,7 @@ SET @NUMERO =(select max(Numero)from FACTURAS) +1
 DECLARE @FECHA datetime,@ID numeric(18,0)
 select @FECHA=Fecha,@ID=Id_Publicacion from inserted;
 DECLARE @TOTAL numeric(18,0)
-select @TOTAL=Precio from VISIBILIDADES WHERE Id_Visibilidad=(select Id_Visibilidad from PUBLICACIONES where Id_Publicacion = (select Id_Publicacion from inserted))
+select @TOTAL=Precio from VISIBILIDADES WHERE Id_Visibilidad=(select Id_Visibilidad from PMS.PUBLICACIONES where Id_Publicacion = (select Id_Publicacion from inserted))
 EXEC PMS.ALTA_FACTURA @NUMERO,@FECHA,@TOTAL,1,@TOTAL,1,@ID,'Comision por Publicacion'
 END
 GO
@@ -1281,7 +1282,7 @@ DECLARE @NUMERO numeric(18,0)
 SET @NUMERO =(select max(Numero)from FACTURAS)+1
 DECLARE @PORCENTAJE numeric(18,0)
 DECLARE @ENVIO numeric(18,0)
-select @PORCENTAJE= Porcentaje,@ENVIO=isnull(Costo_Envio,0) from VISIBILIDADES WHERE Id_Visibilidad=(select Id_Visibilidad from PUBLICACIONES where Id_Publicacion = (select Id_Publicacion from inserted))
+select @PORCENTAJE= Porcentaje,@ENVIO=isnull(Costo_Envio,0) from PMS.VISIBILIDADES WHERE Id_Visibilidad=(select Id_Visibilidad from PUBLICACIONES where Id_Publicacion = (select Id_Publicacion from inserted))
 DECLARE @FECHA datetime,@TOTAL numeric(18,0),@MONTO numeric(18,0),@CANTIDAD numeric(18,0),@ID numeric(18,0)
 select @FECHA=Fecha,@TOTAL=Monto*@PORCENTAJE+@ENVIO,@MONTO=Monto,@CANTIDAD=Cantidad,@ID=Id_Publicacion from inserted;
 SET @TOTAL = @TOTAL * @CANTIDAD;

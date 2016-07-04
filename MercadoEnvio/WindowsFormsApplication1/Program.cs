@@ -61,6 +61,7 @@ namespace WindowsFormsApplication1
                     cmd.Parameters.Add("@Fecha", SqlDbType.DateTime).Value = fecha;
                     var returnParameter = cmd.Parameters.Add("@ReturnVal", SqlDbType.Int);
                     returnParameter.Direction = ParameterDirection.ReturnValue;
+                    cmd.CommandTimeout = 999999;
                     cmd.ExecuteNonQuery();
                     int.TryParse(returnParameter.Value.ToString(), out result);
                     cmd.Dispose();
