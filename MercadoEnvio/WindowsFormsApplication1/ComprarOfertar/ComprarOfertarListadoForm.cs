@@ -7,14 +7,38 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MercadoNegocio;
 
 namespace WindowsFormsApplication1.ComprarOfertar
 {
     public partial class ComprarOfertarListadoForm : Form
     {
+        public ComprarOfertarNegocio comprarOfertarNegocio { get; set; }
+       // public SqlServerDBConnection instance { get; set; }
+
         public ComprarOfertarListadoForm()
         {
             InitializeComponent();
+            superGrid1.PageSize = 5;
+            comprarOfertarNegocio = new ComprarOfertarNegocio(SqlServerDBConnection.Instance());
+        
+            var rubrosDt = comprarOfertarNegocio.getRubros();
+            rubrosListBox.DisplayMember = rubrosDt.Columns[1].ColumnName;
+            rubrosListBox.ValueMember = rubrosDt.Columns[0].ColumnName;
+            rubrosListBox.DataSource = rubrosDt;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var Descripcion = textBox1.Text == "" ? null : textBox1.Text;
+            var Rubros = new List<String>();
+            foreach (var item in rubrosListBox.SelectedItems)
+            {
+                Rubros.Add(((DataRowView)item)["Id_Rubro"].ToString());
+            }
+            var publicacionesDt = comprarOfertarNegocio.getPublicaciones(Descripcion, Rubros);
+
+            this.superGrid1.SetPagedDataSource(publicacionesDt,this.bindingNavigator1);
         }
     }
 }
