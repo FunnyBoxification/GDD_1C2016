@@ -48,6 +48,7 @@ namespace WindowsFormsApplication1
         static int terminarSubastas()
         {
             DateTime fecha = DateTime.Parse(ConfigurationManager.AppSettings["FechaDelDia"]);
+            UsuarioLogueado.Instance().fechaDeHoy = fecha;
             SqlServerDBConnection DBConn = SqlServerDBConnection.Instance();
             
             int result = -1;

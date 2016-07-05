@@ -31,10 +31,12 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ComprarOfertarListadoForm));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.rubrosListBox = new System.Windows.Forms.ListBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.bindingNavigatorMoveFirstItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorMovePreviousItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorSeparator = new System.Windows.Forms.ToolStripSeparator();
@@ -45,9 +47,8 @@
             this.bindingNavigatorMoveLastItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.bindingNavigator1 = new System.Windows.Forms.BindingNavigator(this.components);
-            this.rubrosListBox = new System.Windows.Forms.ListBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.superGrid1 = new MercadoEN.SuperGrid();
+            this.compraOfertaBtn = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).BeginInit();
             this.bindingNavigator1.SuspendLayout();
@@ -67,6 +68,40 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Filtros";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(272, 23);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(41, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Rubros";
+            // 
+            // rubrosListBox
+            // 
+            this.rubrosListBox.FormattingEnabled = true;
+            this.rubrosListBox.Location = new System.Drawing.Point(313, 19);
+            this.rubrosListBox.Name = "rubrosListBox";
+            this.rubrosListBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
+            this.rubrosListBox.Size = new System.Drawing.Size(120, 95);
+            this.rubrosListBox.TabIndex = 2;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(77, 19);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(166, 20);
+            this.textBox1.TabIndex = 1;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(8, 23);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(63, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Descripcion";
+            // 
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(377, 135);
@@ -85,22 +120,6 @@
             this.button2.TabIndex = 4;
             this.button2.Text = "Limpiar";
             this.button2.UseVisualStyleBackColor = true;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 23);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(63, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Descripcion";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(77, 19);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(166, 20);
-            this.textBox1.TabIndex = 1;
             // 
             // bindingNavigatorMoveFirstItem
             // 
@@ -196,38 +215,33 @@
             this.bindingNavigator1.TabIndex = 1;
             this.bindingNavigator1.Text = "bindingNavigator1";
             // 
-            // rubrosListBox
-            // 
-            this.rubrosListBox.FormattingEnabled = true;
-            this.rubrosListBox.Location = new System.Drawing.Point(313, 19);
-            this.rubrosListBox.Name = "rubrosListBox";
-            this.rubrosListBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
-            this.rubrosListBox.Size = new System.Drawing.Size(120, 95);
-            this.rubrosListBox.TabIndex = 2;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(272, 23);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(41, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Rubros";
-            // 
             // superGrid1
             // 
             this.superGrid1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.superGrid1.Location = new System.Drawing.Point(12, 164);
+            this.superGrid1.MultiSelect = false;
             this.superGrid1.Name = "superGrid1";
             this.superGrid1.PageSize = 10;
+            this.superGrid1.ReadOnly = true;
             this.superGrid1.Size = new System.Drawing.Size(440, 150);
             this.superGrid1.TabIndex = 0;
+            // 
+            // compraOfertaBtn
+            // 
+            this.compraOfertaBtn.Location = new System.Drawing.Point(360, 320);
+            this.compraOfertaBtn.Name = "compraOfertaBtn";
+            this.compraOfertaBtn.Size = new System.Drawing.Size(92, 23);
+            this.compraOfertaBtn.TabIndex = 5;
+            this.compraOfertaBtn.Text = "Comprar/Ofertar";
+            this.compraOfertaBtn.UseVisualStyleBackColor = true;
+            this.compraOfertaBtn.Click += new System.EventHandler(this.compraOfertaBtn_Click);
             // 
             // ComprarOfertarListadoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(464, 368);
+            this.Controls.Add(this.compraOfertaBtn);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox1);
@@ -266,5 +280,6 @@
         private System.Windows.Forms.BindingNavigator bindingNavigator1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ListBox rubrosListBox;
+        private System.Windows.Forms.Button compraOfertaBtn;
     }
 }

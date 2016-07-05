@@ -40,5 +40,26 @@ namespace WindowsFormsApplication1.ComprarOfertar
 
             this.superGrid1.SetPagedDataSource(publicacionesDt,this.bindingNavigator1);
         }
+
+        private void compraOfertaBtn_Click(object sender, EventArgs e)
+        {
+            if (this.superGrid1.SelectedRows.Count == 1)
+            {
+                var selectedRow = this.superGrid1.SelectedRows[0];
+                if (Int32.Parse(selectedRow.Cells["Id_Tipo"].Value.ToString()) == 1) //Compra directa
+                {
+                    //Mostrar Form para que elija cantidad y si quiere envio
+                    var form = new ComprarForm(selectedRow);
+                    form.Show();
+                }
+                else //Subasta
+                {
+                    //Mostrar Form chiquito para que ingrese cantidad a ofertar
+                    var form = new OfertarForm(selectedRow);
+                    form.Show();
+                }
+            }
+
+        }
     }
 }
