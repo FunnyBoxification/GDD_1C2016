@@ -13,6 +13,7 @@ namespace MercadoNegocio
 
         public String userId { get; set; }
         public String rol { get; set; }
+        public DateTime fechaDeHoy { get; set; }
 
         public static UsuarioLogueado Instance()
         {

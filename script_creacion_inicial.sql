@@ -1122,31 +1122,32 @@ create procedure PMS.ALTA_OFERTAS
            ,@Id_Cliente numeric(18,0)
 		   ,@id numeric(18,0) output
 as begin
-if @monto<(select max(monto)from OFERTAS where Id_Publicacion=@Id_Publicacion)
-begin
-; throw 50999,'monto menor',1;
-end
-else if @Id_Cliente=(select Id_usuario from PUBLICACIONES where Id_Publicacion=@Id_Publicacion)
-begin
-; throw 50999,'comprador no puede ser el vendedor',1;
-end
-else if 2>(select count(Id_Compra) from PMS.COMPRAS where Id_Cliente_Comprador=@Id_Cliente and Id_Calificacion is null)
-begin
-; throw 50999,'3 compras sin calificar',1;
-end
-else
-begin
-INSERT INTO [PMS].[OFERTAS]
-           ([Fecha]
-           ,[Monto]
-           ,[Id_Publicacion]
-           ,[Id_Cliente])
-     VALUES
-           (@Fecha
-           ,@Monto
-           ,@Id_Publicacion
-           ,@Id_Cliente)
-end
+	if @monto<(select max(monto)from OFERTAS where Id_Publicacion=@Id_Publicacion)
+	begin
+		; throw 50999,'monto menor',1;
+	end
+	else if @Id_Cliente=(select Id_usuario from PUBLICACIONES where Id_Publicacion=@Id_Publicacion)
+	begin
+		; throw 50999,'comprador no puede ser el vendedor',1;
+	end
+	else if 2>(select count(Id_Compra) from PMS.COMPRAS where Id_Cliente_Comprador=@Id_Cliente and Id_Calificacion is null)
+	begin
+		; throw 50999,'3 compras sin calificar',1;
+	end
+	else
+	begin
+		INSERT INTO [PMS].[OFERTAS]
+				   ([Fecha]
+				   ,[Monto]
+				   ,[Id_Publicacion]
+				   ,[Id_Cliente])
+			 VALUES
+				   (@Fecha
+				   ,@Monto
+				   ,@Id_Publicacion
+				   ,@Id_Cliente);
+		UPDATE PMS.PUBLICACIONES SET Precio = @Monto WHERE Id_Publicacion=@Id_Publicacion;
+	end
 end
 set @id=(select max(Id_Oferta) from PMS.OFERTAS)
 GO

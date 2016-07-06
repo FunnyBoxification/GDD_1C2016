@@ -143,11 +143,23 @@
     <Compile Include="Calificar\Calificar.Designer.cs">
       <DependentUpon>Calificar.cs</DependentUpon>
     </Compile>
+    <Compile Include="ComprarOfertar\ComprarForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComprarOfertar\ComprarForm.Designer.cs">
+      <DependentUpon>ComprarForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ComprarOfertar\ComprarOfertarListadoForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ComprarOfertar\ComprarOfertarListadoForm.Designer.cs">
       <DependentUpon>ComprarOfertarListadoForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ComprarOfertar\OfertarForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComprarOfertar\OfertarForm.Designer.cs">
+      <DependentUpon>OfertarForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Connection\Connection.cs" />
     <Compile Include="DataSet1.Designer.cs" />
@@ -269,8 +281,14 @@
     <EmbeddedResource Include="Calificar\Calificar.resx">
       <DependentUpon>Calificar.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ComprarOfertar\ComprarForm.resx">
+      <DependentUpon>ComprarForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ComprarOfertar\ComprarOfertarListadoForm.resx">
       <DependentUpon>ComprarOfertarListadoForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComprarOfertar\OfertarForm.resx">
+      <DependentUpon>OfertarForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Facturas\FacturasVendedor.resx">
       <DependentUpon>FacturasVendedor.cs</DependentUpon>
