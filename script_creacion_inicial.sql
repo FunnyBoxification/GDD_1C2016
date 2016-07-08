@@ -20,7 +20,7 @@ BEGIN
 		FechaCreacion			datetime,
 		Habilitado					numeric(18,0) DEFAULT 1,
 		Intentos_login			numeric(18,0) DEFAULT 0,
-		Primera_Vez				numeric(18,0),
+		Primera_Vez				numeric(18,0) DEFAULT 0,
 		Reputacion				numeric(18,0)		
 		PRIMARY KEY(Id_Usuario)
 	);
@@ -340,6 +340,8 @@ BEGIN
 			1, 5
 	FROM gd_esquema.Maestra 
 	WHERE Publicacion_Visibilidad_Cod IS NOT NULL;
+
+	UPDATE PMS.VISIBILIDADES set Costo_Envio = 0 WHERE Descripcion = 'Gratis';
 
 	INSERT INTO PMS.TIPO_PUBLICACION
 	SELECT DISTINCT
@@ -852,7 +854,7 @@ INSERT INTO [PMS].[USUARIOS]
 		   ,@FechaCreacion
            ,1
            ,0
-           ,null
+           ,1
            ,null)
 
 
@@ -1274,7 +1276,16 @@ DECLARE @FECHA datetime,@ID numeric(18,0)
 select @FECHA=Fecha,@ID=Id_Publicacion from inserted;
 DECLARE @TOTAL numeric(18,0)
 select @TOTAL=Precio from VISIBILIDADES WHERE Id_Visibilidad=(select Id_Visibilidad from PMS.PUBLICACIONES where Id_Publicacion = (select Id_Publicacion from inserted))
+DECLARE @Id_Usuario numeric(18,0)
+SELECT @Id_Usuario = Id_Usuario FROM PMS.PUBLICACIONES WHERE Id_Publicacion = (select Id_Publicacion from inserted)
+if (SELECT Primera_Vez FROM PMS.USUARIOS WHERE Id_Usuario = @Id_Usuario) = 0
+begin
 EXEC PMS.ALTA_FACTURA @NUMERO,@FECHA,@TOTAL,1,@TOTAL,1,@ID,'Comision por Publicacion'
+end
+else 
+begin
+UPDATE PMS.USUARIOS SET Primera_Vez = 1 WHERE Id_Usuario = @Id_Usuario
+end
 END
 GO
 
