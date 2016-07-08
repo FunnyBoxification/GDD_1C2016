@@ -229,7 +229,18 @@ namespace WindowsFormsApplication1.Generar_Publicación
                 var Stock = this.tbxStock.Text;
                 var Fecha = this.dtpInicio.Value;
                 var FechaVencimiento = this.dptVencimiento.Value;
+                if (DateTime.Compare(Fecha, FechaVencimiento) >= 0)
+                {
+                    MessageBox.Show("La fecha de finalizacion debe ser posterior a la fecha de publicacion");
+                    return;
+                }
                 var Precio = this.tbxPrecio.Text;
+                int a;
+                if (!Int32.TryParse(Precio,out a))
+                {
+                    MessageBox.Show("El precio debe ser un numero");
+                    return;
+                }
                 var idUsuario = Int32.Parse(tbxVendedor.Text);
                 var Id_Visibilidad = (this.cbxVisibilidad.SelectedItem as ComboboxItem) != null ? (this.cbxVisibilidad.SelectedItem as ComboboxItem).Value : -1;
                 Int32 Id_Tipo = (this.cbxTipo.SelectedItem as ComboboxItem) != null ? (this.cbxTipo.SelectedItem as ComboboxItem).Value : -1;  //Falta pasarlo a combo
