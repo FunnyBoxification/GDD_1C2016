@@ -156,7 +156,7 @@
             this.dgvUsuarios.Name = "dgvUsuarios";
             this.dgvUsuarios.Size = new System.Drawing.Size(929, 445);
             this.dgvUsuarios.TabIndex = 1;
-            this.dgvUsuarios.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUsuarios_CellContentClick);
+            this.dgvUsuarios.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUsuarios_CellContentClick);
             // 
             // btnLimpiar
             // 

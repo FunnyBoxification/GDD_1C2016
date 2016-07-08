@@ -1067,7 +1067,7 @@ CREATE PROCEDURE PMS.ALTA_COMPRAS
            ,@Id_Publicacion numeric(18,0)
 		   ,@id numeric(18,0) output
 AS BEGIN
-if (select top 1 Stock from PMS.PUBLICACIONES where Id_Publicacion=@Id_Publicacion) <= @Cantidad
+if (select top 1 Stock from PMS.PUBLICACIONES where Id_Publicacion=@Id_Publicacion) < @Cantidad
 begin
 ;throw 50999,'cantidad a comprar mayor a stock',1;
 end
