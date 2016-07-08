@@ -60,6 +60,7 @@ namespace WindowsFormsApplication1.Generar_Publicación
                 }
 
             }
+            this.tbxCosto.Text = publNegocio.getCostoPublicacion(Int32.Parse(idPublicacion)).ToString() ;
 
             foreach (DataRow row in publNegocio.obtenerVisibilidades().Rows)
             {
@@ -101,7 +102,7 @@ namespace WindowsFormsApplication1.Generar_Publicación
             //this.Tipo = tipo;
 
             tbxDescripcion.Text = publicacionDt.Rows[0]["Descripcion"].ToString();
-            tbxCosto.Text = publicacionDt.Rows[0]["Precio"].ToString();
+            //tbxCosto.Text = publicacionDt.Rows[0]["Precio"].ToString();
             tbxPrecio.Text = publicacionDt.Rows[0]["Precio"].ToString();
             tbxStock.Text = publicacionDt.Rows[0]["Stock"].ToString();
             if(UsuarioLogueado.Instance().rol == "Cliente" || UsuarioLogueado.Instance().rol == "Empresa") 
