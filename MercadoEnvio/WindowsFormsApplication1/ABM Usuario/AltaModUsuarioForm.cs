@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WindowsFormsApplication1.ABM_Visibilidad;
+using System.Configuration;
+using System.Collections.Specialized;
 
 namespace WindowsFormsApplication1.ABM_Usuario
 {
@@ -115,7 +117,8 @@ namespace WindowsFormsApplication1.ABM_Usuario
                                            datos1.Nro,
                                            datos1.Piso,
                                            datos1.Dpto,
-                                           datos1.Localidad);
+                                           datos1.Localidad,
+                                           DateTime.Parse(ConfigurationManager.AppSettings["FechaDelDia"]));
                 
                
                 
@@ -136,7 +139,8 @@ namespace WindowsFormsApplication1.ABM_Usuario
                                            datos1.Nro ,
                                            datos1.Piso ,
                                            datos1.Dpto ,
-                                           datos1.Localidad );
+                                           datos1.Localidad,
+                                           DateTime.Parse(ConfigurationManager.AppSettings["FechaDelDia"]));
             }
         }
 

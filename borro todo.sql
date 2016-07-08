@@ -10,6 +10,8 @@ GO
 	drop proc PMS.ALTA_USER
 	drop proc PMS.ALTA_USUARIO_CLIENTE
 	drop proc PMS.ALTA_USUARIO_EMPRESA
+	drop proc PMS.MODIFICACION_USUARIO_CLIENTE
+	drop proc PMS.MODIFICACION_USUARIO_EMPRESA
 	drop proc PMS.ALTA_CLIENTE
 	drop proc PMS.AumentarIntentosFallidos
 	drop proc PMS.BAJA_ROL
@@ -19,8 +21,8 @@ GO
 	drop proc PMS.LimpiarIntentos
 	drop proc PMS.MODIFICACION_ROLES
 	drop proc PMS.SUBASTAS_TERMIANDAS
-	drop proc PMS.MODIFICACION_PUBLICACION
 	drop proc PMS.upd_Rol
+	drop proc PMS.MODIFICACION_PUBLICACION
 
 	drop function PMS.getEstrellasDadas
 	drop function PMS.getUser

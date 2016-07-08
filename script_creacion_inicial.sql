@@ -820,7 +820,7 @@ create procedure PMS.ALTA_USUARIO_CLIENTE
            ,@Depto nvarchar(50)
            ,@Cod_Postal nvarchar(50)
 		   ,@Telefono nvarchar(50)
-		   ,@Localidad nvarchar(50)
+		   --,@Localidad nvarchar(50)
 		   ,@FechaCreacion datetime
 		   ,@id numeric(18,0) output
 as begin
@@ -901,7 +901,7 @@ create procedure PMS.ALTA_USUARIO_EMPRESA
            ,@CodigoPostal nvarchar(50)
 		   ,@Telefono nvarchar(50)
 		   ,@Contacto nvarchar(50)
-		   ,@Localidad nvarchar(50)
+		   --,@Localidad nvarchar(50)
 		   ,@Ciudad nvarchar(50)
 		   ,@Rubro nvarchar(50)
 		   ,@Id numeric(18,0) output
@@ -977,6 +977,136 @@ INSERT INTO [PMS].[EMPRESAS]
 		   ,@Contacto
 		   ,@Telefono
 		   ,@Id_Rubro)
+end
+go
+
+create procedure PMS.MODIFICACION_USUARIO_CLIENTE
+			@User_Nombre nvarchar(255)
+		   ,@User_Password binary(32)
+           ,@Dni_Cliente numeric(18,0)
+		   ,@Tipo_Dni nvarchar(50)
+           ,@Apellido nvarchar(255)
+           ,@Nombre nvarchar(255)
+           ,@FechaNacimiento datetime
+           ,@Mail nvarchar(255)
+           ,@DomCalle nvarchar(255)
+           ,@NroCalle numeric(18,0)
+           ,@Piso numeric(18,0)
+           ,@Depto nvarchar(50)
+           ,@Cod_Postal nvarchar(50)
+		   ,@Telefono nvarchar(50)
+		   --,@Localidad nvarchar(50)
+		   ,@FechaCreacion datetime
+		   ,@id numeric(18,0) 
+as begin
+IF not EXISTS (select * from PMS.USUARIOS u  WHERE @id = u.Id_Usuario)
+ BEGIN
+    RAISERROR ('NO Existe usuario', 16, 1)
+ END
+ IF EXISTS (select * from PMS.CLIENTES c  WHERE @Dni_Cliente = c.Dni_Cliente)
+ BEGIN
+    RAISERROR ('Duplicate RazonSocial', 16, 1)
+ END
+ IF EXISTS (select * from PMS.CLIENTES c  WHERE @Mail = c.Mail)
+ BEGIN
+    RAISERROR ('Duplicate Mail', 16, 1)
+ END
+
+
+IF @User_Password IS NOT NULL
+BEGIN UPDATE [PMS].[USUARIOS]
+SET			[User_password] = HASHBYTES('SHA2_256',@User_Password)	
+WHERE [User_Nombre] = @id
+
+END
+
+UPDATE [PMS].[CLIENTES]      
+Set                   
+           [Dni_Cliente]     =  @Dni_Cliente     
+           ,[Apellido]        =  @Apellido     
+           ,[Nombre]          =  @Nombre     
+           ,[FechaNacimiento] =  @FechaNacimiento     
+           ,[Mail]            =  @Mail     
+           ,[DomCalle]        =  @DomCalle     
+           ,[NroCalle]        =  @NroCalle     
+           ,[Piso]            =  @Piso     
+           ,[Depto]           =  @Depto     
+           ,[Cod_Postal]	  =  @Cod_Postal
+		   ,[Tipo_Doc]		  =  @Tipo_Dni
+		   ,[Telefono]        =  @Telefono    
+where [Id_Cliente]		=	@id  
+   
+end
+go
+
+create procedure PMS.MODIFICAION_USUARIO_EMPRESA
+			@User_Nombre nvarchar(255)
+			,@User_Password binary(32)
+           ,@Cuit_Empresa nvarchar(50)
+           ,@RazonSocial nvarchar(255)
+           ,@FechaCreacion datetime
+           ,@Mail nvarchar(50)
+           ,@DomCalle nvarchar(100)
+           ,@NroCalle numeric(18,0)
+           ,@Piso numeric(18,0)
+           ,@Depto nvarchar(50)
+           ,@CodigoPostal nvarchar(50)
+		   ,@Telefono nvarchar(50)
+		   ,@Contacto nvarchar(50)
+		   --,@Localidad nvarchar(50)
+		   ,@Ciudad nvarchar(50)
+		   ,@Rubro nvarchar(50)
+		   ,@Id numeric(18,0)
+as begin
+
+declare @Id_Rubro1 numeric(18,0)
+
+IF not EXISTS (select * from PMS.USUARIOS u  WHERE @id = u.Id_Usuario)
+ BEGIN
+    RAISERROR ('No user', 16, 1)
+ END
+ IF EXISTS (select * from PMS.EMPRESAS e  WHERE @RazonSocial = e.RazonSocial and @id <> e.Id_empresa)
+ BEGIN
+    RAISERROR ('Duplicate RazonSocial', 16, 1)
+ END
+ IF EXISTS (select * from PMS.EMPRESAS e  WHERE @Cuit_Empresa = e.Cuit_Empresa and @id <> e.Id_empresa)
+ BEGIN
+    RAISERROR ('Duplicate Cuit', 16, 1)
+ END
+ IF EXISTS (select * from PMS.EMPRESAS e  WHERE @Mail = e.Mail and @id <> e.Id_empresa)
+ BEGIN
+    RAISERROR ('Duplicate Mail', 16, 1)
+ END
+
+
+IF @User_Password IS NOT NULL
+BEGIN UPDATE [PMS].[USUARIOS]
+SET			[User_password] = HASHBYTES('SHA2_256',@User_Password)   	
+WHERE [User_Nombre] = @Id
+
+END
+
+
+
+DECLARE @Id_Rubro numeric(18,0);
+set @Id_Rubro1=(select Id_Rubro from PMS.RUBROS where Descripcion = @Rubro);
+
+UPDATE [PMS].[EMPRESAS]		
+SET			[Cuit_Empresa]  = @Cuit_Empresa        
+           ,[RazonSocial]   = @RazonSocial      
+           ,[Mail]          = @FechaCreacion      
+           ,[DomCalle]      = @Mail      
+           ,[NroCalle]      = @DomCalle      
+           ,[Piso]          = @NroCalle      
+           ,[Depto]         = @Piso      
+           ,[CodigoPostal]	= @Depto
+		   ,[NombreContacto]= @CodigoPostal
+		   ,[Ciudad]		= @Contacto
+		   ,[Telefono]		= @Telefono
+		   ,[Id_Rubro]	=	@Id_Rubro
+where [Id_Empresa]      =     @id 		   
+		          			
+   
 end
 go
 
