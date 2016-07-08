@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MercadoNegocio
 {
-    class Calificacion
+    public class Calificacion
     {
          SqlServerDBConnection DBConn { get; set; }
 

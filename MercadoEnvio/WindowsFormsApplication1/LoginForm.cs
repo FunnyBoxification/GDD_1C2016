@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MercadoNegocio;
-
+using MercadoEN;
 
 namespace WindowsFormsApplication1
 {
@@ -67,23 +67,33 @@ namespace WindowsFormsApplication1
                 UsuarioLogueado.Instance().userId = userId.ToString();
                 DataTable dt = loginNegocio.getRolesDT(userId);
                 UsuarioLogueado.Instance().rol = (dt.Rows[0][0]).ToString();
-
+                this.Hide();
                 if (dt.Rows.Count > 1)
                 {
                     //Tiene mas de un rol el usuario, se debe elegir con cual quiere loguear
-                    SelectRolForm form = new SelectRolForm(dt);
+                    SelectRolForm form = new SelectRolForm(dt, userId);
+                    User userToSave = new User();
+                    userToSave.userId = userId;
+                    UserSingleton.Instance.setUser(userToSave);
                     form.ShowDialog();
+               
                 }
                 else
                 {
                     //TODO
                     //ACCEDER A la aplicacion el unico rol que tiene el usuario
                     Principal.PaginaPrincipal form = new Principal.PaginaPrincipal((dt.Rows[0][0]).ToString(),userId);
+                    User userToSave = new User();
+                    userToSave.userId = userId;
+                    UserSingleton.Instance.setUser(userToSave);
                     form.ShowDialog();
                 }
+               
+             
+               
 
             }
-            //El logueo fue rechazado
+            //El logueo fue rechazado 
             else if (userId == USER_NOT_FOUND)
             {
                 MessageBox.Show("El usuario especificado no existe");

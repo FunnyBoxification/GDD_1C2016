@@ -19,6 +19,68 @@ namespace MercadoNegocio
             DBConn = dbConnection;
         }
 
+        public Decimal getCostoPublicacion(int idPublicacion)
+        {
+            var publicacionDt = this.BuscarPublicacionSeleccionada(idPublicacion.ToString());
+            var precioPublicacion = Decimal.Parse(publicacionDt.Rows[0]["Precio"].ToString());
+            DataTable dataVisibilidad = new DataTable();
+            try
+            {
+                DBConn.openConnection();
+                String sqlRequest;
+                sqlRequest = "SELECT Precio,Porcentaje FROM PMS.VISIBILIDADES WHERE Id_Visibilidad=" + publicacionDt.Rows[0][7].ToString();
+                SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
+
+                using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                {
+                    adapter.Fill(dataVisibilidad);
+                    command.Dispose();
+                    DBConn.closeConnection();
+                }
+
+                var precioVisibilidad = Decimal.Parse(dataVisibilidad.Rows[0]["Precio"].ToString());
+                var porcentaje = Decimal.Parse(dataVisibilidad.Rows[0]["Porcentaje"].ToString());
+                return precioPublicacion * porcentaje + precioVisibilidad;
+
+
+            }
+            catch (Exception ex)
+            {
+                DBConn.closeConnection();
+                throw (new Exception("Error en facturacion publicacion: " + ex.Message));
+            }
+            
+        }
+
+        public DataTable facturacionPublicacion(int idPublicacion)
+        {
+            try
+            {
+                var dt = new DataTable();
+                DBConn.openConnection();
+                String sqlRequest;
+                sqlRequest = "SELECT DISTINCT Numero, Fecha, Total FROM ";
+                sqlRequest += "( SELECT item.*, factura.* FROM PMS.ITEMFACTURA item LEFT JOIN PMS.FACTURAS factura ON item.Id_Factura = factura.Numero ";
+                sqlRequest += " WHERE Id_Publicacion="+idPublicacion;
+                sqlRequest += ") as Facturas";
+                SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
+
+                using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                {
+                    adapter.Fill(dt);
+                    command.Dispose();
+                    DBConn.closeConnection();
+                    return dt;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                DBConn.closeConnection();
+                throw (new Exception("Error en facturacion publicacion: " + ex.Message));
+            }
+        }
+
         public DataTable getRubros()
         {
             try
@@ -193,7 +255,7 @@ namespace MercadoNegocio
                 sqlRequest += "WHERE 1=1 ";
                 if (userid != null)
                 {
-                    sqlRequest += "AND p.Id_Usuario <> " + userid+" ";
+                    sqlRequest += "AND p.Id_Usuario = " + userid+" ";
                 }
                 if (tipo != null)
                 {
@@ -270,7 +332,7 @@ namespace MercadoNegocio
                     cmd.Parameters.Add("@Id_Visibilidad", SqlDbType.Int).Value = Id_Visibilidad;
                     cmd.Parameters.Add("@Id_Tipo", SqlDbType.Int).Value = Id_Tipo;
                     cmd.Parameters.Add("@Id_Rubro", SqlDbType.Int).Value = Id_Rubro;
-                    cmd.Parameters.Add("@Id_Estado", SqlDbType.Int).Value = Id_Estado;
+                    cmd.Parameters.Add("@Id_Estado", SqlDbType.Int).Value = Id_Estado == -1 ? 2 : Id_Estado;
                     cmd.Parameters.Add("@AceptaPreguntas", SqlDbType.Int).Value = AceptaPreguntas ? 1 : 0;
 
                     cmd.ExecuteNonQuery();

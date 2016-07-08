@@ -64,7 +64,7 @@ namespace WindowsFormsApplication1.Generar_Publicación
             String Descripcion = tbxDesc.Text != "" ? tbxDesc.Text : null;
             String userID = null;
 
-            if (UsuarioLogueado.Instance().rol != "Adminstrador")
+            if (UsuarioLogueado.Instance().rol != "Administrador")
             {
                 userID = UsuarioLogueado.Instance().userId;
             }

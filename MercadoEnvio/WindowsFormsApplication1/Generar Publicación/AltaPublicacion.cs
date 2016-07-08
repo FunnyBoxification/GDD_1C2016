@@ -60,6 +60,7 @@ namespace WindowsFormsApplication1.Generar_Publicación
                 }
 
             }
+            this.tbxCosto.Text = publNegocio.getCostoPublicacion(Int32.Parse(idPublicacion)).ToString() ;
 
             foreach (DataRow row in publNegocio.obtenerVisibilidades().Rows)
             {
@@ -101,7 +102,7 @@ namespace WindowsFormsApplication1.Generar_Publicación
             //this.Tipo = tipo;
 
             tbxDescripcion.Text = publicacionDt.Rows[0]["Descripcion"].ToString();
-            tbxCosto.Text = publicacionDt.Rows[0]["Precio"].ToString();
+            //tbxCosto.Text = publicacionDt.Rows[0]["Precio"].ToString();
             tbxPrecio.Text = publicacionDt.Rows[0]["Precio"].ToString();
             tbxStock.Text = publicacionDt.Rows[0]["Stock"].ToString();
             if(UsuarioLogueado.Instance().rol == "Cliente" || UsuarioLogueado.Instance().rol == "Empresa") 
@@ -229,7 +230,18 @@ namespace WindowsFormsApplication1.Generar_Publicación
                 var Stock = this.tbxStock.Text;
                 var Fecha = this.dtpInicio.Value;
                 var FechaVencimiento = this.dptVencimiento.Value;
+                if (DateTime.Compare(Fecha, FechaVencimiento) >= 0)
+                {
+                    MessageBox.Show("La fecha de finalizacion debe ser posterior a la fecha de publicacion");
+                    return;
+                }
                 var Precio = this.tbxPrecio.Text;
+                int a;
+                if (!Int32.TryParse(Precio,out a))
+                {
+                    MessageBox.Show("El precio debe ser un numero");
+                    return;
+                }
                 var idUsuario = Int32.Parse(tbxVendedor.Text);
                 var Id_Visibilidad = (this.cbxVisibilidad.SelectedItem as ComboboxItem) != null ? (this.cbxVisibilidad.SelectedItem as ComboboxItem).Value : -1;
                 Int32 Id_Tipo = (this.cbxTipo.SelectedItem as ComboboxItem) != null ? (this.cbxTipo.SelectedItem as ComboboxItem).Value : -1;  //Falta pasarlo a combo
@@ -240,6 +252,13 @@ namespace WindowsFormsApplication1.Generar_Publicación
                                                 Descripcion,Stock,Fecha,
                                                 FechaVencimiento,Precio,Id_Visibilidad,
                                                 Id_Tipo,Id_Rubro,Id_Estado,AceptaPreguntas);
+                if (Id_Estado == 4)
+                {
+                    //PopUp de facturacion
+                    var formm = new FacturacionPublicacion(idPublicacion);
+                    this.Hide();
+                    formm.Show();
+                }
                
         }
 

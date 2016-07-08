@@ -14,6 +14,9 @@ namespace WindowsFormsApplication1
 {
     public partial class SelectRolForm : Form
     {
+
+        private String rolSelected { get; set; }
+        private int userId { get; set; }
         
         public SelectRolForm()
         {
@@ -21,7 +24,7 @@ namespace WindowsFormsApplication1
         }
 
 
-        public SelectRolForm(DataTable dt)
+        public SelectRolForm(DataTable dt, int userId)
         {
             InitializeComponent();
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -30,6 +33,24 @@ namespace WindowsFormsApplication1
             dgvRoles.DataMember = dt.TableName;
           
 
+        }
+
+
+    
+
+        private void btContinuar_Click(object sender, EventArgs e)
+        {
+
+            if (dgvRoles.SelectedRows.Count != 0)
+            {
+                DataGridViewRow row = dgvRoles.SelectedRows[0];
+                rolSelected = row.Cells[0].Value.ToString();
+                Principal.PaginaPrincipal form = new Principal.PaginaPrincipal(rolSelected, userId);
+                this.Hide();
+                form.ShowDialog();
+            }
+
+           
         }
     }
 }

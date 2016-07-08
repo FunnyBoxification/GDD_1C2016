@@ -48,6 +48,7 @@ namespace WindowsFormsApplication1
         static int terminarSubastas()
         {
             DateTime fecha = DateTime.Parse(ConfigurationManager.AppSettings["FechaDelDia"]);
+            UsuarioLogueado.Instance().fechaDeHoy = fecha;
             SqlServerDBConnection DBConn = SqlServerDBConnection.Instance();
             
             int result = -1;
@@ -61,6 +62,7 @@ namespace WindowsFormsApplication1
                     cmd.Parameters.Add("@Fecha", SqlDbType.DateTime).Value = fecha;
                     var returnParameter = cmd.Parameters.Add("@ReturnVal", SqlDbType.Int);
                     returnParameter.Direction = ParameterDirection.ReturnValue;
+                    cmd.CommandTimeout = 999999;
                     cmd.ExecuteNonQuery();
                     int.TryParse(returnParameter.Value.ToString(), out result);
                     cmd.Dispose();

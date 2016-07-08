@@ -33,6 +33,7 @@
             this.dgvRoles = new System.Windows.Forms.DataGridView();
             this.dsRolesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.dsRoles = new WindowsFormsApplication1.ABM_Rol.dsRoles();
+            this.btContinuar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvRoles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dsRolesBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dsRoles)).BeginInit();
@@ -55,8 +56,10 @@
             this.dgvRoles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvRoles.DataSource = this.dsRolesBindingSource;
             this.dgvRoles.Location = new System.Drawing.Point(13, 46);
+            this.dgvRoles.MultiSelect = false;
             this.dgvRoles.Name = "dgvRoles";
             this.dgvRoles.ReadOnly = true;
+            this.dgvRoles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvRoles.Size = new System.Drawing.Size(267, 203);
             this.dgvRoles.TabIndex = 2;
             // 
@@ -70,11 +73,22 @@
             this.dsRoles.DataSetName = "dsRoles";
             this.dsRoles.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
+            // btContinuar
+            // 
+            this.btContinuar.Location = new System.Drawing.Point(95, 279);
+            this.btContinuar.Name = "btContinuar";
+            this.btContinuar.Size = new System.Drawing.Size(105, 23);
+            this.btContinuar.TabIndex = 3;
+            this.btContinuar.Text = "Continuar";
+            this.btContinuar.UseVisualStyleBackColor = true;
+            this.btContinuar.Click += new System.EventHandler(this.btContinuar_Click);
+            // 
             // SelectRolForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(292, 261);
+            this.ClientSize = new System.Drawing.Size(292, 323);
+            this.Controls.Add(this.btContinuar);
             this.Controls.Add(this.dgvRoles);
             this.Controls.Add(this.label1);
             this.Name = "SelectRolForm";
@@ -94,5 +108,6 @@
         private System.Windows.Forms.DataGridView dgvRoles;
         private System.Windows.Forms.BindingSource dsRolesBindingSource;
         private ABM_Rol.dsRoles dsRoles;
+        private System.Windows.Forms.Button btContinuar;
     }
 }
