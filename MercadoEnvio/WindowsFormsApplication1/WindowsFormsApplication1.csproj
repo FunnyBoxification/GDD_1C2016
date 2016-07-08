@@ -183,6 +183,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>dsPublicaciones.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Generar Publicación\FacturacionPublicacion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Generar Publicación\FacturacionPublicacion.Designer.cs">
+      <DependentUpon>FacturacionPublicacion.cs</DependentUpon>
+    </Compile>
     <Compile Include="Generar Publicación\GenerarPublicacion.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -296,6 +302,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Generar Publicación\AltaPublicacion.resx">
       <DependentUpon>AltaPublicacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Generar Publicación\FacturacionPublicacion.resx">
+      <DependentUpon>FacturacionPublicacion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Generar Publicación\GenerarPublicacion.resx">
       <DependentUpon>GenerarPublicacion.cs</DependentUpon>

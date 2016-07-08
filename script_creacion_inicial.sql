@@ -1095,6 +1095,10 @@ INSERT INTO PMS.COMPRAS
            ,@Id_Cliente_Comprador
            ,@Id_Publicacion);
 update PUBLICACIONES set Stock=Stock-@Cantidad where Id_Publicacion=@Id_Publicacion;
+if (SELECT Stock FROM PMS.PUBLICACIONES WHERE Id_Publicacion=@Id_Publicacion) = 0
+begin
+	update publicaciones set Id_Estado = 4 WHERE Id_Publicacion=@Id_Publicacion
+end
 set @id=(select max(Id_Compra)from PMS.COMPRAS)
 end
 end

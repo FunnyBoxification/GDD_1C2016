@@ -19,6 +19,35 @@ namespace MercadoNegocio
             DBConn = dbConnection;
         }
 
+        public DataTable facturacionPublicacion(int idPublicacion)
+        {
+            try
+            {
+                var dt = new DataTable();
+                DBConn.openConnection();
+                String sqlRequest;
+                sqlRequest = "SELECT DISTINCT Numero, Fecha, Total FROM ";
+                sqlRequest += "( SELECT item.*, factura.* FROM PMS.ITEMFACTURA item LEFT JOIN PMS.FACTURAS factura ON item.Id_Factura = factura.Numero ";
+                sqlRequest += " WHERE Id_Publicacion="+idPublicacion;
+                sqlRequest += ") as Facturas";
+                SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
+
+                using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                {
+                    adapter.Fill(dt);
+                    command.Dispose();
+                    DBConn.closeConnection();
+                    return dt;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                DBConn.closeConnection();
+                throw (new Exception("Error en facturacion publicacion: " + ex.Message));
+            }
+        }
+
         public DataTable getRubros()
         {
             try

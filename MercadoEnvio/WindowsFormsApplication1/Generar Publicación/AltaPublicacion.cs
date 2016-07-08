@@ -240,6 +240,13 @@ namespace WindowsFormsApplication1.Generar_Publicación
                                                 Descripcion,Stock,Fecha,
                                                 FechaVencimiento,Precio,Id_Visibilidad,
                                                 Id_Tipo,Id_Rubro,Id_Estado,AceptaPreguntas);
+                if (Id_Estado == 4)
+                {
+                    //PopUp de facturacion
+                    var formm = new FacturacionPublicacion(idPublicacion);
+                    this.Hide();
+                    formm.Show();
+                }
                
         }
 
