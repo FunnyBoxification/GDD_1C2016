@@ -48,6 +48,7 @@
     <Compile Include="SuperGrid.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="LogIn\" />

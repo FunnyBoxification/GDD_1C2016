@@ -14,10 +14,7 @@ namespace MercadoNegocio
     {
         public static SqlServerDBConnection instance;
 
-        /*@author: Fede
-         * Mi instancia de SQL tiene el nombre SQLEXPRESS, en el tp SQLSERVER2012
-         * 
-         * */
+       
         public const String ConnectionString = "Data Source=localhost\\SQLSERVER2012;Initial Catalog=GD1C2016;User ID=gd;Password=gd2016";
         public SqlConnection Connection;
 
