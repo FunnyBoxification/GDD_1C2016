@@ -42,7 +42,7 @@ namespace MercadoNegocio
                 SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);                                                                // Telefono			
                 if (razonSocial != null && razonSocial != "") command.Parameters.Add("@razonSocial", SqlDbType.NVarChar).Value = razonSocial;      // Id_Rubro			
                 if (cuit != null && cuit != "") command.Parameters.Add("@cuit", SqlDbType.NVarChar).Value = cuit;
-                if (email != null && email != "") command.Parameters.Add(" @email", SqlDbType.NVarChar).Value = email;
+                if (email != null && email != "") command.Parameters.Add("@email", SqlDbType.NVarChar).Value = email;
                
                 using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                 {
