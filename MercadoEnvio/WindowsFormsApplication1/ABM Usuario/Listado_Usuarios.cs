@@ -13,6 +13,16 @@ namespace WindowsFormsApplication1.ABM_Usuario
 {
     public partial class Listado_Usuarios : Form
     {
+        string RazonSocial = "", cuit = "", contacto = "", rubro = "", ciudad = "", nombre = "",
+                    apellido = "", documento = "", tipo = "", fechanac = "", codusu ="", username ="";
+string mail = "";
+ string telefono = "";
+ string Direccion ="";
+ string nro = "";
+ string piso = "";
+ string dpto = "";
+ string CodPost = "";
+
         public UsuariosNegocio usuNegocio { get; set; }
         public SqlServerDBConnection instance { get; set; }
         public Listado_Usuarios()
@@ -57,11 +67,18 @@ namespace WindowsFormsApplication1.ABM_Usuario
 
         private void RefrescarCampos()
         {
-            txbNomRaz.Text = "";
-            txbApellido.Text = "";
-            txbEmail.Text = "";
-            txbDniCuit.Text = "";
-            dgvUsuarios.Rows.Clear();
+            try
+            {
+                txbNomRaz.Text = "";
+                txbApellido.Text = "";
+                txbEmail.Text = "";
+                txbDniCuit.Text = "";
+                dgvUsuarios.DataSource = null;
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void btnLimpiar_Click(object sender, EventArgs e)
@@ -137,46 +154,79 @@ namespace WindowsFormsApplication1.ABM_Usuario
 
         private void dgvUsuarios_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            usuNegocio = new UsuariosNegocio(instance = new SqlServerDBConnection());
-            if (cbxTipo.SelectedIndex == 1) //Empresa
+            try
             {
-                var frm = new AltaModUsuarioForm(usuNegocio, cbxTipo.SelectedIndex,
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Id_Usuario"].Value),                                                   
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["UserName"].Value), 
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Passwod"].Value),
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["RazonSocial"].Value),
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["CUIT"].Value),
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Contacto"].Value),
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Rubro"].Value),
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Ciudad"].Value),
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Mail"].Value),
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Telefono"].Value),
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Direccion"].Value),
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Nro"].Value),
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Piso"].Value),
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Dpto"].Value),
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Localidad"].Value));
-                frm.Show();
+                usuNegocio = new UsuariosNegocio(instance = new SqlServerDBConnection());
+                codusu = Convert.ToString(dgvUsuarios.Rows[e.RowIndex].Cells["Código Usuario"].Value);
+                username = Convert.ToString(dgvUsuarios.Rows[e.RowIndex].Cells["Nombre Usuario"].Value);
+                //var = Convert.ToString(dgvUsuarios.Rows[e.RowIndex].Cells["Passwod"].Value),.
+                
+                if (cbxTipo.SelectedIndex == 1) //Empresa
+                {
+                    RazonSocial = Convert.ToString(dgvUsuarios.Rows[e.RowIndex].Cells["Razon Social"].Value);
+                    cuit = Convert.ToString(dgvUsuarios.Rows[e.RowIndex].Cells["CUIT"].Value);
+                    contacto = Convert.ToString(dgvUsuarios.Rows[e.RowIndex].Cells["Contacto"].Value);
+                    rubro = Convert.ToString(dgvUsuarios.Rows[e.RowIndex].Cells["Rubro"].Value);
+                    ciudad = Convert.ToString(dgvUsuarios.Rows[e.RowIndex].Cells["Ciudad"].Value);
+                }
+                else
+                {
+                    nombre = Convert.ToString(dgvUsuarios.Rows[e.RowIndex].Cells["Nombre"].Value);
+                    apellido = Convert.ToString(dgvUsuarios.Rows[e.RowIndex].Cells["Apellido"].Value);
+                    documento = Convert.ToString(dgvUsuarios.Rows[e.RowIndex].Cells["Documento"].Value);
+                    tipo = Convert.ToString(dgvUsuarios.Rows[e.RowIndex].Cells["Tipo Doc"].Value);
+                    fechanac = Convert.ToString(dgvUsuarios.Rows[e.RowIndex].Cells["Fecha Nacimiento"].Value);
+                }
+                mail = Convert.ToString(dgvUsuarios.Rows[e.RowIndex].Cells["Mail"].Value);
+                telefono = Convert.ToString(dgvUsuarios.Rows[e.RowIndex].Cells["Telefono"].Value);
+                Direccion = Convert.ToString(dgvUsuarios.Rows[e.RowIndex].Cells["Calle"].Value);
+                nro = Convert.ToString(dgvUsuarios.Rows[e.RowIndex].Cells["Nro"].Value);
+                piso = Convert.ToString(dgvUsuarios.Rows[e.RowIndex].Cells["Piso"].Value);
+                dpto = Convert.ToString(dgvUsuarios.Rows[e.RowIndex].Cells["Depto"].Value);
+                CodPost = Convert.ToString(dgvUsuarios.Rows[e.RowIndex].Cells["Cod Postal"].Value);
+                if (cbxTipo.SelectedIndex == 1) //Empresa
+                {
+                    var frm = new AltaModUsuarioForm(usuNegocio, cbxTipo.SelectedIndex,
+                                                      codusu,
+                                                      username,                    // r = Convert),
+                                                      RazonSocial,
+                                                      cuit,
+                                                      contacto,
+                                                      rubro,
+                                                      ciudad,
+                                                      mail,
+                                                      telefono,
+                                                      Direccion,
+                                                      nro,
+                                                      piso,
+                                                      dpto,
+                                                      CodPost);
+                    frm.Show();
+                }
+                else
+                {
+                    var frm = new AltaModUsuarioForm(usuNegocio, cbxTipo.SelectedIndex,
+                                                      codusu,
+                                                      username,
+                                                      nombre,
+                                                      apellido,
+                                                      documento,
+                                                      tipo,
+                                                      fechanac,
+                                                      mail,
+                                                      telefono,
+                                                      Direccion,
+                                                      nro,
+                                                      piso,
+                                                      dpto,
+                                                      CodPost);
+                    frm.Show(); ;
+                    //frm.Show();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                var frm = new AltaModUsuarioForm(usuNegocio, cbxTipo.SelectedIndex,
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Id_Usuario"].Value),       
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["UserName"].Value),
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Passwod"].Value),
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Nombre"].Value),
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Apellido"].Value),
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Documento"].Value),
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Tipo"].Value),
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["FechaNac"].Value),
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Mail"].Value),
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Telefono"].Value),
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Direccion"].Value),
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Nro"].Value),
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Piso"].Value),
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Dpto"].Value),
-                                                  Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Localidad"].Value));
-                frm.Show();
+                MessageBox.Show("Error en llamado a alta mod" + ex.Message);
             }
         }
 

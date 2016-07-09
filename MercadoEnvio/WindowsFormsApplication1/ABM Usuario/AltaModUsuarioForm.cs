@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WindowsFormsApplication1.ABM_Visibilidad;
+using System.Configuration;
+using System.Collections.Specialized;
 
 namespace WindowsFormsApplication1.ABM_Usuario
 {
@@ -40,10 +42,12 @@ namespace WindowsFormsApplication1.ABM_Usuario
 
         
 
-        public AltaModUsuarioForm(UsuariosNegocio usuNegocio,int tipo, string idCod, string userNamer, string Password, string RazonSocialNombre, 
+        public AltaModUsuarioForm(UsuariosNegocio usuNegocio,int tipo, string idCod, string userNamer, string RazonSocialNombre, 
                             string cuitApellido, string contactoDto,  string rubroTipo, string ciudadFechaNac, string mail, string telefono,
-                            string direccion, string nro, string piso, string dpto,  string localidad)
+                            string direccion, string nro, string piso, string dpto,  string CodPostal)
         {
+            InitializeComponent();
+            Tipo = tipo;
             if (Tipo == 1)
             {
                 this.Text = "Modificar Empresa: Codigo " + IdCod.ToString();
@@ -55,7 +59,7 @@ namespace WindowsFormsApplication1.ABM_Usuario
             // TODO: Complete member initialization
             this.txbUsername.Text = userNamer;
             this.usuNegocio = usuNegocio;
-            this.txbPassw.Text = Password;
+           // this.txbPassw.Text = Password;
             CargarDatosPropios(tipo,RazonSocialNombre, cuitApellido, contactoDto, rubroTipo, ciudadFechaNac);
             this.datos1.Mail = mail;
             this.datos1.Telefono = telefono;
@@ -63,7 +67,7 @@ namespace WindowsFormsApplication1.ABM_Usuario
             this.datos1.Nro = nro;
             this.datos1.Piso = piso;
             this.datos1.Dpto = dpto;
-            this.datos1.Localidad = localidad;
+            this.datos1.Localidad = CodPostal;
             this.IdCod = Convert.ToInt32(idCod);
         }
 
@@ -113,7 +117,8 @@ namespace WindowsFormsApplication1.ABM_Usuario
                                            datos1.Nro,
                                            datos1.Piso,
                                            datos1.Dpto,
-                                           datos1.Localidad);
+                                           datos1.Localidad,
+                                           DateTime.Parse(ConfigurationManager.AppSettings["FechaDelDia"]));
                 
                
                 
@@ -134,7 +139,8 @@ namespace WindowsFormsApplication1.ABM_Usuario
                                            datos1.Nro ,
                                            datos1.Piso ,
                                            datos1.Dpto ,
-                                           datos1.Localidad );
+                                           datos1.Localidad,
+                                           DateTime.Parse(ConfigurationManager.AppSettings["FechaDelDia"]));
             }
         }
 

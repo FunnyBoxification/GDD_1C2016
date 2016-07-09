@@ -77,7 +77,6 @@ BEGIN
 		Precio					numeric(18,2),
 		Porcentaje				numeric(18,2),
 		Habilitado				numeric(18,0) DEFAULT 1,
-		Costo_Envio				numeric(18,0) DEFAULT 5
 		PRIMARY KEY(Id_Visibilidad)
 	);
 	
@@ -337,7 +336,7 @@ BEGIN
 			Publicacion_Visibilidad_Desc,
 			Publicacion_Visibilidad_Precio,		
 			Publicacion_Visibilidad_Porcentaje,
-			1, 5
+			1
 	FROM gd_esquema.Maestra 
 	WHERE Publicacion_Visibilidad_Cod IS NOT NULL;
 
@@ -821,7 +820,7 @@ create procedure PMS.ALTA_USUARIO_CLIENTE
            ,@Depto nvarchar(50)
            ,@Cod_Postal nvarchar(50)
 		   ,@Telefono nvarchar(50)
-		   ,@Localidad nvarchar(50)
+		   --,@Localidad nvarchar(50)
 		   ,@FechaCreacion datetime
 		   ,@id numeric(18,0) output
 as begin
@@ -902,7 +901,7 @@ create procedure PMS.ALTA_USUARIO_EMPRESA
            ,@CodigoPostal nvarchar(50)
 		   ,@Telefono nvarchar(50)
 		   ,@Contacto nvarchar(50)
-		   ,@Localidad nvarchar(50)
+		   --,@Localidad nvarchar(50)
 		   ,@Ciudad nvarchar(50)
 		   ,@Rubro nvarchar(50)
 		   ,@Id numeric(18,0) output
@@ -978,6 +977,136 @@ INSERT INTO [PMS].[EMPRESAS]
 		   ,@Contacto
 		   ,@Telefono
 		   ,@Id_Rubro)
+end
+go
+
+create procedure PMS.MODIFICACION_USUARIO_CLIENTE
+			@User_Nombre nvarchar(255)
+		   ,@User_Password binary(32)
+           ,@Dni_Cliente numeric(18,0)
+		   ,@Tipo_Dni nvarchar(50)
+           ,@Apellido nvarchar(255)
+           ,@Nombre nvarchar(255)
+           ,@FechaNacimiento datetime
+           ,@Mail nvarchar(255)
+           ,@DomCalle nvarchar(255)
+           ,@NroCalle numeric(18,0)
+           ,@Piso numeric(18,0)
+           ,@Depto nvarchar(50)
+           ,@Cod_Postal nvarchar(50)
+		   ,@Telefono nvarchar(50)
+		   --,@Localidad nvarchar(50)
+		   ,@FechaCreacion datetime
+		   ,@id numeric(18,0) 
+as begin
+IF not EXISTS (select * from PMS.USUARIOS u  WHERE @id = u.Id_Usuario)
+ BEGIN
+    RAISERROR ('NO Existe usuario', 16, 1)
+ END
+ IF EXISTS (select * from PMS.CLIENTES c  WHERE @Dni_Cliente = c.Dni_Cliente)
+ BEGIN
+    RAISERROR ('Duplicate RazonSocial', 16, 1)
+ END
+ IF EXISTS (select * from PMS.CLIENTES c  WHERE @Mail = c.Mail)
+ BEGIN
+    RAISERROR ('Duplicate Mail', 16, 1)
+ END
+
+
+IF @User_Password IS NOT NULL
+BEGIN UPDATE [PMS].[USUARIOS]
+SET			[User_password] = HASHBYTES('SHA2_256',@User_Password)	
+WHERE [User_Nombre] = @id
+
+END
+
+UPDATE [PMS].[CLIENTES]      
+Set                   
+           [Dni_Cliente]     =  @Dni_Cliente     
+           ,[Apellido]        =  @Apellido     
+           ,[Nombre]          =  @Nombre     
+           ,[FechaNacimiento] =  @FechaNacimiento     
+           ,[Mail]            =  @Mail     
+           ,[DomCalle]        =  @DomCalle     
+           ,[NroCalle]        =  @NroCalle     
+           ,[Piso]            =  @Piso     
+           ,[Depto]           =  @Depto     
+           ,[Cod_Postal]	  =  @Cod_Postal
+		   ,[Tipo_Doc]		  =  @Tipo_Dni
+		   ,[Telefono]        =  @Telefono    
+where [Id_Cliente]		=	@id  
+   
+end
+go
+
+create procedure PMS.MODIFICAION_USUARIO_EMPRESA
+			@User_Nombre nvarchar(255)
+			,@User_Password binary(32)
+           ,@Cuit_Empresa nvarchar(50)
+           ,@RazonSocial nvarchar(255)
+           ,@FechaCreacion datetime
+           ,@Mail nvarchar(50)
+           ,@DomCalle nvarchar(100)
+           ,@NroCalle numeric(18,0)
+           ,@Piso numeric(18,0)
+           ,@Depto nvarchar(50)
+           ,@CodigoPostal nvarchar(50)
+		   ,@Telefono nvarchar(50)
+		   ,@Contacto nvarchar(50)
+		   --,@Localidad nvarchar(50)
+		   ,@Ciudad nvarchar(50)
+		   ,@Rubro nvarchar(50)
+		   ,@Id numeric(18,0)
+as begin
+
+declare @Id_Rubro1 numeric(18,0)
+
+IF not EXISTS (select * from PMS.USUARIOS u  WHERE @id = u.Id_Usuario)
+ BEGIN
+    RAISERROR ('No user', 16, 1)
+ END
+ IF EXISTS (select * from PMS.EMPRESAS e  WHERE @RazonSocial = e.RazonSocial and @id <> e.Id_empresa)
+ BEGIN
+    RAISERROR ('Duplicate RazonSocial', 16, 1)
+ END
+ IF EXISTS (select * from PMS.EMPRESAS e  WHERE @Cuit_Empresa = e.Cuit_Empresa and @id <> e.Id_empresa)
+ BEGIN
+    RAISERROR ('Duplicate Cuit', 16, 1)
+ END
+ IF EXISTS (select * from PMS.EMPRESAS e  WHERE @Mail = e.Mail and @id <> e.Id_empresa)
+ BEGIN
+    RAISERROR ('Duplicate Mail', 16, 1)
+ END
+
+
+IF @User_Password IS NOT NULL
+BEGIN UPDATE [PMS].[USUARIOS]
+SET			[User_password] = HASHBYTES('SHA2_256',@User_Password)   	
+WHERE [User_Nombre] = @Id
+
+END
+
+
+
+DECLARE @Id_Rubro numeric(18,0);
+set @Id_Rubro1=(select Id_Rubro from PMS.RUBROS where Descripcion = @Rubro);
+
+UPDATE [PMS].[EMPRESAS]		
+SET			[Cuit_Empresa]  = @Cuit_Empresa        
+           ,[RazonSocial]   = @RazonSocial      
+           ,[Mail]          = @FechaCreacion      
+           ,[DomCalle]      = @Mail      
+           ,[NroCalle]      = @DomCalle      
+           ,[Piso]          = @NroCalle      
+           ,[Depto]         = @Piso      
+           ,[CodigoPostal]	= @Depto
+		   ,[NombreContacto]= @CodigoPostal
+		   ,[Ciudad]		= @Contacto
+		   ,[Telefono]		= @Telefono
+		   ,[Id_Rubro]	=	@Id_Rubro
+where [Id_Empresa]      =     @id 		   
+		          			
+   
 end
 go
 
@@ -1070,7 +1199,7 @@ CREATE PROCEDURE PMS.ALTA_COMPRAS
 AS BEGIN
 if (select top 1 Stock from PMS.PUBLICACIONES where Id_Publicacion=@Id_Publicacion) < @Cantidad
 begin
-;throw 50999,'cantidad a comprar mayor a stock!!!!',1;
+;throw 50999,'cantidad a comprar mayor a stock',1;
 end
 else if @Id_Cliente_Comprador=(select Id_Usuario from PMS.PUBLICACIONES where Id_Publicacion=@Id_Publicacion)
 begin
@@ -1122,32 +1251,31 @@ create procedure PMS.ALTA_OFERTAS
            ,@Id_Cliente numeric(18,0)
 		   ,@id numeric(18,0) output
 as begin
-	if @monto<(select max(monto)from OFERTAS where Id_Publicacion=@Id_Publicacion)
-	begin
-		; throw 50999,'monto menor',1;
-	end
-	else if @Id_Cliente=(select Id_usuario from PUBLICACIONES where Id_Publicacion=@Id_Publicacion)
-	begin
-		; throw 50999,'comprador no puede ser el vendedor',1;
-	end
-	else if 2>(select count(Id_Compra) from PMS.COMPRAS where Id_Cliente_Comprador=@Id_Cliente and Id_Calificacion is null)
-	begin
-		; throw 50999,'3 compras sin calificar',1;
-	end
-	else
-	begin
-		INSERT INTO [PMS].[OFERTAS]
-				   ([Fecha]
-				   ,[Monto]
-				   ,[Id_Publicacion]
-				   ,[Id_Cliente])
-			 VALUES
-				   (@Fecha
-				   ,@Monto
-				   ,@Id_Publicacion
-				   ,@Id_Cliente);
-		UPDATE PMS.PUBLICACIONES SET Precio = @Monto WHERE Id_Publicacion=@Id_Publicacion;
-	end
+if @monto<(select max(monto)from OFERTAS where Id_Publicacion=@Id_Publicacion)
+begin
+; throw 50999,'monto menor',1;
+end
+else if @Id_Cliente=(select Id_usuario from PUBLICACIONES where Id_Publicacion=@Id_Publicacion)
+begin
+; throw 50999,'comprador no puede ser el vendedor',1;
+end
+else if 2>(select count(Id_Compra) from PMS.COMPRAS where Id_Cliente_Comprador=@Id_Cliente and Id_Calificacion is null)
+begin
+; throw 50999,'3 compras sin calificar',1;
+end
+else
+begin
+INSERT INTO [PMS].[OFERTAS]
+           ([Fecha]
+           ,[Monto]
+           ,[Id_Publicacion]
+           ,[Id_Cliente])
+     VALUES
+           (@Fecha
+           ,@Monto
+           ,@Id_Publicacion
+           ,@Id_Cliente)
+end
 end
 set @id=(select max(Id_Oferta) from PMS.OFERTAS)
 GO
@@ -1239,12 +1367,8 @@ DECLARE @MONTO numeric(18,2)
 DECLARE @Id_Compra numeric(18,0)
 
 DECLARE db_cursor CURSOR FOR  
-	select p.Id_Publicacion,o.Monto,o.Id_Cliente 
-	from PMS.PUBLICACIONES p 
-	LEFT JOIN PMS.OFERTAS o ON p.Id_Publicacion=o.Id_Publicacion
-	where p.Id_Tipo=2 AND p.FechaVencimiento<@Fecha AND p.Id_Estado = 1
-	AND o.Monto IN (SELECT TOP 1 MAX(Monto) FROM PMS.OFERTAS WHERE Id_Publicacion = p.Id_Publicacion)
-
+select p.Id_Publicacion,o.Monto,o.Id_Cliente from PMS.PUBLICACIONES p join PMS.OFERTAS o ON p.Id_Publicacion=o.Id_Publicacion
+ where p.Id_Tipo=2 and p.FechaVencimiento<@Fecha
 OPEN db_cursor   
 FETCH NEXT FROM db_cursor INTO @ID_PUBLICACION,@MONTO,@ID_CLIENTE
 
@@ -1254,7 +1378,6 @@ EXECUTE PMS.ALTA_COMPRAS 1,@Fecha,@ID_CLIENTE,@ID_PUBLICACION,@Id_Compra output
 update PMS.PUBLICACIONES
 set Id_Estado=4
 where Id_Publicacion=@ID_PUBLICACION;
-FETCH NEXT FROM db_cursor INTO @ID_PUBLICACION,@MONTO,@ID_CLIENTE
 END
 END
 GO
@@ -1265,30 +1388,12 @@ AFTER INSERT
 AS
 BEGIN
 DECLARE @NUMERO numeric(18,0)
-SET @NUMERO =(select max(Numero)from FACTURAS) +1
+SET @NUMERO =(select max(Numero)from FACTURAS) 
 DECLARE @FECHA datetime,@ID numeric(18,0)
 select @FECHA=Fecha,@ID=Id_Publicacion from inserted;
 DECLARE @TOTAL numeric(18,0)
-select @TOTAL=Precio from VISIBILIDADES WHERE Id_Visibilidad=(select Id_Visibilidad from PMS.PUBLICACIONES where Id_Publicacion = (select Id_Publicacion from inserted))
-EXEC PMS.ALTA_FACTURA @NUMERO,@FECHA,@TOTAL,1,@TOTAL,1,@ID,'Comision por Publicacion'
-END
-GO
-
-CREATE TRIGGER ALTA_FACTURA_VENTA
-ON PMS.COMPRAS
-AFTER INSERT
-AS
-BEGIN 
-DECLARE @NUMERO numeric(18,0)
-SET @NUMERO =(select max(Numero)from FACTURAS)+1
-DECLARE @PORCENTAJE numeric(18,0)
-DECLARE @ENVIO numeric(18,0)
-select @PORCENTAJE= Porcentaje,@ENVIO=isnull(Costo_Envio,0) from PMS.VISIBILIDADES WHERE Id_Visibilidad=(select Id_Visibilidad from PUBLICACIONES where Id_Publicacion = (select Id_Publicacion from inserted))
-DECLARE @FECHA datetime,@TOTAL numeric(18,0),@MONTO numeric(18,0),@CANTIDAD numeric(18,0),@ID numeric(18,0)
-select @FECHA=Fecha,@TOTAL=Monto*@PORCENTAJE+@ENVIO,@MONTO=Monto,@CANTIDAD=Cantidad,@ID=Id_Publicacion from inserted;
-SET @TOTAL = @TOTAL * @CANTIDAD;
-SET @MONTO = @MONTO * @PORCENTAJE;
-EXEC PMS.ALTA_FACTURA @NUMERO ,@FECHA,@TOTAL,1,@MONTO,@CANTIDAD,@ID,'Comision por venta'
+select @TOTAL=Precio from VISIBILIDADES WHERE Id_Visibilidad=(select Id_Visibilidad from PUBLICACIONES where Id_Publicacion = (select Id_Publicacion from inserted))
+EXEC PMS.ALTA_FACTURA @NUMERO,@FECHA,@TOTAL,0,0,@ID,'Comision por Publicacion'
 END
 GO
 

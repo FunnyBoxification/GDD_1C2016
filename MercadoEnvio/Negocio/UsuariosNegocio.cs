@@ -7,6 +7,8 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Data;
 using MercadoEN;
+using System.Configuration;
+using System.Collections.Specialized;
 
 namespace MercadoNegocio
 {
@@ -26,17 +28,19 @@ namespace MercadoNegocio
             {
                 var dt = new DataTable();
                 DBConn.openConnection();
-                String sqlRequest;
-                sqlRequest = "SELECT  u.Habilitado, u.Id_Usuarios as \"Código Usuario\", u.User_Nombre as \"Nombre Usuario\", e.RAzonSocial as \"Razon Social\", e.Cuit_Empresa as \"CUIT\", e.Mail, e.DomCalle as \"Domicilio\", e.NroCalle as \"Numero\", e.Piso, ";
-                sqlRequest += "e.CodigoPostal as \"Código Postal\", e.Telefono, e.Contacto, ";
-                sqlRequest += "(select r.Descripcion FROM PMS.RUBROS r where r.Id_Rubro = e.Id_Rubro) as \"Rubro\" ";
-                sqlRequest += " FROM PMS.USUARIOS u, PMS.EMPRESAS e";
-                sqlRequest += " WHERE u.Id_Usuario = e.Id_Empresa ";
-                if (razonSocial != null && razonSocial != "") sqlRequest += " and e.RazonSocial = @razonSocial";
-                if (cuit != null && cuit != "") sqlRequest += " and e.Cuit_Empresa = @cuit";
-                if (email != null && email != "") sqlRequest += " and e.Mail = @email";
-                SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
-                if (razonSocial != null && razonSocial != "") command.Parameters.Add("@razonSocial", SqlDbType.NVarChar).Value = razonSocial;
+                String sqlRequest;                                                                                                                 // Id_Empresa			
+                sqlRequest = "SELECT  u.Habilitado, u.Id_Usuario as \"Código Usuario\", u.User_Nombre as \"Nombre Usuario\", ";                   // Cuit_Empresa		
+                sqlRequest += "e.RAzonSocial as \"Razon Social\", e.Cuit_Empresa as \"CUIT\", e.Mail, e.DomCalle as \"Calle\", ";              // RazonSocial			
+                sqlRequest += "e.NroCalle as \"Nro\", e.Piso, e.Depto, ";                                                                                // Mail				
+                sqlRequest += "e.CodigoPostal as \"Cod Postal\", e.Ciudad ,  e.Telefono, e.NombreContacto as \"Contacto\", ";                                                     // DomCalle			
+                sqlRequest += "(select r.Descripcion FROM PMS.RUBROS r where r.Id_Rubro = e.Id_Rubro) as \"Rubro\" , u.FechaCreacion as \"Fecha Creación\" ";                              // NroCalle			
+                sqlRequest += " FROM PMS.USUARIOS u, PMS.EMPRESAS e";                                                                              // Piso				
+                sqlRequest += " WHERE u.Id_Usuario = e.Id_Empresa ";                                                                               // Depto				
+                if (razonSocial != null && razonSocial != "") sqlRequest += " and e.RazonSocial = @razonSocial";                                   // CodigoPostal		
+                if (cuit != null && cuit != "") sqlRequest += " and e.Cuit_Empresa = @cuit";                                                       // Ciudad				
+                if (email != null && email != "") sqlRequest += " and e.Mail = @email";                                                            // NombreContacto		
+                SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);                                                                // Telefono			
+                if (razonSocial != null && razonSocial != "") command.Parameters.Add("@razonSocial", SqlDbType.NVarChar).Value = razonSocial;      // Id_Rubro			
                 if (cuit != null && cuit != "") command.Parameters.Add("@cuit", SqlDbType.NVarChar).Value = cuit;
                 if (email != null && email != "") command.Parameters.Add(" @email", SqlDbType.NVarChar).Value = email;
                
@@ -65,17 +69,19 @@ namespace MercadoNegocio
                 var dt = new DataTable();
                 DBConn.openConnection();
                 String sqlRequest;
-                sqlRequest = "SELECT u.Habilitado, u.Id_Usuario as \"Código Usuario\", u.User_Nombre as \"Nombre Usuario\", c.Nombre , c.Apellido, c.Dni_Cliente as \"DNI Cliente\", u.FechaNacimiento as \"Fecha Nacimiento\", c.Mail, c.DomCalle as \"Direccion\", c.NroCalle as \"Nro\", c.Piso, c.Cod_Postal as \"Cod Postal\", c.Telefono, c.FechaCreacion as \"Fecha Creación\"";
-                sqlRequest += " FROM PMS.USUARIOS u, PMS.Clientes c";
-                sqlRequest += " WHERE u.Id_Usuario = c.Id_Cliente ";
-                if (nombre != null && nombre != "") sqlRequest += " and c.Nombre = @nombre";
-                if (apellido != null && apellido != "") sqlRequest += " and c.Apellido = @apellido";
-                if (dni != null && dni != 0) sqlRequest += " and c.Dni_Cliente = @dni";
-                if (email != null && email != "") sqlRequest += " and c.Mail = @email";
-                SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
-                if (nombre != null && nombre != "") command.Parameters.Add("@nombre", SqlDbType.NVarChar).Value = nombre;
-                if (apellido != null && apellido != "") command.Parameters.Add("@apellido", SqlDbType.NVarChar).Value = apellido;
-                if (dni != null && dni != 0) command.Parameters.Add("@apellido", SqlDbType.Int).Value = dni;
+                sqlRequest = "SELECT u.Habilitado, u.Id_Usuario as \"Código Usuario\", u.User_Nombre as \"Nombre Usuario\", c.Nombre , c.Apellido, c.Tipo_Doc as \"Tipo Doc\" , ";//Id_Cliente		
+                sqlRequest += " c.Dni_Cliente as \"Documento\", c.FechaNacimiento as \"Fecha Nacimiento\", c.Mail, c.DomCalle as \"Calle\","; //Dni_Cliente		
+                sqlRequest += " c.NroCalle as \"Nro\", c.Piso, c.Depto, c.Cod_Postal as \"Cod Postal\", c.Telefono, u.FechaCreacion as \"Fecha Creación\"";  //Apellido		
+                sqlRequest += " FROM PMS.USUARIOS u, PMS.Clientes c";                                                                               //Nombre			
+                sqlRequest += " WHERE u.Id_Usuario = c.Id_Cliente ";                                                                                //FechaNacimiento	
+                if (nombre != null && nombre != "") sqlRequest += " and c.Nombre = @nombre";                                                        //Mail			
+                if (apellido != null && apellido != "") sqlRequest += " and c.Apellido = @apellido";                                                //DomCalle		
+                if (dni != null && dni != 0) sqlRequest += " and c.Dni_Cliente = @dni";                                                             //NroCalle		
+                if (email != null && email != "") sqlRequest += " and c.Mail = @email";                                                             //Piso			
+                SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);                                                                 //Depto			
+                if (nombre != null && nombre != "") command.Parameters.Add("@nombre", SqlDbType.NVarChar).Value = nombre;                           //Cod_Postal		
+                if (apellido != null && apellido != "") command.Parameters.Add("@apellido", SqlDbType.NVarChar).Value = apellido;                   //Tipo_Doc		
+                if (dni != null && dni != 0) command.Parameters.Add("@apellido", SqlDbType.Int).Value = dni;                                        //Telefono		
                 if (email != null && email != "") command.Parameters.Add(" @email", SqlDbType.NVarChar).Value = email;
 
                 using (SqlDataAdapter adapter = new SqlDataAdapter(command))
@@ -98,10 +104,11 @@ namespace MercadoNegocio
 
         public void ProcedureCliente(int tipo, int modo, int IdCod, string username, string password, string nombreRazon, string ApellidCui,
                                 string Doccto,string tiporub, string fechaCiud, string mail, string telef, string direcc,
-                                string nro, string piso, string dpto, string local)
+                                string nro, string piso, string dpto, string local, DateTime fechacreac)
         {
             try
             {
+                
                 var proc = "PMS.";
                 if(modo == 0)
                 {
@@ -125,15 +132,19 @@ namespace MercadoNegocio
                     {
                         cmd.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = IdCod;
                     }
-                    cmd.Parameters.Add("@Username", SqlDbType.VarChar).Value = username;
-                    cmd.Parameters.Add("¨@Password", SqlDbType.VarChar).Value = password;
+                    else
+                    {
+                        cmd.Parameters.Add("@FechaCreac", SqlDbType.DateTime).Value = fechacreac;
+                    }
+                    cmd.Parameters.Add("@User_nombre", SqlDbType.VarChar).Value = username;
+                    cmd.Parameters.Add("¨@user_Password", SqlDbType.VarChar).Value = password;
                     if(tipo == 0)
                     {                //Cliente    
                     cmd.Parameters.Add("@Nombre", SqlDbType.Int).Value = nombreRazon;
                     cmd.Parameters.Add("@Apellido", SqlDbType.VarChar).Value = ApellidCui;
-                    cmd.Parameters.Add("¨@Documento", SqlDbType.VarChar).Value = Doccto;
-                    cmd.Parameters.Add("@TipoDocumento", SqlDbType.VarChar).Value = tiporub;
-                    cmd.Parameters.Add("¨@FechaNac", SqlDbType.VarChar).Value = fechaCiud;
+                    cmd.Parameters.Add("¨@Dni_Cliente", SqlDbType.VarChar).Value = Doccto;
+                    cmd.Parameters.Add("@Tipo_Dni", SqlDbType.VarChar).Value = tiporub;
+                    cmd.Parameters.Add("¨@@FechaNacimiento", SqlDbType.DateTime).Value = Convert.ToDateTime(fechaCiud);
                     }else
                     { //empresa
                     cmd.Parameters.Add("@RazonSocial", SqlDbType.Int).Value = nombreRazon;
@@ -144,11 +155,12 @@ namespace MercadoNegocio
                     }
                     cmd.Parameters.Add("@Mail", SqlDbType.Int).Value = mail;
                     cmd.Parameters.Add("@Telefono", SqlDbType.VarChar).Value = telef;
-                    cmd.Parameters.Add("¨@Direccion", SqlDbType.VarChar).Value = direcc;
-                    cmd.Parameters.Add("@Nro", SqlDbType.VarChar).Value = nro;
+                    cmd.Parameters.Add("¨@DomCalle", SqlDbType.Int).Value = Convert.ToInt32(direcc);
+                    cmd.Parameters.Add("@NroCalle", SqlDbType.Int).Value = Convert.ToInt32(nro);
                     cmd.Parameters.Add("¨@Piso", SqlDbType.VarChar).Value = piso;
-                    cmd.Parameters.Add("@Departamento", SqlDbType.VarChar).Value = dpto;
-                    cmd.Parameters.Add("¨@Localidad", SqlDbType.VarChar).Value = local;
+                    cmd.Parameters.Add("@Depto", SqlDbType.VarChar).Value = dpto;
+                    cmd.Parameters.Add("@CodigoPostal", SqlDbType.VarChar).Value = local;
+                    //cmd.Parameters.Add("¨@Localidad", SqlDbType.VarChar).Value = local;
                     cmd.ExecuteNonQuery();
                 }
                 DBConn.closeConnection();
