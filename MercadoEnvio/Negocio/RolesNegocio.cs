@@ -28,7 +28,7 @@ namespace MercadoNegocio
             try
             {
                 DBConn.openConnection();
-                using (SqlCommand cmd = new SqlCommand("PMS.insertRo", DBConn.Connection))
+                using (SqlCommand cmd = new SqlCommand("PMS.ALTA_ROL", DBConn.Connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("Nombre", Nombre);

@@ -807,7 +807,7 @@ go
 
 create procedure PMS.ALTA_USUARIO_CLIENTE
 			@User_Nombre nvarchar(255)
-		   ,@User_Password binary(32)
+		   ,@User_Password nvarchar(255)
            ,@Dni_Cliente numeric(18,0)
 		   ,@Tipo_Dni nvarchar(50)
            ,@Apellido nvarchar(255)
@@ -818,7 +818,7 @@ create procedure PMS.ALTA_USUARIO_CLIENTE
            ,@NroCalle numeric(18,0)
            ,@Piso numeric(18,0)
            ,@Depto nvarchar(50)
-           ,@Cod_Postal nvarchar(50)
+           ,@CodigoPostal nvarchar(50)
 		   ,@Telefono nvarchar(50)
 		   --,@Localidad nvarchar(50)
 		   ,@FechaCreacion datetime
@@ -851,7 +851,7 @@ INSERT INTO [PMS].[USUARIOS]
 		   ,@FechaCreacion
            ,1
            ,0
-           ,null
+           ,1
            ,null)
 
 
@@ -881,7 +881,7 @@ INSERT INTO [PMS].[CLIENTES]
            ,@NroCalle
            ,@Piso
            ,@Depto
-           ,@Cod_Postal
+           ,@CodigoPostal
 		   ,@Tipo_Dni
 		   ,@Telefono)
 end
@@ -889,7 +889,7 @@ go
 
 create procedure PMS.ALTA_USUARIO_EMPRESA
 			@User_Nombre nvarchar(255)
-			,@User_Password binary(32)
+			,@User_Password nvarchar(255)
            ,@Cuit_Empresa nvarchar(50)
            ,@RazonSocial nvarchar(255)
            ,@FechaCreacion datetime
@@ -941,7 +941,7 @@ INSERT INTO [PMS].[USUARIOS]
 		   ,GETDATE()
            ,1
            ,0
-           ,null
+           ,1
            ,null)
 
 set @id=(select Id_usuario from PMS.USUARIOS where User_Nombre=@User_Nombre);
@@ -982,7 +982,7 @@ go
 
 create procedure PMS.MODIFICACION_USUARIO_CLIENTE
 			@User_Nombre nvarchar(255)
-		   ,@User_Password binary(32)
+		   ,@User_Password nvarchar(255)
            ,@Dni_Cliente numeric(18,0)
 		   ,@Tipo_Dni nvarchar(50)
            ,@Apellido nvarchar(255)
@@ -993,7 +993,7 @@ create procedure PMS.MODIFICACION_USUARIO_CLIENTE
            ,@NroCalle numeric(18,0)
            ,@Piso numeric(18,0)
            ,@Depto nvarchar(50)
-           ,@Cod_Postal nvarchar(50)
+           ,@CodigoPostal nvarchar(50)
 		   ,@Telefono nvarchar(50)
 		   --,@Localidad nvarchar(50)
 		   ,@FechaCreacion datetime
@@ -1031,7 +1031,7 @@ Set
            ,[NroCalle]        =  @NroCalle     
            ,[Piso]            =  @Piso     
            ,[Depto]           =  @Depto     
-           ,[Cod_Postal]	  =  @Cod_Postal
+           ,[Cod_Postal]	  =  @CodigoPostal
 		   ,[Tipo_Doc]		  =  @Tipo_Dni
 		   ,[Telefono]        =  @Telefono    
 where [Id_Cliente]		=	@id  
@@ -1039,9 +1039,9 @@ where [Id_Cliente]		=	@id
 end
 go
 
-create procedure PMS.MODIFICAION_USUARIO_EMPRESA
+create procedure PMS.MODIFICACION_USUARIO_EMPRESA
 			@User_Nombre nvarchar(255)
-			,@User_Password binary(32)
+			,@User_Password nvarchar(255)
            ,@Cuit_Empresa nvarchar(50)
            ,@RazonSocial nvarchar(255)
            ,@FechaCreacion datetime
