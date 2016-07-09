@@ -386,9 +386,9 @@ BEGIN
 		Oferta_Fecha,
 		Oferta_Monto,
 		Publicacion_Cod,
-		(SELECT Id_Usuario
-			   From PMS.USUARIOS
-			  WHERE Id_Usuario = Cli_Dni)		
+		(SELECT Id_Cliente
+			   From PMS.CLIENTES
+			  WHERE Dni_Cliente = Cli_Dni)		
 	FROM gd_esquema.Maestra WHERE Oferta_Monto IS NOT NULL;
 
 	INSERT INTO PMS.CALIFICACIONES
