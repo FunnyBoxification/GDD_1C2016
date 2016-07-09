@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using MercadoEN;
 using MercadoNegocio;
 
+
 namespace WindowsFormsApplication1.Calificar
 {
     public partial class Calificar : Form
@@ -27,9 +28,40 @@ namespace WindowsFormsApplication1.Calificar
             ;
             Calificacion calificacionNegocio =  new Calificacion(SqlServerDBConnection.instance);
 
-            dgvPendientes.DataSource = calificacionNegocio.GetComprasSinCalificar(user.userId);
+            int cantComprasRealizadas = 0;
+            int cantComprasSinCalificar = 0;
+            var dtComprasSinCalificar = new DataTable();
 
-            
+            dtComprasSinCalificar = calificacionNegocio.GetComprasSinCalificar(user.userId);
+            cantComprasSinCalificar = dtComprasSinCalificar.Rows.Count;
+            dgvPendientes.DataSource = dtComprasSinCalificar;
+
+            cantComprasRealizadas = calificacionNegocio.getCantidadDeCompras(user.userId);
+            lblComprasRealizadas.Text =  cantComprasRealizadas.ToString() + "  "  + "compras realizadas";
+
+            dgvUltimasCinco.DataSource = calificacionNegocio.getUltimasCincoCalificaciones(user.userId);
+
+
+            lblCompras1.Text = calificacionNegocio.getCantidadDeComprasConXEstrellas(user.userId, 1).ToString();
+            lblCompras2.Text = calificacionNegocio.getCantidadDeComprasConXEstrellas(user.userId, 2).ToString();
+            lblCompras3.Text = calificacionNegocio.getCantidadDeComprasConXEstrellas(user.userId, 3).ToString();
+            lblCompras4.Text = calificacionNegocio.getCantidadDeComprasConXEstrellas(user.userId, 4).ToString();
+            lblCompras5.Text = calificacionNegocio.getCantidadDeComprasConXEstrellas(user.userId, 5).ToString();
+
+
+            lblSubastas1.Text = calificacionNegocio.getCantidadDeSubastasConXEstrellas(user.userId, 1).ToString();
+            lblSubastas2.Text = calificacionNegocio.getCantidadDeSubastasConXEstrellas(user.userId, 2).ToString();
+            lblSubastas3.Text = calificacionNegocio.getCantidadDeSubastasConXEstrellas(user.userId, 3).ToString();
+            lblSubastas4.Text = calificacionNegocio.getCantidadDeSubastasConXEstrellas(user.userId, 4).ToString();
+            lblSubastas5.Text = calificacionNegocio.getCantidadDeSubastasConXEstrellas(user.userId, 5).ToString();
+
+
+            lblComprasCalificadas.Text = (cantComprasRealizadas - cantComprasSinCalificar).ToString();
+
+            lblCantSubastasSinCalificar.Text = calificacionNegocio.getCantidadDeSubastasSinCalificar(user.userId).ToString();
+
+
+
             
         }
 

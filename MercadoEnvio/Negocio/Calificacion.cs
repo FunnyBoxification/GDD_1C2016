@@ -24,7 +24,7 @@ namespace MercadoNegocio
             try
             {
                 DBConn.openConnection();
-                String sqlRequest = "select c.Monto,c.Cantidad,p.Descripcion,c.Fecha,p.Precio,r.Descripcion from PMS.COMPRAS c JOIN PMS.PUBLICACIONES p ON c.Id_Publicacion = p.Id_Publicacion join PMS.RUBROS r on p.Id_Rubro = r.Id_Rubro where c.Id_Cliente_Comprador = @id and c.Id_Calificacion is null";
+                String sqlRequest = "select c.Monto,c.Cantidad,p.Descripcion,c.Fecha,p.Precio,r.Descripcion from PMS.COMPRAS c JOIN PMS.PUBLICACIONES p ON c.Id_Publicacion = p.Id_Publicacion join PMS.RUBROS r on p.Id_Rubro = r.Id_Rubro   where c.Id_Cliente_Comprador = @id and c.Id_Calificacion is null";
 
                 SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
                 command.Parameters.Add("@id", SqlDbType.Int).Value = id;
@@ -105,5 +105,185 @@ namespace MercadoNegocio
                 throw (new Exception("Error en ObetenerRoles" + ex.Message));
             }
         }
+
+
+        public int getCantidadDeCompras(int userId)
+        {
+            try
+            {
+                DBConn.openConnection();
+                String sqlRequest = "SELECT COUNT(*) FROM PMS.Compras where Id_Cliente_Comprador =  @idCliente;";
+
+                SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
+                command.Parameters.Add("@idCliente", SqlDbType.Int).Value = userId;
+
+               
+
+                int result = (int)command.ExecuteScalar();
+                DBConn.closeConnection();
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                DBConn.closeConnection();               
+                throw new Exception("Error al obtener cantidad de compras : " + ex.Message);
+
+            }
+        }
+
+
+
+        public int getCantidadDeSubastasConXEstrellas(int clienteId, int cant)
+        {
+            try
+            {
+                DBConn.openConnection();
+                String sqlRequest = "SELECT COUNT(CA.Id_Calificacion) " +
+             " FROM PMS.CALIFICACIONES CA JOIN PMS.COMPRAS  CO on CO.Id_Calificacion = CA.Id_Calificacion" +
+                " and CO.Id_Cliente_Comprador = @clienteId AND ca.Cantidad_Estrellas = @cantEstrellas " +
+                "		JOIN PMS.PUBLICACIONES PU ON PU.Id_Publicacion  = CO.Id_Publicacion" +
+          " join PMS.TIPO_PUBLICACION TP ON TP.Id_Tipo = PU.Id_Tipo and TP.Descripcion like 'Subasta'";
+
+                SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
+                command.Parameters.Add("@clienteId", SqlDbType.Int).Value = clienteId;
+                command.Parameters.Add("@cantEstrellas", SqlDbType.Int).Value = cant;
+
+
+
+                int result = (int)command.ExecuteScalar();
+                DBConn.closeConnection();
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                DBConn.closeConnection();
+                throw new Exception("Error al obtener cantidad de compras : " + ex.Message);
+
+            }
+        }
+
+        public int getCantidadDeSubastasSinCalificar(int clienteId)
+        {
+            try
+            {
+                DBConn.openConnection();
+                String sqlRequest = "select COUNT(c.Id_Compra) from " +
+                " PMS.COMPRAS c JOIN PMS.PUBLICACIONES p ON c.Id_Publicacion = p.Id_Publicacion join PMS.RUBROS r on p.Id_Rubro = r.Id_Rubro" +
+            " JOIN PMS.TIPO_PUBLICACION TP ON TP.Id_Tipo = P.Id_Tipo AND TP.Descripcion LIKE 'Subasta'" +
+              "   where c.Id_Cliente_Comprador = @clienteId and c.Id_Calificacion is null";
+
+                SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
+                command.Parameters.Add("@clienteId", SqlDbType.Int).Value = clienteId;
+
+
+
+
+                int result = (int)command.ExecuteScalar();
+                DBConn.closeConnection();
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                DBConn.closeConnection();
+                throw new Exception("Error al obtener cantidad de subastas : " + ex.Message);
+
+            }
+        }
+
+
+        public int getCantidadDeComprasSinCalificar(int clienteId)
+        {
+            try
+            {
+                DBConn.openConnection();
+                String sqlRequest =  "select COUNT(c.Id_Compra) from " + 
+                " PMS.COMPRAS c JOIN PMS.PUBLICACIONES p ON c.Id_Publicacion = p.Id_Publicacion join PMS.RUBROS r on p.Id_Rubro = r.Id_Rubro" +
+            " JOIN PMS.TIPO_PUBLICACION TP ON TP.Id_Tipo = P.Id_Tipo AND TP.Descripcion LIKE 'Compra Inmediata'" + 
+              "   where c.Id_Cliente_Comprador = @clienteId and c.Id_Calificacion is null";
+
+                SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
+                command.Parameters.Add("@clienteId", SqlDbType.Int).Value = clienteId;
+                
+
+
+
+                int result = (int)command.ExecuteScalar();
+                DBConn.closeConnection();
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                DBConn.closeConnection();
+                throw new Exception("Error al obtener cantidad de compras : " + ex.Message);
+
+            }
+        }
+
+
+        public int getCantidadDeComprasConXEstrellas(int clienteId, int cant)
+        {
+            try
+            {
+                DBConn.openConnection();
+                String sqlRequest = "SELECT COUNT(CA.Id_Calificacion) " + 
+             " FROM PMS.CALIFICACIONES CA JOIN PMS.COMPRAS  CO on CO.Id_Calificacion = CA.Id_Calificacion"+
+		        " and CO.Id_Cliente_Comprador = @clienteId AND ca.Cantidad_Estrellas = @cantEstrellas "+
+                "		JOIN PMS.PUBLICACIONES PU ON PU.Id_Publicacion  = CO.Id_Publicacion" + 
+		  " join PMS.TIPO_PUBLICACION TP ON TP.Id_Tipo = PU.Id_Tipo and TP.Descripcion like 'Compra Inmediata'";
+
+                SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
+                command.Parameters.Add("@clienteId", SqlDbType.Int).Value = clienteId;
+                command.Parameters.Add("@cantEstrellas", SqlDbType.Int).Value = cant;
+
+
+
+                int result = (int)command.ExecuteScalar();
+                DBConn.closeConnection();
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                DBConn.closeConnection();
+                throw new Exception("Error al obtener cantidad de compras : " + ex.Message);
+
+            }
+        }
+
+
+        public DataTable getUltimasCincoCalificaciones(int clienteId)
+        {
+            var dt = new DataTable();
+
+            try
+            {
+                DBConn.openConnection();
+                String sqlRequest = "SELECT TOP 5 CA.Cantidad_Estrellas As Estrellas, CA.Descripcion" +
+                 " FROM PMS.COMPRAS CO JOIN PMS.CALIFICACIONES CA on CO.Id_Calificacion = CA.Id_Calificacion" +
+                " JOIN PMS.CLIENTES CL ON CL.Id_Cliente = @clienteId";
+
+                SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
+                command.Parameters.Add("@clienteId", SqlDbType.Int).Value = clienteId;
+
+                using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                {
+                    adapter.Fill(dt);
+                    command.Dispose();
+                    DBConn.closeConnection();
+                    return dt;
+                }
+            }
+            catch (Exception ex)
+            {
+                DBConn.closeConnection();
+                throw (new Exception("Error en Calificaciones" + ex.Message));
+            }
+        }
+    
+    
     }
 }
