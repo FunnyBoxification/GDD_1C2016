@@ -136,7 +136,7 @@ namespace MercadoNegocio
                     {
                         cmd.Parameters.Add("@FechaCreacion", SqlDbType.DateTime).Value = fechacreac;
                     }
-                    cmd.Parameters.Add("@User_nombre", SqlDbType.VarChar).Value = username;
+                    cmd.Parameters.Add("@User_Nombre", SqlDbType.VarChar).Value = username;
                     cmd.Parameters.Add("@User_Password", SqlDbType.VarChar).Value = password;
                     if(tipo == 0)
                     {                //Cliente    
@@ -160,6 +160,9 @@ namespace MercadoNegocio
                     cmd.Parameters.Add("@Piso", SqlDbType.Int).Value = Convert.ToInt32(piso);
                     cmd.Parameters.Add("@Depto", SqlDbType.VarChar).Value = dpto;
                     cmd.Parameters.Add("@CodigoPostal", SqlDbType.VarChar).Value = local;
+                    var returnParameter = cmd.Parameters.Add("@id", SqlDbType.Int);
+                    //returnParameter.Value = 0;
+                    returnParameter.Direction = ParameterDirection.Output;
                     //cmd.Parameters.Add("¨@Localidad", SqlDbType.VarChar).Value = local;
                     cmd.ExecuteNonQuery();
                 }
