@@ -81,8 +81,8 @@ namespace MercadoNegocio
                 SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);                                                                 //Depto			
                 if (nombre != null && nombre != "") command.Parameters.Add("@nombre", SqlDbType.NVarChar).Value = nombre;                           //Cod_Postal		
                 if (apellido != null && apellido != "") command.Parameters.Add("@apellido", SqlDbType.NVarChar).Value = apellido;                   //Tipo_Doc		
-                if (dni != null && dni != 0) command.Parameters.Add("@apellido", SqlDbType.Int).Value = dni;                                        //Telefono		
-                if (email != null && email != "") command.Parameters.Add(" @email", SqlDbType.NVarChar).Value = email;
+                if (dni != null && dni != 0) command.Parameters.Add("@dni", SqlDbType.Int).Value = dni;                                        //Telefono		
+                if (email != null && email != "") command.Parameters.Add("@email", SqlDbType.NVarChar).Value = email;
 
                 using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                 {
