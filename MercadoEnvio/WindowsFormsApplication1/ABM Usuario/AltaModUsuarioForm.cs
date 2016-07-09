@@ -19,6 +19,7 @@ namespace WindowsFormsApplication1.ABM_Usuario
 
         String tipo;
         private UsuariosNegocio UsuNegocio;
+        int modo;
         private UsuariosNegocio usuNegocio;
 
         public int IdCod { get; set; }
@@ -47,6 +48,7 @@ namespace WindowsFormsApplication1.ABM_Usuario
                             string direccion, string nro, string piso, string dpto,  string CodPostal)
         {
             InitializeComponent();
+            this.UsuNegocio = usuNegocio;
             Tipo = tipo;
             if (Tipo == 1)
             {
@@ -98,11 +100,13 @@ namespace WindowsFormsApplication1.ABM_Usuario
 
         private void btnGrabar_Click(object sender, EventArgs e)
         {
-            int modo;
-            if (IdCod != null) {modo = 0; }else{ modo = 1;};
-              
-            if (Tipo == 0)
-            {                
+            try
+            {
+                
+                if (IdCod != null) { modo = 0; } else { modo = 1; };
+
+                if (Tipo == 0)
+                {
                     UsuNegocio.ProcedureCliente(Tipo, modo, IdCod,
                                            txbUsername.Text,
                                            txbPassw.Text,
@@ -119,28 +123,33 @@ namespace WindowsFormsApplication1.ABM_Usuario
                                            datos1.Dpto,
                                            datos1.Localidad,
                                            DateTime.Parse(ConfigurationManager.AppSettings["FechaDelDia"]));
-                
-               
-                
+
+
+
+                }
+                else
+                {
+                    UsuNegocio.ProcedureCliente(Tipo, modo, IdCod,
+                                             txbUsername.Text,
+                                             txbPassw.Text,
+                                               datosEmpresa1.RazonSocial,
+                                               datosEmpresa1.Cuit,
+                                               datosEmpresa1.Contacto,
+                                               datosEmpresa1.Rubro,
+                                               datosEmpresa1.Ciudad,
+                                               datos1.Mail,
+                                               datos1.Telefono,
+                                               datos1.Direccion,
+                                               datos1.Nro,
+                                               datos1.Piso,
+                                               datos1.Dpto,
+                                               datos1.Localidad,
+                                               DateTime.Parse(ConfigurationManager.AppSettings["FechaDelDia"]));
+                }
             }
-            else
+            catch (Exception ex)
             {
-                UsuNegocio.ProcedureCliente(Tipo, modo, IdCod,
-                                         txbUsername.Text,
-                                         txbPassw.Text,
-                                           datosEmpresa1.RazonSocial,
-                                           datosEmpresa1.Cuit,
-                                           datosEmpresa1.Contacto ,
-                                           datosEmpresa1.Rubro,
-                                           datosEmpresa1.Ciudad ,
-                                           datos1.Mail,
-                                           datos1.Telefono,
-                                           datos1.Direccion ,
-                                           datos1.Nro ,
-                                           datos1.Piso ,
-                                           datos1.Dpto ,
-                                           datos1.Localidad,
-                                           DateTime.Parse(ConfigurationManager.AppSettings["FechaDelDia"]));
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -155,6 +164,11 @@ namespace WindowsFormsApplication1.ABM_Usuario
             {
                 this.Text = "Alta Empresa";
                 datosCliente1.Visible = false;
+            }
+
+            if (IdCod != null)
+            {
+                txbUsername.Enabled = false;
             }
         }
 

@@ -110,7 +110,7 @@ namespace MercadoNegocio
             {
                 
                 var proc = "PMS.";
-                if(modo == 0)
+                if(modo == 1)
                 {
                     proc += "ALTA_USUARIO_";
                 }else
@@ -128,7 +128,7 @@ namespace MercadoNegocio
                 using (SqlCommand cmd = new SqlCommand(proc, DBConn.Connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    if (modo == 1)
+                    if (modo == 0)
                     {
                         cmd.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = IdCod;
                     }
@@ -137,27 +137,27 @@ namespace MercadoNegocio
                         cmd.Parameters.Add("@FechaCreac", SqlDbType.DateTime).Value = fechacreac;
                     }
                     cmd.Parameters.Add("@User_nombre", SqlDbType.VarChar).Value = username;
-                    cmd.Parameters.Add("¨@user_Password", SqlDbType.VarChar).Value = password;
+                    cmd.Parameters.Add("¨@User_Password", SqlDbType.VarChar).Value = password;
                     if(tipo == 0)
                     {                //Cliente    
-                    cmd.Parameters.Add("@Nombre", SqlDbType.Int).Value = nombreRazon;
+                    cmd.Parameters.Add("@Nombre", SqlDbType.VarChar).Value = nombreRazon;
                     cmd.Parameters.Add("@Apellido", SqlDbType.VarChar).Value = ApellidCui;
                     cmd.Parameters.Add("¨@Dni_Cliente", SqlDbType.VarChar).Value = Doccto;
                     cmd.Parameters.Add("@Tipo_Dni", SqlDbType.VarChar).Value = tiporub;
                     cmd.Parameters.Add("¨@@FechaNacimiento", SqlDbType.DateTime).Value = Convert.ToDateTime(fechaCiud);
                     }else
                     { //empresa
-                    cmd.Parameters.Add("@RazonSocial", SqlDbType.Int).Value = nombreRazon;
+                    cmd.Parameters.Add("@RazonSocial", SqlDbType.VarChar).Value = nombreRazon;
                     cmd.Parameters.Add("@Cuit_Empresa", SqlDbType.VarChar).Value = ApellidCui;
                     cmd.Parameters.Add("¨@Contacto", SqlDbType.VarChar).Value = Doccto;
                     cmd.Parameters.Add("@Rubro", SqlDbType.VarChar).Value = tiporub;
                     cmd.Parameters.Add("¨@Ciudad", SqlDbType.VarChar).Value = fechaCiud;
                     }
-                    cmd.Parameters.Add("@Mail", SqlDbType.Int).Value = mail;
+                    cmd.Parameters.Add("@Mail", SqlDbType.VarChar).Value = mail;
                     cmd.Parameters.Add("@Telefono", SqlDbType.VarChar).Value = telef;
-                    cmd.Parameters.Add("¨@DomCalle", SqlDbType.Int).Value = Convert.ToInt32(direcc);
+                    cmd.Parameters.Add("¨@DomCalle", SqlDbType.VarChar).Value =direcc;
                     cmd.Parameters.Add("@NroCalle", SqlDbType.Int).Value = Convert.ToInt32(nro);
-                    cmd.Parameters.Add("¨@Piso", SqlDbType.VarChar).Value = piso;
+                    cmd.Parameters.Add("¨@Piso", SqlDbType.Int).Value = Convert.ToInt32(piso);
                     cmd.Parameters.Add("@Depto", SqlDbType.VarChar).Value = dpto;
                     cmd.Parameters.Add("@CodigoPostal", SqlDbType.VarChar).Value = local;
                     //cmd.Parameters.Add("¨@Localidad", SqlDbType.VarChar).Value = local;
@@ -172,6 +172,13 @@ namespace MercadoNegocio
 
             }
         }
+        public static object DbNullIfNull(object obj)
+        {
+            return obj != null ? obj : DBNull.Value;
+        }
        
+
     }
+    
+     
 }
