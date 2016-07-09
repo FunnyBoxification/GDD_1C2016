@@ -1368,7 +1368,7 @@ DECLARE @Id_Compra numeric(18,0)
 
 DECLARE db_cursor CURSOR FOR  
 select p.Id_Publicacion,o.Monto,o.Id_Cliente from PMS.PUBLICACIONES p join PMS.OFERTAS o ON p.Id_Publicacion=o.Id_Publicacion
- where p.Id_Tipo=2 and p.FechaVencimiento<@Fecha
+ where p.Id_Tipo=2 and p.FechaVencimiento<@Fecha AND Id_Estado <> 4
 OPEN db_cursor   
 FETCH NEXT FROM db_cursor INTO @ID_PUBLICACION,@MONTO,@ID_CLIENTE
 
@@ -1378,6 +1378,7 @@ EXECUTE PMS.ALTA_COMPRAS 1,@Fecha,@ID_CLIENTE,@ID_PUBLICACION,@Id_Compra output
 update PMS.PUBLICACIONES
 set Id_Estado=4
 where Id_Publicacion=@ID_PUBLICACION;
+FETCH NEXT FROM db_cursor INTO @ID_PUBLICACION,@MONTO,@ID_CLIENTE
 END
 END
 GO
