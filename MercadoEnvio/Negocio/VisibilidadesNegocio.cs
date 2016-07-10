@@ -32,7 +32,7 @@ namespace MercadoNegocio
                 DBConn.openConnection();
                 String sqlRequest;
                 sqlRequest = "SELECT Id_Visibilidad, Descripcion, Porcentaje, Precio FROM PMS.VISIBILIDADES";
-                sqlRequest += " WHERE 1 = 1 ";
+                sqlRequest += " WHERE Habilitado = 1 ";
                 if (codigo != null && codigo != "") sqlRequest += " and Id_Visibilidad LIKE  @idVisib";
                 if (desc != null && desc != "") sqlRequest += " and Descripcion LIKE @Desc";
                 if (porc != null && porc != "") sqlRequest += " and Porcentaje LIKE  @Porc";
@@ -80,7 +80,7 @@ namespace MercadoNegocio
                 using (SqlCommand cmd = new SqlCommand("PMS.BAJA_VISIBILIDAD", DBConn.Connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add("@user", SqlDbType.VarChar).Value = IdVisib;
+                    cmd.Parameters.Add("@Id_Visibilidad", SqlDbType.VarChar).Value = IdVisib;
                     cmd.ExecuteNonQuery();
                 }
                 DBConn.closeConnection();
@@ -126,7 +126,7 @@ namespace MercadoNegocio
                 using (SqlCommand cmd = new SqlCommand("PMS.MODIFICACION_VISIBILIDAD", DBConn.Connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add("@Id_Visibilidad", SqlDbType.VarChar).Value = descripcion;
+                    cmd.Parameters.Add("@Id_Visibilidad", SqlDbType.Int).Value = IdCod;
                     cmd.Parameters.Add("@Descripcion", SqlDbType.VarChar).Value = descripcion;
                     cmd.Parameters.Add("@porcentaje", SqlDbType.Decimal).Value = porcentaje;
                     cmd.Parameters.Add("@precio", SqlDbType.Decimal).Value = precio;

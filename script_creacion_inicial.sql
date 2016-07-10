@@ -1517,15 +1517,21 @@ CREATE PROCEDURE PMS.ALTA_VISIBILIDAD
                               
 AS 
 BEGIN 
+
+DECLARE @id integer
      SET NOCOUNT ON 
 
+SET @id = (SELECT top 1 Id_Visibilidad FROM PMS.VISIBILIDADES order by  Id_Visibilidad desc) 
+
 INSERT INTO [PMS].[VISIBILIDADES]
-           ([Descripcion]
+           ([Id_Visibilidad]
+		   ,[Descripcion]
            ,[Porcentaje]
            ,[Precio]
            ,[Habilitado])           
      VALUES
-           (@Descripcion
+           (@id +1
+		   ,@Descripcion
            ,@porcentaje
            ,@precio
 		   ,1)
