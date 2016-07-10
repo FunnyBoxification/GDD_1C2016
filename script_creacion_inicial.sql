@@ -315,12 +315,12 @@ BEGIN
 	
 	
 
-	INSERT INTO PMS.USUARIOS (User_Nombre, Habilitado, User_Password,FechaCreacion)
+	INSERT INTO PMS.USUARIOS (User_Nombre, Habilitado, User_Password,FechaCreacion,Primera_Vez)
 	SELECT RazonSocial, 1, HASHBYTES('SHA2_256','1234'),
 	(select TOP 1 Publ_Empresa_Fecha_Creacion 
 	   from gd_esquema.Maestra
 	  where Publ_Empresa_Cuit = Cuit_Empresa
-		and Publ_Empresa_Fecha_Creacion is not null )
+		and Publ_Empresa_Fecha_Creacion is not null ),0
 	FROM PMS.EMPRESAS
 	ORDER BY Id_Empresa;
 	
@@ -520,10 +520,13 @@ FETCH NEXT FROM CURSOR_REPUTACION_USUARIOS INTO @ID_USER
 WHILE @@FETCH_STATUS = 0
 BEGIN
 	SET @REPUTACION =(
-		(select SUM(Cantidad_Estrellas)
+		(
+		select SUM(Cantidad_Estrellas)
 		from PMS.CALIFICACIONES 
-		WHERE Id_Calificacion IN (select Id_Calificacion from PMS.COMPRAS where Id_Publicacion IN (select Id_Publicacion FROM PMS.PUBLICACIONES where Id_Usuario = @ID_USER))) + 
-		(select ISNULL(Reputacion,0) from PMS.USUARIOS where Id_Usuario=@ID_USER))/(select count(Id_Calificacion) from PMS.CALIFICACIONES where Id_Calificacion IN (select Id_Calificacion from PMS.COMPRAS where Id_Publicacion IN (select Id_Publicacion FROM PMS.PUBLICACIONES where Id_Usuario = @ID_USER)))
+		WHERE Id_Calificacion IN 
+			(select Id_Calificacion from PMS.COMPRAS where Id_Publicacion IN (select Id_Publicacion FROM PMS.PUBLICACIONES where Id_Usuario = @ID_USER))))
+		
+		/ (select count(Id_Calificacion) from PMS.CALIFICACIONES where Id_Calificacion IN (select Id_Calificacion from PMS.COMPRAS where Id_Publicacion IN (select Id_Publicacion FROM PMS.PUBLICACIONES where Id_Usuario = @ID_USER)))
 
 	UPDATE PMS.USUARIOS
 	set Reputacion=@REPUTACION
