@@ -1416,22 +1416,32 @@ UPDATE [PMS].[COMPRAS]
  WHERE Id_Compra=@Id_Compra
 
 
- declare @aumentoReputacion int
+
  declare @idVendedor numeric(18,0)
  declare @cantidadDeCalificacionesRecibidas int
+ declare @cantidadDeEstrellasRecibidas int
+
 
  select @idVendedor = Id_Usuario from pms.PUBLICACIONES P  join pms.COMPRAS C on P.Id_Publicacion = C.Id_Publicacion and C.Id_Compra = @Id_Compra  
 
- select COUNT(Ca.Id_Calificacion) from pms.USUARIOS U join pms.PUBLICACIONES P on U.Id_Usuario =  P.Id_Usuario AND U.Id_Usuario =95
+  select @cantidadDeCalificacionesRecibidas= COUNT(Ca.Id_Calificacion) from pms.USUARIOS U join pms.PUBLICACIONES P on U.Id_Usuario =  P.Id_Usuario AND U.Id_Usuario =@idVendedor
 JOIN pms.COMPRAS CO 
 		on CO.Id_Publicacion = P.Id_Publicacion JOIN pms.CALIFICACIONES CA on CA.Id_Calificacion = CO.Id_Calificacion
 
 
-set @aumentoReputacion = @Cantidad_Estrellas / @cantidadDeCalificacionesRecibidas
+	 select @cantidadDeEstrellasRecibidas= SUM(Ca.Cantidad_Estrellas) from pms.USUARIOS U join pms.PUBLICACIONES P on U.Id_Usuario =  P.Id_Usuario AND U.Id_Usuario =@idVendedor
+JOIN pms.COMPRAS CO 
+		on CO.Id_Publicacion = P.Id_Publicacion JOIN pms.CALIFICACIONES CA on CA.Id_Calificacion = CO.Id_Calificacion
+	
+
+	select @cantidadDeEstrellasRecibidas = @cantidadDeEstrellasRecibidas + @Cantidad_Estrellas
+
+
 declare @reputacionActual int
 
 set @reputacionActual  = ISNULL((select Reputacion from pms.USUARIOS where Id_Usuario = @idVendedor),0)
- update pms.USUARIOS set Reputacion = @reputacionActual + @aumentoReputacion where Id_Usuario = @idVendedor
+ update pms.USUARIOS set Reputacion =  (@cantidadDeEstrellasRecibidas / @cantidadDeCalificacionesRecibidas) where Id_Usuario = @idVendedor
+
 
 
 END
