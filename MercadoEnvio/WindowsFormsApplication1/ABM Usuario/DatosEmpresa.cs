@@ -15,7 +15,7 @@ namespace WindowsFormsApplication1.ABM_Usuario
          public string RazonSocial { get{return tbxRazonSocial.Text;} set{tbxRazonSocial.Text = value;} }
          public string Cuit { get{return tbxCuit.Text;} set{tbxCuit.Text = value;} }
          public string Contacto { get{return tbxContacto.Text;} set{tbxContacto.Text = value;} }
-         public string Rubro { get{return  cbxRubro.SelectedText;} set{cbxRubro.SelectedText = value;} }
+         public string Rubro { get{return  cbxRubro.Text;} set{cbxRubro.SelectedText = value;} }
          public string Ciudad { get{return tbxCiudad.Text;} set{tbxCiudad.Text = value;} }
          public DataTable dtRubros { get ;  set;  }
         

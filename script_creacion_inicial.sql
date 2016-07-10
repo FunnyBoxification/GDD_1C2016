@@ -1038,7 +1038,7 @@ IF not EXISTS (select * from PMS.USUARIOS u  WHERE @Id_Usuario = u.Id_Usuario)
 IF @User_Password IS NOT NULL
 BEGIN UPDATE [PMS].[USUARIOS]
 SET			[User_password] = HASHBYTES('SHA2_256',@User_Password)	
-WHERE [User_Nombre] = @Id_Usuario
+WHERE [Id_Usuario] = @Id_Usuario
 
 END
 
@@ -1105,7 +1105,7 @@ IF not EXISTS (select * from PMS.USUARIOS u  WHERE @Id_Usuario = u.Id_Usuario)
 IF @User_Password IS NOT NULL
 BEGIN UPDATE [PMS].[USUARIOS]
 SET			[User_password] = HASHBYTES('SHA2_256',@User_Password)   	
-WHERE [User_Nombre] = @Id_Usuario
+WHERE [Id_Usuario] = @Id_Usuario
 
 END
 
@@ -1126,7 +1126,7 @@ SET			[Cuit_Empresa]  = @Cuit_Empresa
 		   ,[NombreContacto]= @Contacto
 		   ,[Ciudad]		= @Ciudad
 		   ,[Telefono]		= @Telefono
-		   ,[Id_Rubro]	=	@Id_Rubro
+		   ,[Id_Rubro]	=	@Id_Rubro1
 where [Id_Empresa]      =     @Id_Usuario 		   
 		          			
    

@@ -88,6 +88,11 @@ string mail = "";
 
         private void btnBuscar_Click(object sender, EventArgs e)
         {
+            Buscar();
+        }
+
+        private void Buscar()
+        {
             try
             {
                 usuNegocio = new UsuariosNegocio(instance = new SqlServerDBConnection());
@@ -98,14 +103,14 @@ string mail = "";
                 else
                 {
                     int dni;
-                    if(txbDniCuit.Text == ""){ dni = 0;}else{dni = Convert.ToInt32(txbDniCuit.Text);}
+                    if (txbDniCuit.Text == "") { dni = 0; } else { dni = Convert.ToInt32(txbDniCuit.Text); }
                     dgvUsuarios.DataSource = usuNegocio.BuscarClientes(txbNomRaz.Text, txbApellido.Text, dni, txbEmail.Text);
                 }
 
                 dgvUsuarios.Columns[0].Width = 60;
                 dgvUsuarios.Columns[0].HeaderText = "Hab";
 
-                foreach(DataGridViewRow row in dgvUsuarios.Rows)
+                foreach (DataGridViewRow row in dgvUsuarios.Rows)
                 {
                     if (Convert.ToDecimal(row.Cells[0].Value) == 1)
                     {
@@ -116,13 +121,13 @@ string mail = "";
                         row.Cells[0].Style.BackColor = Color.Green;
                     }
                 }
-    
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-              
+
         }
 
 
@@ -149,6 +154,7 @@ string mail = "";
             usuNegocio = new UsuariosNegocio(instance = new SqlServerDBConnection());
             var frm = new AltaModUsuarioForm(usuNegocio, cbxTipo.SelectedIndex);
             frm.Show();
+            Buscar();
             
         }
 
@@ -222,6 +228,7 @@ string mail = "";
                                                       CodPost);
                     frm.Show(); ;
                     //frm.Show();
+                    Buscar();
                 }
             }
             catch (Exception ex)

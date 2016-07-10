@@ -120,7 +120,7 @@ namespace WindowsFormsApplication1.ABM_Usuario
             try
             {
                 
-                if (IdCod != null && IdCod != 0) { modo = 0; } else { modo = 1; };
+                if (IdCod != null && IdCod != 0) { modo = 1; } else { modo = 0; };
 
                 if (Tipo == 0)
                 {
