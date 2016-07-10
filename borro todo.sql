@@ -23,9 +23,9 @@ GO
 	drop proc PMS.SUBASTAS_TERMIANDAS
 	drop proc PMS.upd_Rol
 	drop proc PMS.MODIFICACION_PUBLICACION
-	drop proc PMS.ALTA_VISBILIDAD
-	drop proc PMS.BAJA_VISBILIDAD
-	drop proc PMS.MODIFICACION_VISBILIDAD
+	drop proc PMS.ALTA_VISIBILIDAD
+	drop proc PMS.BAJA_VISIBILIDAD
+	drop proc PMS.MODIFICACION_VISIBILIDAD
 	drop proc PMS.habilitar_Rol
 	drop proc PMS.borrar_funcionalidades_rol
 	drop proc PMS.insertfuncionalidad

@@ -1025,11 +1025,11 @@ IF not EXISTS (select * from PMS.USUARIOS u  WHERE @Id_Usuario = u.Id_Usuario)
  BEGIN
     RAISERROR ('NO Existe usuario', 16, 1)
  END
- IF EXISTS (select * from PMS.CLIENTES c  WHERE @Dni_Cliente = c.Dni_Cliente)
+ IF EXISTS (select * from PMS.CLIENTES c  WHERE @Dni_Cliente = c.Dni_Cliente and @Id_Usuario <> c.Id_Cliente)
  BEGIN
-    RAISERROR ('Duplicate RazonSocial', 16, 1)
+    RAISERROR ('Duplicate DNI', 16, 1)
  END
- IF EXISTS (select * from PMS.CLIENTES c  WHERE @Mail = c.Mail)
+ IF EXISTS (select * from PMS.CLIENTES c  WHERE @Mail = c.Mail and @Id_Usuario <> c.Id_Cliente)
  BEGIN
     RAISERROR ('Duplicate Mail', 16, 1)
  END
@@ -1067,7 +1067,7 @@ create procedure PMS.MODIFICACION_USUARIO_EMPRESA
 			,@User_Password nvarchar(255)
            ,@Cuit_Empresa nvarchar(50)
            ,@RazonSocial nvarchar(255)
-           ,@FechaCreacion datetime
+           --,@FechaCreacion datetime
            ,@Mail nvarchar(50)
            ,@DomCalle nvarchar(100)
            ,@NroCalle numeric(18,0)
@@ -1117,14 +1117,14 @@ set @Id_Rubro1=(select Id_Rubro from PMS.RUBROS where Descripcion = @Rubro);
 UPDATE [PMS].[EMPRESAS]		
 SET			[Cuit_Empresa]  = @Cuit_Empresa        
            ,[RazonSocial]   = @RazonSocial      
-           ,[Mail]          = @FechaCreacion      
-           ,[DomCalle]      = @Mail      
-           ,[NroCalle]      = @DomCalle      
-           ,[Piso]          = @NroCalle      
-           ,[Depto]         = @Piso      
-           ,[CodigoPostal]	= @Depto
-		   ,[NombreContacto]= @CodigoPostal
-		   ,[Ciudad]		= @Contacto
+           ,[Mail]          = @Mail         
+           ,[DomCalle]      = @DomCalle    
+           ,[NroCalle]      = @NroCalle      
+           ,[Piso]          = @Piso        
+           ,[Depto]         = @Depto
+           ,[CodigoPostal]	= @CodigoPostal
+		   ,[NombreContacto]= @Contacto
+		   ,[Ciudad]		= @Ciudad
 		   ,[Telefono]		= @Telefono
 		   ,[Id_Rubro]	=	@Id_Rubro
 where [Id_Empresa]      =     @Id_Usuario 		   
@@ -1593,8 +1593,7 @@ end
 go
 
 CREATE PROCEDURE PMS.BAJA_VISIBILIDAD
-			 @Id_Visibilidad numeric(18,0)
-                              
+			 @Id_Visibilidad numeric(18,0)                              
 AS 
 BEGIN 
      SET NOCOUNT ON 
