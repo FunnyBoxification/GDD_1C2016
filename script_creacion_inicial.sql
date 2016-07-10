@@ -509,7 +509,7 @@ where Id_Estado=1;
 update PMS.PUBLICACIONES 
 set Id_Estado= 4
 where Id_Publicacion in (select f.Id_Publicacion from PMS.ITEMFACTURA f where Descripcion = 'Comision por venta')
-and Id_Tipo = 2
+--and Id_Tipo = 2
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
@@ -1208,10 +1208,10 @@ else if @Id_Cliente_Comprador=(select Id_Usuario from PMS.PUBLICACIONES where Id
 begin
 ; throw 50999,'comprador no puede ser el vendedor',1;
 end
-else if (select count(Id_Compra) from PMS.COMPRAS where Id_Cliente_Comprador=@Id_Cliente_Comprador and Id_Calificacion is null) > 2
-begin
-; throw 50999,'3 compras sin calificar',1;
-end
+--else if (select count(Id_Compra) from PMS.COMPRAS where Id_Cliente_Comprador=@Id_Cliente_Comprador and Id_Calificacion is null) > 2
+--begin
+--; throw 50999,'3 compras sin calificar',1;
+--end
 else
 begin
 INSERT INTO PMS.COMPRAS
@@ -1266,10 +1266,10 @@ else if @Id_Cliente=(select Id_usuario from PUBLICACIONES where Id_Publicacion=@
 begin
 ; throw 50999,'comprador no puede ser el vendedor',1;
 end
-else if 2>(select count(Id_Compra) from PMS.COMPRAS where Id_Cliente_Comprador=@Id_Cliente and Id_Calificacion is null)
-begin
-; throw 50999,'3 compras sin calificar',1;
-end
+--else if 2>(select count(Id_Compra) from PMS.COMPRAS where Id_Cliente_Comprador=@Id_Cliente and Id_Calificacion is null)
+--begin
+--; throw 50999,'3 compras sin calificar',1;
+--end
 else
 begin
 INSERT INTO [PMS].[OFERTAS]
