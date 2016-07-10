@@ -26,6 +26,9 @@ GO
 	drop proc PMS.ALTA_VISBILIDAD
 	drop proc PMS.BAJA_VISBILIDAD
 	drop proc PMS.MODIFICACION_VISBILIDAD
+	drop proc PMS.habilitar_Rol
+	drop proc PMS.borrar_funcionalidades_rol
+	drop proc PMS.insertfuncionalidad
 
 	drop function PMS.getEstrellasDadas
 	drop function PMS.getUser
