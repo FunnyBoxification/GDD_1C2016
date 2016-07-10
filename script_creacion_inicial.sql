@@ -1342,7 +1342,7 @@ where Id_Usuario=@ID_USER
 END
 GO
 
-CREATE PROCEDURE PMS.ALTA_CALIFICACION
+CREATE PROCEDURE [PMS].[ALTA_CALIFICACION]
 		@Id_Compra numeric(18,0)
         ,@Cantidad_Estrellas numeric(18,0)
         ,@Descripcion nvarchar(255)
@@ -1350,7 +1350,7 @@ CREATE PROCEDURE PMS.ALTA_CALIFICACION
 AS
 BEGIN
 
-set @ID_CALIFICACION=(select max(Id_Calificacion) from PMS.CALIFICACIONES)
+set @ID_CALIFICACION=((select max(Id_Calificacion) from PMS.CALIFICACIONES) +1)
 INSERT INTO [PMS].[CALIFICACIONES]
            ([Id_Calificacion]
            ,[Cantidad_Estrellas]
@@ -1363,6 +1363,8 @@ INSERT INTO [PMS].[CALIFICACIONES]
 UPDATE [PMS].[COMPRAS]
    SET [Id_Calificacion] = @Id_Calificacion
  WHERE Id_Compra=@Id_Compra
+
+
 END
 GO
 
