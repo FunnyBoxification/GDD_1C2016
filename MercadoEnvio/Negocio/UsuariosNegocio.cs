@@ -110,7 +110,7 @@ namespace MercadoNegocio
             {
                 
                 var proc = "PMS.";
-                if(modo == 0)
+                if(modo == 1)
                 {
                     proc += "ALTA_USUARIO_";
                 }else
@@ -128,7 +128,7 @@ namespace MercadoNegocio
                 using (SqlCommand cmd = new SqlCommand(proc, DBConn.Connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    if (modo == 1)
+                    if (modo == 0)
                     {
                         cmd.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = IdCod;
                     }
@@ -160,7 +160,7 @@ namespace MercadoNegocio
                     cmd.Parameters.Add("@Piso", SqlDbType.Int).Value = Convert.ToInt32(piso);
                     cmd.Parameters.Add("@Depto", SqlDbType.VarChar).Value = dpto;
                     cmd.Parameters.Add("@CodigoPostal", SqlDbType.VarChar).Value = local;
-                    if (modo == 0)
+                    if (modo == 1)
                     {
                         var returnParameter = cmd.Parameters.Add("@id", SqlDbType.Int);
                         //returnParameter.Value = 0;
