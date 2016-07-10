@@ -24,7 +24,7 @@ namespace MercadoNegocio
             DBConn = sqlServerDBConnection;
         }
 
-        public DataTable ObtenerVisibListado(double codigo, string desc, double porc, double precio)
+        public DataTable ObtenerVisibListado(string codigo, string desc, string porc, string precio)
         {
             try
             {
@@ -32,16 +32,16 @@ namespace MercadoNegocio
                 DBConn.openConnection();
                 String sqlRequest;
                 sqlRequest = "SELECT Id_Visibilidad, Descripcion, Porcentaje, Precio FROM PMS.VISIBILIDADES";
-                sqlRequest += "WHERE 1 = 1 ";
-                if (codigo != null) sqlRequest += " and Id_Visibilidad LIKE  @idVisib";
-                if (desc != null) sqlRequest += " and Descripcion LIKE @Desc";
-                if (porc != null) sqlRequest += " and Porcentaje LIKE  @Porc";
-                if (precio != null) sqlRequest += " and Precio LIKE @Precio";
+                sqlRequest += " WHERE 1 = 1 ";
+                if (codigo != null && codigo != "") sqlRequest += " and Id_Visibilidad LIKE  @idVisib";
+                if (desc != null && desc != "") sqlRequest += " and Descripcion LIKE @Desc";
+                if (porc != null && porc != "") sqlRequest += " and Porcentaje LIKE  @Porc";
+                if (precio != null && precio != "") sqlRequest += " and Precio LIKE @Precio";
                 SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
-                if (codigo != null) command.Parameters.Add("@idVisib", SqlDbType.Int).Value = "%" + codigo + "%";
-                if (desc != null) command.Parameters.Add("@Desc", SqlDbType.Int).Value = "%" + desc + "%";
-                if (porc != null) command.Parameters.Add(" @Porc", SqlDbType.Int).Value = "%" + porc + "%";
-                if (precio != null) command.Parameters.Add("@Precio", SqlDbType.Int).Value = "%" + precio + "%";
+                if (codigo != null && codigo != "") command.Parameters.Add("@idVisib", SqlDbType.NVarChar).Value = "%" + codigo + "%";
+                if (desc != null && desc != "") command.Parameters.Add("@Desc", SqlDbType.NVarChar).Value = "%" + desc + "%";
+                if (porc != null && porc != "") command.Parameters.Add(" @Porc", SqlDbType.NVarChar).Value = "%" + porc + "%";
+                if (precio != null && precio != "") command.Parameters.Add("@Precio", SqlDbType.NVarChar).Value = "%" + precio + "%";
                 
                 using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                 {

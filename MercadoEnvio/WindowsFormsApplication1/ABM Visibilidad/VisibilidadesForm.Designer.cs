@@ -44,12 +44,14 @@
             this.Modificarbtn = new System.Windows.Forms.Button();
             this.Altabtn = new System.Windows.Forms.Button();
             this.VisilidadesDG = new System.Windows.Forms.DataGridView();
-            this.visibilidadesDSBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.visibilidadesDSBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.visibilidadesDS = new WindowsFormsApplication1.ABM_Visibilidad.VisibilidadesDS();
+            this.visibilidadesDSBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.VisilidadesDG)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.visibilidadesDSBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.visibilidadesDSBindingSource1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.visibilidadesDS)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.visibilidadesDSBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -190,23 +192,28 @@
             // 
             // VisilidadesDG
             // 
-            this.VisilidadesDG.AutoGenerateColumns = false;
+            this.VisilidadesDG.AllowUserToAddRows = false;
             this.VisilidadesDG.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.VisilidadesDG.DataSource = this.visibilidadesDSBindingSource;
             this.VisilidadesDG.Location = new System.Drawing.Point(13, 140);
             this.VisilidadesDG.Name = "VisilidadesDG";
+            this.VisilidadesDG.ReadOnly = true;
             this.VisilidadesDG.Size = new System.Drawing.Size(505, 274);
             this.VisilidadesDG.TabIndex = 7;
             // 
-            // visibilidadesDSBindingSource
+            // visibilidadesDSBindingSource1
             // 
-            this.visibilidadesDSBindingSource.DataSource = this.visibilidadesDS;
-            this.visibilidadesDSBindingSource.Position = 0;
+            this.visibilidadesDSBindingSource1.DataSource = this.visibilidadesDS;
+            this.visibilidadesDSBindingSource1.Position = 0;
             // 
             // visibilidadesDS
             // 
             this.visibilidadesDS.DataSetName = "VisibilidadesDS";
             this.visibilidadesDS.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // visibilidadesDSBindingSource
+            // 
+            this.visibilidadesDSBindingSource.DataSource = this.visibilidadesDS;
+            this.visibilidadesDSBindingSource.Position = 0;
             // 
             // VisibilidadesForm
             // 
@@ -223,8 +230,9 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.VisilidadesDG)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.visibilidadesDSBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.visibilidadesDSBindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.visibilidadesDS)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.visibilidadesDSBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -248,5 +256,6 @@
         private VisibilidadesDS visibilidadesDS;
         private System.Windows.Forms.TextBox txbDesc;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.BindingSource visibilidadesDSBindingSource1;
     }
 }

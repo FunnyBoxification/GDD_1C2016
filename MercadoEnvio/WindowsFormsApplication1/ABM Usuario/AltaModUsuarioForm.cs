@@ -179,6 +179,8 @@ namespace WindowsFormsApplication1.ABM_Usuario
                 this.Text = "Alta Empresa";
                 datosCliente1.Visible = false;
                 this.datosEmpresa1.Rubro = rubro;
+                this.datosEmpresa1.Location = new System.Drawing.Point(this.datosEmpresa1.Location.X , this.datosEmpresa1.Location.Y-25);
+                this.datosEmpresa1.Height = this.datosEmpresa1.Height + 15;
             }
 
             if (IdCod != null)
