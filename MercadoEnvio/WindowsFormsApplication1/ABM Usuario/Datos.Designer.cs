@@ -111,6 +111,7 @@ namespace WindowsFormsApplication1.ABM_Usuarios
             this.tbxNro.Name = "tbxNro";
             this.tbxNro.Size = new System.Drawing.Size(57, 20);
             this.tbxNro.TabIndex = 7;
+            this.tbxNro.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SoloNumeros_KeyPress);
             // 
             // tbxPiso
             // 
@@ -118,6 +119,7 @@ namespace WindowsFormsApplication1.ABM_Usuarios
             this.tbxPiso.Name = "tbxPiso";
             this.tbxPiso.Size = new System.Drawing.Size(50, 20);
             this.tbxPiso.TabIndex = 9;
+            this.tbxPiso.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SoloNumeros_KeyPress);
             // 
             // label5
             // 
@@ -149,9 +151,9 @@ namespace WindowsFormsApplication1.ABM_Usuarios
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(5, 90);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(53, 13);
+            this.label8.Size = new System.Drawing.Size(61, 13);
             this.label8.TabIndex = 15;
-            this.label8.Text = "Localidad";
+            this.label8.Text = "Cod. Postal";
             // 
             // Domicilio
             // 

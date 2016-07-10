@@ -20,6 +20,7 @@ namespace WindowsFormsApplication1.ABM_Usuario
         String tipo;
         private UsuariosNegocio UsuNegocio;
         int modo;
+        public string rubro { get; set; }
         private UsuariosNegocio usuNegocio;
 
         public int IdCod { get; set; }
@@ -38,7 +39,11 @@ namespace WindowsFormsApplication1.ABM_Usuario
             InitializeComponent();
             this.UsuNegocio = usuNegocio;
             Tipo = tipo;
-            
+            if (Tipo == 1)
+            {
+                
+                cargarRubros();
+            }
         }
 
         
@@ -49,10 +54,12 @@ namespace WindowsFormsApplication1.ABM_Usuario
         {
             InitializeComponent();
             this.UsuNegocio = usuNegocio;
+           
             Tipo = tipo;
             if (Tipo == 1)
             {
                 this.Text = "Modificar Empresa: Codigo " + IdCod.ToString();
+                cargarRubros();
             }
             else
             {
@@ -73,6 +80,12 @@ namespace WindowsFormsApplication1.ABM_Usuario
             this.IdCod = Convert.ToInt32(idCod);
         }
 
+        private void cargarRubros()
+        {
+            var dt = UsuNegocio.ObtenerRubros();
+            this.datosEmpresa1.dtRubros = dt;
+        }
+
         private void CargarDatosPropios(int tipo, string RazonSocialNombre, string cuitApellido, string contactoDto, string rubroTipo, string ciudadFechaNac)
         {
             if (tipo == 1)
@@ -80,7 +93,8 @@ namespace WindowsFormsApplication1.ABM_Usuario
                 this.datosEmpresa1.RazonSocial = RazonSocialNombre;
                 this.datosEmpresa1.Cuit = cuitApellido;
                 this.datosEmpresa1.Contacto = contactoDto;
-                this.datosEmpresa1.Rubro = rubroTipo;
+
+                rubro = rubroTipo;
                 this.datosEmpresa1.Ciudad = ciudadFechaNac;
             }
             else
@@ -164,6 +178,7 @@ namespace WindowsFormsApplication1.ABM_Usuario
             {
                 this.Text = "Alta Empresa";
                 datosCliente1.Visible = false;
+                this.datosEmpresa1.Rubro = rubro;
             }
 
             if (IdCod != null)

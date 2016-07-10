@@ -33,15 +33,15 @@ namespace MercadoNegocio
                 String sqlRequest;
                 sqlRequest = "SELECT Id_Visibilidad, Descripcion, Porcentaje, Precio FROM PMS.VISIBILIDADES";
                 sqlRequest += "WHERE 1 = 1 ";
-                if (codigo != null) sqlRequest += " and Id_Visibilidad = @idVisib";
-                if (desc != null) sqlRequest += " and Descripcion = @Desc";
-                if (porc != null) sqlRequest += " and Porcentaje = @Porc";
-                if (precio != null) sqlRequest += " and Precio = @Precio";
+                if (codigo != null) sqlRequest += " and Id_Visibilidad LIKE  @idVisib";
+                if (desc != null) sqlRequest += " and Descripcion LIKE @Desc";
+                if (porc != null) sqlRequest += " and Porcentaje LIKE  @Porc";
+                if (precio != null) sqlRequest += " and Precio LIKE @Precio";
                 SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
-                if (codigo != null) command.Parameters.Add("@idVisib", SqlDbType.Int).Value = codigo;
-                if (desc != null) command.Parameters.Add("@Desc", SqlDbType.Int).Value = desc;
-                if (porc != null) command.Parameters.Add(" @Porc", SqlDbType.Int).Value = porc;
-                if (precio != null) command.Parameters.Add("@Precio", SqlDbType.Int).Value = precio;
+                if (codigo != null) command.Parameters.Add("@idVisib", SqlDbType.Int).Value = "%" + codigo + "%";
+                if (desc != null) command.Parameters.Add("@Desc", SqlDbType.Int).Value = "%" + desc + "%";
+                if (porc != null) command.Parameters.Add(" @Porc", SqlDbType.Int).Value = "%" + porc + "%";
+                if (precio != null) command.Parameters.Add("@Precio", SqlDbType.Int).Value = "%" + precio + "%";
                 
                 using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                 {

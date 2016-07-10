@@ -77,6 +77,7 @@ BEGIN
 		Precio					numeric(18,2),
 		Porcentaje				numeric(18,2),
 		Habilitado				numeric(18,0) DEFAULT 1,
+		CostoEnvio				numeric(18,0) DEFAULT 5,
 		PRIMARY KEY(Id_Visibilidad)
 	);
 	
@@ -336,9 +337,11 @@ BEGIN
 			Publicacion_Visibilidad_Desc,
 			Publicacion_Visibilidad_Precio,		
 			Publicacion_Visibilidad_Porcentaje,
-			1
+			1, 5
 	FROM gd_esquema.Maestra 
 	WHERE Publicacion_Visibilidad_Cod IS NOT NULL;
+
+	UPDATE PMS.VISIBILIDADES SET CostoEnvio = 0 WHERE Descripcion='Gratis';
 
 	INSERT INTO PMS.TIPO_PUBLICACION
 	SELECT DISTINCT
@@ -1224,6 +1227,10 @@ INSERT INTO PMS.COMPRAS
            ,@Id_Cliente_Comprador
            ,@Id_Publicacion);
 update PUBLICACIONES set Stock=Stock-@Cantidad where Id_Publicacion=@Id_Publicacion;
+if (SELECT Stock from PUBLICACIONES WHERE Id_Publicacion=@Id_Publicacion ) = 0
+begin
+update PUBLICACIONES SET Id_Estado = 4 WHERE Id_Publicacion=@Id_Publicacion
+end
 set @id=(select max(Id_Compra)from PMS.COMPRAS)
 end
 end
@@ -1275,6 +1282,8 @@ INSERT INTO [PMS].[OFERTAS]
            ,@Monto
            ,@Id_Publicacion
            ,@Id_Cliente)
+
+UPDATE PMS.Publicaciones SET Precio = @Monto WHERE Id_Publicacion = @Id_Publicacion
 end
 end
 set @id=(select max(Id_Oferta) from PMS.OFERTAS)
@@ -1369,8 +1378,11 @@ DECLARE @MONTO numeric(18,2)
 DECLARE @Id_Compra numeric(18,0)
 
 DECLARE db_cursor CURSOR FOR  
-select p.Id_Publicacion,o.Monto,o.Id_Cliente from PMS.PUBLICACIONES p join PMS.OFERTAS o ON p.Id_Publicacion=o.Id_Publicacion
- where p.Id_Tipo=2 and p.FechaVencimiento<@Fecha AND Id_Estado <> 4
+select p.Id_Publicacion,o.Monto,o.Id_Cliente 
+	from PMS.PUBLICACIONES p 
+	LEFT JOIN PMS.OFERTAS o ON p.Id_Publicacion=o.Id_Publicacion
+	where p.Id_Tipo=2 AND p.FechaVencimiento<@Fecha AND p.Id_Estado = 1
+	AND o.Monto IN (SELECT TOP 1 MAX(Monto) FROM PMS.OFERTAS WHERE Id_Publicacion = p.Id_Publicacion)
 OPEN db_cursor   
 FETCH NEXT FROM db_cursor INTO @ID_PUBLICACION,@MONTO,@ID_CLIENTE
 
@@ -1391,15 +1403,32 @@ AFTER INSERT
 AS
 BEGIN
 DECLARE @NUMERO numeric(18,0)
-SET @NUMERO =(select max(Numero)from FACTURAS) 
+SET @NUMERO =(select max(Numero)from FACTURAS)+1
 DECLARE @FECHA datetime,@ID numeric(18,0)
 select @FECHA=Fecha,@ID=Id_Publicacion from inserted;
 DECLARE @TOTAL numeric(18,0)
-select @TOTAL=Precio from VISIBILIDADES WHERE Id_Visibilidad=(select Id_Visibilidad from PUBLICACIONES where Id_Publicacion = (select Id_Publicacion from inserted))
-EXEC PMS.ALTA_FACTURA @NUMERO,@FECHA,@TOTAL,0,0,@ID,'Comision por Publicacion'
+select @TOTAL=Precio from VISIBILIDADES WHERE Id_Visibilidad=(select Id_Visibilidad from PMS.PUBLICACIONES where Id_Publicacion = (select Id_Publicacion from inserted))
+EXEC PMS.ALTA_FACTURA @NUMERO,@FECHA,@TOTAL,1,@TOTAL,1,@ID,'Comision por Publicacion'
 END
 GO
 
+CREATE TRIGGER ALTA_FACTURA_VENTA
+ON PMS.COMPRAS
+AFTER INSERT
+AS
+BEGIN 
+DECLARE @NUMERO numeric(18,0)
+SET @NUMERO =(select max(Numero)from FACTURAS)+1
+DECLARE @PORCENTAJE numeric(18,0)
+DECLARE @ENVIO numeric(18,0)
+select @PORCENTAJE= Porcentaje,@ENVIO=isnull(CostoEnvio,0) from VISIBILIDADES WHERE Id_Visibilidad=(select Id_Visibilidad from PUBLICACIONES where Id_Publicacion = (select Id_Publicacion from inserted))
+DECLARE @FECHA datetime,@TOTAL numeric(18,0),@MONTO numeric(18,0),@CANTIDAD numeric(18,0),@ID numeric(18,0)
+select @FECHA=Fecha,@TOTAL=Monto*@PORCENTAJE+@ENVIO,@MONTO=Monto,@CANTIDAD=Cantidad,@ID=Id_Publicacion from inserted;
+SET @TOTAL = @TOTAL * @CANTIDAD;
+SET @MONTO = @MONTO * @PORCENTAJE;
+EXEC PMS.ALTA_FACTURA @NUMERO ,@FECHA,@TOTAL,1,@MONTO,@CANTIDAD,@ID,'Comision por venta'
+END
+GO
 
 
 	--************************FUNCIONES/STORED PROCEDURES/TRIGGERS*****************************************

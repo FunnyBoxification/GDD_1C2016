@@ -17,11 +17,25 @@ namespace WindowsFormsApplication1.ABM_Usuario
          public string Contacto { get{return tbxContacto.Text;} set{tbxContacto.Text = value;} }
          public string Rubro { get{return  cbxRubro.SelectedText;} set{cbxRubro.SelectedText = value;} }
          public string Ciudad { get{return tbxCiudad.Text;} set{tbxCiudad.Text = value;} }
+         public DataTable dtRubros { get ;  set;  }
         
         public DatosEmpresa()
         {
             InitializeComponent();
            
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void DatosEmpresa_Load(object sender, EventArgs e)
+        {
+            cbxRubro.DataSource = dtRubros.DefaultView;
+            cbxRubro.DisplayMember = "Descripcion";
+
+            cbxRubro.BindingContext = this.BindingContext;
         }
         
 
