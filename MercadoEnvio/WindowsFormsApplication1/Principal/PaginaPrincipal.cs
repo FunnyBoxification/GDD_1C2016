@@ -53,7 +53,7 @@ namespace WindowsFormsApplication1.Principal
             {
                 Historial.Visible = true;
             }
-            if (ListaFuncionalidades.Any(p => p.ToLower().Contains("lsitado")))
+            if (ListaFuncionalidades.Any(p => p.ToLower().Contains("listado")))
             {
                 Listado.Visible = true;
             }

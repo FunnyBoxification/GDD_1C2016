@@ -120,7 +120,7 @@ namespace WindowsFormsApplication1.ABM_Usuario
             try
             {
                 
-                if (IdCod != null) { modo = 0; } else { modo = 1; };
+                if (IdCod != null && IdCod != 0) { modo = 1; } else { modo = 0; };
 
                 if (Tipo == 0)
                 {
@@ -163,6 +163,8 @@ namespace WindowsFormsApplication1.ABM_Usuario
                                                datos1.Localidad,
                                                DateTime.Parse(ConfigurationManager.AppSettings["FechaDelDia"]));
                 }
+                MessageBox.Show("Se grabó correctamente.");
+                this.Close();
             }
             catch (Exception ex)
             {
@@ -191,7 +193,7 @@ namespace WindowsFormsApplication1.ABM_Usuario
                 this.datosEmpresa1.Height = this.datosEmpresa1.Height + 15;
             }
 
-            if (IdCod != null)
+            if (IdCod != null && IdCod != 0)
             {
                 txbUsername.Enabled = false;
             }

@@ -107,6 +107,7 @@
             this.tbxDocumento.Name = "tbxDocumento";
             this.tbxDocumento.Size = new System.Drawing.Size(100, 20);
             this.tbxDocumento.TabIndex = 5;
+            this.tbxDocumento.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SoloNumeros_KeyPress);
             // 
             // label4
             // 
