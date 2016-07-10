@@ -143,6 +143,12 @@
     <Compile Include="Calificar\Calificar.Designer.cs">
       <DependentUpon>Calificar.cs</DependentUpon>
     </Compile>
+    <Compile Include="Calificar\CalificarCompra.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Calificar\CalificarCompra.Designer.cs">
+      <DependentUpon>CalificarCompra.cs</DependentUpon>
+    </Compile>
     <Compile Include="ComprarOfertar\ComprarForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -287,6 +293,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Calificar\Calificar.resx">
       <DependentUpon>Calificar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Calificar\CalificarCompra.resx">
+      <DependentUpon>CalificarCompra.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ComprarOfertar\ComprarForm.resx">
       <DependentUpon>ComprarForm.cs</DependentUpon>
