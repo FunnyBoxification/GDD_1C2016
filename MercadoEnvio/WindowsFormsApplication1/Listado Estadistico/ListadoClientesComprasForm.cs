@@ -47,5 +47,10 @@ namespace WindowsFormsApplication1.Listado_Estadistico
             var rubro = (this.comboBox1.SelectedItem as ComboboxItem) != null ? (this.comboBox1.SelectedItem as ComboboxItem).Value : -1;
             this.dataGridView1.DataSource = negocio.getTop5ClientesConArticulosComprados(anio, trimestre, rubro);
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            dataGridView1.DataSource = new DataTable();
+        }
     }
 }

@@ -47,5 +47,11 @@ namespace WindowsFormsApplication1.Listado_Estadistico
             dataGridView1.DataSource = negocio.getTop5VendedoresConArticulosNoVendidos(anio, trimestre, visibilidad);
 
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            comboBox1.SelectedItem = null;
+            dataGridView1.DataSource = new DataTable();
+        }
     }
 }
