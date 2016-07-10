@@ -23,9 +23,10 @@ GO
 	drop proc PMS.SUBASTAS_TERMIANDAS
 	drop proc PMS.upd_Rol
 	drop proc PMS.MODIFICACION_PUBLICACION
-	drop proc PMS.ALTA_VISBILIDAD
-	drop proc PMS.BAJA_VISBILIDAD
-	drop proc PMS.MODIFICACION_VISBILIDAD
+	drop proc PMS.ALTA_VISIBILIDAD
+	drop proc PMS.BAJA_VISIBILIDAD
+	drop proc PMS.MODIFICACION_VISIBILIDAD
+	drop proc BORRAR_FUNCIONALIDADES_ROL
 
 	drop function PMS.getEstrellasDadas
 	drop function PMS.getUser

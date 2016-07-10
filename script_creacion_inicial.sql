@@ -1002,7 +1002,8 @@ end
 go
 
 create procedure PMS.MODIFICACION_USUARIO_CLIENTE
-			@User_Nombre nvarchar(255)
+			@Id_Usuario numeric(18,0)
+		   ,@User_Nombre nvarchar(255)
 		   ,@User_Password nvarchar(255)
            ,@Dni_Cliente numeric(18,0)
 		   ,@Tipo_Dni nvarchar(50)
@@ -1017,10 +1018,10 @@ create procedure PMS.MODIFICACION_USUARIO_CLIENTE
            ,@CodigoPostal nvarchar(50)
 		   ,@Telefono nvarchar(50)
 		   --,@Localidad nvarchar(50)
-		   ,@FechaCreacion datetime
-		   ,@id numeric(18,0) 
+		   --,@FechaCreacion datetime
+		   --,@id numeric(18,0) 
 as begin
-IF not EXISTS (select * from PMS.USUARIOS u  WHERE @id = u.Id_Usuario)
+IF not EXISTS (select * from PMS.USUARIOS u  WHERE @Id_Usuario = u.Id_Usuario)
  BEGIN
     RAISERROR ('NO Existe usuario', 16, 1)
  END
@@ -1037,7 +1038,7 @@ IF not EXISTS (select * from PMS.USUARIOS u  WHERE @id = u.Id_Usuario)
 IF @User_Password IS NOT NULL
 BEGIN UPDATE [PMS].[USUARIOS]
 SET			[User_password] = HASHBYTES('SHA2_256',@User_Password)	
-WHERE [User_Nombre] = @id
+WHERE [User_Nombre] = @Id_Usuario
 
 END
 
@@ -1055,13 +1056,14 @@ Set
            ,[Cod_Postal]	  =  @CodigoPostal
 		   ,[Tipo_Doc]		  =  @Tipo_Dni
 		   ,[Telefono]        =  @Telefono    
-where [Id_Cliente]		=	@id  
+where [Id_Cliente]		=	@Id_Usuario  
    
 end
 go
 
 create procedure PMS.MODIFICACION_USUARIO_EMPRESA
-			@User_Nombre nvarchar(255)
+			@Id_Usuario numeric(18,0)
+			,@User_Nombre nvarchar(255)
 			,@User_Password nvarchar(255)
            ,@Cuit_Empresa nvarchar(50)
            ,@RazonSocial nvarchar(255)
@@ -1077,24 +1079,24 @@ create procedure PMS.MODIFICACION_USUARIO_EMPRESA
 		   --,@Localidad nvarchar(50)
 		   ,@Ciudad nvarchar(50)
 		   ,@Rubro nvarchar(50)
-		   ,@Id numeric(18,0)
+		   --,@Id numeric(18,0)
 as begin
 
 declare @Id_Rubro1 numeric(18,0)
 
-IF not EXISTS (select * from PMS.USUARIOS u  WHERE @id = u.Id_Usuario)
+IF not EXISTS (select * from PMS.USUARIOS u  WHERE @Id_Usuario = u.Id_Usuario)
  BEGIN
     RAISERROR ('No user', 16, 1)
  END
- IF EXISTS (select * from PMS.EMPRESAS e  WHERE @RazonSocial = e.RazonSocial and @id <> e.Id_empresa)
+ IF EXISTS (select * from PMS.EMPRESAS e  WHERE @RazonSocial = e.RazonSocial and @Id_Usuario <> e.Id_empresa)
  BEGIN
     RAISERROR ('Duplicate RazonSocial', 16, 1)
  END
- IF EXISTS (select * from PMS.EMPRESAS e  WHERE @Cuit_Empresa = e.Cuit_Empresa and @id <> e.Id_empresa)
+ IF EXISTS (select * from PMS.EMPRESAS e  WHERE @Cuit_Empresa = e.Cuit_Empresa and @Id_Usuario <> e.Id_empresa)
  BEGIN
     RAISERROR ('Duplicate Cuit', 16, 1)
  END
- IF EXISTS (select * from PMS.EMPRESAS e  WHERE @Mail = e.Mail and @id <> e.Id_empresa)
+ IF EXISTS (select * from PMS.EMPRESAS e  WHERE @Mail = e.Mail and @Id_Usuario <> e.Id_empresa)
  BEGIN
     RAISERROR ('Duplicate Mail', 16, 1)
  END
@@ -1103,7 +1105,7 @@ IF not EXISTS (select * from PMS.USUARIOS u  WHERE @id = u.Id_Usuario)
 IF @User_Password IS NOT NULL
 BEGIN UPDATE [PMS].[USUARIOS]
 SET			[User_password] = HASHBYTES('SHA2_256',@User_Password)   	
-WHERE [User_Nombre] = @Id
+WHERE [User_Nombre] = @Id_Usuario
 
 END
 
@@ -1125,7 +1127,7 @@ SET			[Cuit_Empresa]  = @Cuit_Empresa
 		   ,[Ciudad]		= @Contacto
 		   ,[Telefono]		= @Telefono
 		   ,[Id_Rubro]	=	@Id_Rubro
-where [Id_Empresa]      =     @id 		   
+where [Id_Empresa]      =     @Id_Usuario 		   
 		          			
    
 end

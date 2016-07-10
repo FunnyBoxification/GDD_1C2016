@@ -142,7 +142,7 @@ namespace MercadoNegocio
                     {                //Cliente    
                     cmd.Parameters.Add("@Nombre", SqlDbType.VarChar).Value = nombreRazon;
                     cmd.Parameters.Add("@Apellido", SqlDbType.VarChar).Value = ApellidCui;
-                    cmd.Parameters.Add("@Dni_Cliente", SqlDbType.VarChar).Value = Doccto;
+                    cmd.Parameters.Add("@Dni_Cliente", SqlDbType.Int).Value = Convert.ToInt32(Doccto);
                     cmd.Parameters.Add("@Tipo_Dni", SqlDbType.VarChar).Value = tiporub;
                     cmd.Parameters.Add("@FechaNacimiento", SqlDbType.DateTime).Value = Convert.ToDateTime(fechaCiud);
                     }else
@@ -160,13 +160,17 @@ namespace MercadoNegocio
                     cmd.Parameters.Add("@Piso", SqlDbType.Int).Value = Convert.ToInt32(piso);
                     cmd.Parameters.Add("@Depto", SqlDbType.VarChar).Value = dpto;
                     cmd.Parameters.Add("@CodigoPostal", SqlDbType.VarChar).Value = local;
-                    var returnParameter = cmd.Parameters.Add("@id", SqlDbType.Int);
-                    //returnParameter.Value = 0;
-                    returnParameter.Direction = ParameterDirection.Output;
+                    if (modo == 0)
+                    {
+                        var returnParameter = cmd.Parameters.Add("@id", SqlDbType.Int);
+                        //returnParameter.Value = 0;
+                        returnParameter.Direction = ParameterDirection.Output;
+                    }
                     //cmd.Parameters.Add("¨@Localidad", SqlDbType.VarChar).Value = local;
                     cmd.ExecuteNonQuery();
                 }
                 DBConn.closeConnection();
+                
             }
             catch (Exception e)
             {
