@@ -44,6 +44,7 @@ namespace WindowsFormsApplication1.ABM_Usuario
                 
                 cargarRubros();
             }
+            hacerload();
         }
 
         
@@ -78,6 +79,8 @@ namespace WindowsFormsApplication1.ABM_Usuario
             this.datos1.Dpto = dpto;
             this.datos1.Localidad = CodPostal;
             this.IdCod = Convert.ToInt32(idCod);
+
+            hacerload();
         }
 
         private void cargarRubros()
@@ -169,6 +172,11 @@ namespace WindowsFormsApplication1.ABM_Usuario
 
         private void AltaModUsuarioForm_Load(object sender, EventArgs e)
         {
+           // hacerload();
+        }
+
+        private void hacerload()
+        {
             if (Tipo == 0)
             {
                 datosEmpresa1.Visible = false;
@@ -179,7 +187,7 @@ namespace WindowsFormsApplication1.ABM_Usuario
                 this.Text = "Alta Empresa";
                 datosCliente1.Visible = false;
                 this.datosEmpresa1.Rubro = rubro;
-                this.datosEmpresa1.Location = new System.Drawing.Point(this.datosEmpresa1.Location.X , this.datosEmpresa1.Location.Y-25);
+                this.datosEmpresa1.Location = new System.Drawing.Point(this.datosEmpresa1.Location.X, this.datosEmpresa1.Location.Y - 25);
                 this.datosEmpresa1.Height = this.datosEmpresa1.Height + 15;
             }
 
