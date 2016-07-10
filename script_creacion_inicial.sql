@@ -524,8 +524,7 @@ BEGIN
 		select SUM(Cantidad_Estrellas)
 		from PMS.CALIFICACIONES 
 		WHERE Id_Calificacion IN 
-			(select Id_Calificacion from PMS.COMPRAS where Id_Publicacion IN (select Id_Publicacion FROM PMS.PUBLICACIONES where Id_Usuario = @ID_USER))))
-		
+			(select Id_Calificacion from PMS.COMPRAS where Id_Publicacion IN (select Id_Publicacion FROM PMS.PUBLICACIONES where Id_Usuario = @ID_USER))))		
 		/ (select count(Id_Calificacion) from PMS.CALIFICACIONES where Id_Calificacion IN (select Id_Calificacion from PMS.COMPRAS where Id_Publicacion IN (select Id_Publicacion FROM PMS.PUBLICACIONES where Id_Usuario = @ID_USER)))
 
 	UPDATE PMS.USUARIOS
