@@ -30,9 +30,9 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Calificar));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.dgvUltimasCinco = new System.Windows.Forms.DataGridView();
+            this.dgvUltimasCinco = new MercadoEN.SuperGrid();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.dgvPendientes = new System.Windows.Forms.DataGridView();
+            this.dgvPendientes = new MercadoEN.SuperGrid();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.lblComprasCalificadas = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
@@ -57,6 +57,7 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.lblCantSubastasSinCalificar = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.lblSubastas5 = new System.Windows.Forms.Label();
             this.lblSubastas4 = new System.Windows.Forms.Label();
@@ -79,7 +80,7 @@
             this.pictureBox21 = new System.Windows.Forms.PictureBox();
             this.pictureBox18 = new System.Windows.Forms.PictureBox();
             this.lblComprasRealizadas = new System.Windows.Forms.Label();
-            this.lblCantSubastasSinCalificar = new System.Windows.Forms.Label();
+            this.btCalificarPendiente = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUltimasCinco)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -132,28 +133,33 @@
             // dgvUltimasCinco
             // 
             this.dgvUltimasCinco.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvUltimasCinco.Location = new System.Drawing.Point(24, 25);
+            this.dgvUltimasCinco.Location = new System.Drawing.Point(30, 19);
             this.dgvUltimasCinco.Name = "dgvUltimasCinco";
-            this.dgvUltimasCinco.Size = new System.Drawing.Size(459, 108);
-            this.dgvUltimasCinco.TabIndex = 0;
+            this.dgvUltimasCinco.PageSize = 10;
+            this.dgvUltimasCinco.Size = new System.Drawing.Size(438, 131);
+            this.dgvUltimasCinco.TabIndex = 5;
             // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.dgvPendientes);
-            this.groupBox2.Location = new System.Drawing.Point(66, 288);
+            this.groupBox2.Location = new System.Drawing.Point(66, 259);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(506, 122);
+            this.groupBox2.Size = new System.Drawing.Size(506, 151);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Compras  pendientes de calificación:";
             // 
             // dgvPendientes
             // 
+            this.dgvPendientes.AllowUserToAddRows = false;
+            this.dgvPendientes.AllowUserToDeleteRows = false;
             this.dgvPendientes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvPendientes.Location = new System.Drawing.Point(19, 18);
+            this.dgvPendientes.Location = new System.Drawing.Point(19, 19);
             this.dgvPendientes.Name = "dgvPendientes";
-            this.dgvPendientes.Size = new System.Drawing.Size(470, 98);
-            this.dgvPendientes.TabIndex = 0;
+            this.dgvPendientes.PageSize = 10;
+            this.dgvPendientes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvPendientes.Size = new System.Drawing.Size(449, 126);
+            this.dgvPendientes.TabIndex = 5;
             // 
             // groupBox3
             // 
@@ -179,7 +185,7 @@
             this.groupBox3.Controls.Add(this.pictureBox3);
             this.groupBox3.Controls.Add(this.pictureBox2);
             this.groupBox3.Controls.Add(this.pictureBox1);
-            this.groupBox3.Location = new System.Drawing.Point(66, 434);
+            this.groupBox3.Location = new System.Drawing.Point(66, 478);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(235, 213);
             this.groupBox3.TabIndex = 2;
@@ -438,12 +444,21 @@
             this.groupBox4.Controls.Add(this.lblEstrella);
             this.groupBox4.Controls.Add(this.pictureBox21);
             this.groupBox4.Controls.Add(this.pictureBox18);
-            this.groupBox4.Location = new System.Drawing.Point(346, 434);
+            this.groupBox4.Location = new System.Drawing.Point(346, 478);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(239, 213);
             this.groupBox4.TabIndex = 3;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Resumen de subastas calificadas";
+            // 
+            // lblCantSubastasSinCalificar
+            // 
+            this.lblCantSubastasSinCalificar.AutoSize = true;
+            this.lblCantSubastasSinCalificar.Location = new System.Drawing.Point(203, 194);
+            this.lblCantSubastasSinCalificar.Name = "lblCantSubastasSinCalificar";
+            this.lblCantSubastasSinCalificar.Size = new System.Drawing.Size(13, 13);
+            this.lblCantSubastasSinCalificar.TabIndex = 22;
+            this.lblCantSubastasSinCalificar.Text = "0";
             // 
             // label15
             // 
@@ -673,20 +688,22 @@
             this.lblComprasRealizadas.TabIndex = 4;
             this.lblComprasRealizadas.Text = "0 Compras realizadas";
             // 
-            // lblCantSubastasSinCalificar
+            // btCalificarPendiente
             // 
-            this.lblCantSubastasSinCalificar.AutoSize = true;
-            this.lblCantSubastasSinCalificar.Location = new System.Drawing.Point(203, 194);
-            this.lblCantSubastasSinCalificar.Name = "lblCantSubastasSinCalificar";
-            this.lblCantSubastasSinCalificar.Size = new System.Drawing.Size(13, 13);
-            this.lblCantSubastasSinCalificar.TabIndex = 22;
-            this.lblCantSubastasSinCalificar.Text = "0";
+            this.btCalificarPendiente.Location = new System.Drawing.Point(158, 433);
+            this.btCalificarPendiente.Name = "btCalificarPendiente";
+            this.btCalificarPendiente.Size = new System.Drawing.Size(246, 23);
+            this.btCalificarPendiente.TabIndex = 5;
+            this.btCalificarPendiente.Text = "Calificar compra pendiente seleccionada";
+            this.btCalificarPendiente.UseVisualStyleBackColor = true;
+            this.btCalificarPendiente.Click += new System.EventHandler(this.btCalificarPendiente_Click);
             // 
             // Calificar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(710, 691);
+            this.ClientSize = new System.Drawing.Size(710, 710);
+            this.Controls.Add(this.btCalificarPendiente);
             this.Controls.Add(this.lblComprasRealizadas);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
@@ -740,7 +757,6 @@
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.DataGridView dgvUltimasCinco;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.PictureBox pictureBox1;
@@ -788,8 +804,10 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label lblComprasRealizadas;
-        private System.Windows.Forms.DataGridView dgvPendientes;
         private System.Windows.Forms.Label lblCantSubastasSinCalificar;
+        private MercadoEN.SuperGrid dgvUltimasCinco;
+        private MercadoEN.SuperGrid dgvPendientes;
+        private System.Windows.Forms.Button btCalificarPendiente;
 
 
     }

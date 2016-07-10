@@ -19,6 +19,8 @@ namespace WindowsFormsApplication1.Calificar
         public Calificar()
         {
             InitializeComponent();
+            dgvPendientes.MultiSelect = false;
+            
             this.user = UserSingleton.Instance.getUser();
             if (user == null)
             {
@@ -37,7 +39,7 @@ namespace WindowsFormsApplication1.Calificar
             dgvPendientes.DataSource = dtComprasSinCalificar;
 
             cantComprasRealizadas = calificacionNegocio.getCantidadDeCompras(user.userId);
-            lblComprasRealizadas.Text =  cantComprasRealizadas.ToString() + "  "  + "compras realizadas";
+            lblComprasRealizadas.Text =  cantComprasRealizadas.ToString() + "  "  + "compra/s realizada/s";
 
             dgvUltimasCinco.DataSource = calificacionNegocio.getUltimasCincoCalificaciones(user.userId);
 
@@ -58,11 +60,18 @@ namespace WindowsFormsApplication1.Calificar
 
             lblComprasCalificadas.Text = (cantComprasRealizadas - cantComprasSinCalificar).ToString();
 
-            lblCantSubastasSinCalificar.Text = calificacionNegocio.getCantidadDeSubastasSinCalificar(user.userId).ToString();
+            lblCantSubastasSinCalificar.Text = calificacionNegocio.getCantidadDeSubastasCalificadas(user.userId).ToString();
 
+           
 
 
             
+        }
+
+
+        private void dgvPendientes_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            MessageBox.Show("click");
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
@@ -77,6 +86,19 @@ namespace WindowsFormsApplication1.Calificar
 
         private void groupBox5_Enter_1(object sender, EventArgs e)
         {
+
+        }
+
+        private void btCalificarPendiente_Click(object sender, EventArgs e)
+        {
+            if (dgvPendientes.SelectedRows.Count != 0)
+            {
+                DataGridViewRow row = dgvPendientes.SelectedRows[0];
+                String compra_id = row.Cells[0].Value.ToString();               
+               CalificarCompra form =  new CalificarCompra(Int32.Parse(compra_id),this);
+               form.Show();
+            }
+          
 
         }
     }

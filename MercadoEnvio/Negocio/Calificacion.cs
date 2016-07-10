@@ -24,7 +24,7 @@ namespace MercadoNegocio
             try
             {
                 DBConn.openConnection();
-                String sqlRequest = "select c.Monto,c.Cantidad,p.Descripcion,c.Fecha,p.Precio,r.Descripcion from PMS.COMPRAS c JOIN PMS.PUBLICACIONES p ON c.Id_Publicacion = p.Id_Publicacion join PMS.RUBROS r on p.Id_Rubro = r.Id_Rubro   where c.Id_Cliente_Comprador = @id and c.Id_Calificacion is null";
+                String sqlRequest = "select c.Id_Compra As Codigo, c.Monto,c.Cantidad,p.Descripcion,c.Fecha,p.Precio,r.Descripcion from PMS.COMPRAS c JOIN PMS.PUBLICACIONES p ON c.Id_Publicacion = p.Id_Publicacion join PMS.RUBROS r on p.Id_Rubro = r.Id_Rubro   where c.Id_Cliente_Comprador = @id and c.Id_Calificacion is null";
 
                 SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
                 command.Parameters.Add("@id", SqlDbType.Int).Value = id;
@@ -41,6 +41,33 @@ namespace MercadoNegocio
             {
                 DBConn.closeConnection();
                 throw (new Exception("Error en Compras" + ex.Message));
+            }
+        }
+
+        public String calificarCompra(int compraId, String comentario, int estrellas)
+        {
+            try
+            {
+                DBConn.openConnection();
+                String sqlRequest = "EXEC PMS.ALTA_CALIFICACION @Id_Compra = @compraId, @Cantidad_Estrellas = @estrellas, @Descripcion = @comentario, @ID_CALIFICACION = @calificacionId";
+
+                SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
+                command.Parameters.Add("@compraId", SqlDbType.Int).Value = compraId;
+                command.Parameters.Add("@estrellas", SqlDbType.Int).Value = estrellas;
+                command.Parameters.Add("@comentario", SqlDbType.Text).Value = comentario;
+
+                SqlParameter output = new SqlParameter("@calificacionId", SqlDbType.Int);
+                output.Direction = ParameterDirection.Output;
+                command.Parameters.Add(output);
+
+                command.ExecuteNonQuery();
+                DBConn.closeConnection();
+                return output.Value.ToString();
+            }
+            catch (Exception ex)
+            {
+                DBConn.closeConnection();
+                throw (new Exception("Error al calificar la compra " + ex.Message));
             }
         }
 
@@ -164,6 +191,36 @@ namespace MercadoNegocio
             }
         }
 
+
+        public int getCantidadDeSubastasCalificadas(int clienteId)
+        {
+            try
+            {
+                DBConn.openConnection();
+                String sqlRequest = "select COUNT(c.Id_Compra) from " +
+                " PMS.COMPRAS c JOIN PMS.PUBLICACIONES p ON c.Id_Publicacion = p.Id_Publicacion join PMS.RUBROS r on p.Id_Rubro = r.Id_Rubro" +
+            " JOIN PMS.TIPO_PUBLICACION TP ON TP.Id_Tipo = P.Id_Tipo AND TP.Descripcion LIKE 'Subasta'" +
+              "   where c.Id_Cliente_Comprador = @clienteId and c.Id_Calificacion is not null";
+
+                SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
+                command.Parameters.Add("@clienteId", SqlDbType.Int).Value = clienteId;
+
+
+
+
+                int result = (int)command.ExecuteScalar();
+                DBConn.closeConnection();
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                DBConn.closeConnection();
+                throw new Exception("Error al obtener cantidad de subastas : " + ex.Message);
+
+            }
+        }
+
         public int getCantidadDeSubastasSinCalificar(int clienteId)
         {
             try
@@ -264,7 +321,7 @@ namespace MercadoNegocio
                 DBConn.openConnection();
                 String sqlRequest = "SELECT TOP 5 CA.Cantidad_Estrellas As Estrellas, CA.Descripcion" +
                  " FROM PMS.COMPRAS CO JOIN PMS.CALIFICACIONES CA on CO.Id_Calificacion = CA.Id_Calificacion" +
-                " JOIN PMS.CLIENTES CL ON CL.Id_Cliente = @clienteId";
+                " JOIN PMS.CLIENTES CL ON CL.Id_Cliente = @clienteId AND CO.Id_Cliente_Comprador = @clienteId";
 
                 SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
                 command.Parameters.Add("@clienteId", SqlDbType.Int).Value = clienteId;
