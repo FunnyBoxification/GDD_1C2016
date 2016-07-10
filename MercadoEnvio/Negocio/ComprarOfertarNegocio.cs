@@ -118,7 +118,7 @@ namespace MercadoNegocio
                 var dt = new DataTable();
                 DBConn.openConnection();
                 String sqlRequest;
-                sqlRequest = "SELECT * FROM PMS.PUBLICACIONES WHERE Id_Estado = 1 AND Id_Usuario <> "+UsuarioLogueado.Instance().userId;
+                sqlRequest = "select P.Id_Publicacion AS Codigo, Descripcion, Stock, Fecha, FechaVencimiento, Precio, (U.Reputacion) from pms.PUBLICACIONES P join pms.USUARIOS U  on P.Id_Usuario = u.Id_Usuario WHERE Id_Estado = 1 AND P.Id_Usuario <> " + UsuarioLogueado.Instance().userId;
                 if (Descripcion != null)
                 {
                     sqlRequest += " AND DESCRIPCION LIKE '%" + Descripcion + "%'";

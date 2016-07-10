@@ -340,6 +340,62 @@ namespace MercadoNegocio
                 throw (new Exception("Error en Calificaciones" + ex.Message));
             }
         }
+
+
+        public int getSumaDeEstrellasObtenidas(int userId)
+        {
+            try
+            {
+                DBConn.openConnection();
+                String sqlRequest = "select SUM(Ca.Cantidad_Estrellas) from pms.USUARIOS U join pms.PUBLICACIONES P on U.Id_Usuario =  P.Id_Usuario "+
+                    " AND U.Id_Usuario = @userId "+
+                    " JOIN pms.COMPRAS CO  on CO.Id_Publicacion = P.Id_Publicacion JOIN pms.CALIFICACIONES CA on CA.Id_Calificacion = CO.Id_Calificacion";
+
+                SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
+                command.Parameters.Add("@userId", SqlDbType.Int).Value = userId;             
+
+
+
+                int result = (int)command.ExecuteScalar();
+                DBConn.closeConnection();
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                DBConn.closeConnection();
+                throw new Exception("Error suma de estrellas : " + ex.Message);
+
+            }
+        }
+
+
+        public int getCantidadDeCalificacionesObtenidas(int userId)
+        {
+            try
+            {
+                DBConn.openConnection();
+                String sqlRequest = "select COUNT(Ca.Id_Calificacion) from pms.USUARIOS U join pms.PUBLICACIONES P on U.Id_Usuario =  P.Id_Usuario AND U.Id_Usuario = @userId"+ 
+            " JOIN pms.COMPRAS CO on CO.Id_Publicacion = P.Id_Publicacion JOIN pms.CALIFICACIONES CA on CA.Id_Calificacion = CO.Id_Calificacion";
+
+                SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
+                command.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+
+
+
+                int result = (int)command.ExecuteScalar();
+                DBConn.closeConnection();
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                DBConn.closeConnection();
+                throw new Exception("Error suma de estrellas : " + ex.Message);
+
+            }
+
+        }
     
     
     }
