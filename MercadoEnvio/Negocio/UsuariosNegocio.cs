@@ -74,16 +74,16 @@ namespace MercadoNegocio
                 sqlRequest += " c.NroCalle as \"Nro\", c.Piso, c.Depto, c.Cod_Postal as \"Cod Postal\", c.Telefono, u.FechaCreacion as \"Fecha Creación\"";  //Apellido		
                 sqlRequest += " FROM PMS.USUARIOS u, PMS.Clientes c";                                                                               //Nombre			
                 sqlRequest += " WHERE u.Id_Usuario = c.Id_Cliente ";                                                                                //FechaNacimiento	
-                if (nombre != null && nombre != "") sqlRequest += " and c.Nombre = @nombre";                                                        //Mail			
-                if (apellido != null && apellido != "") sqlRequest += " and c.Apellido = @apellido";                                                //DomCalle		
-                if (dni != null && dni != 0) sqlRequest += " and c.Dni_Cliente = @dni";                                                             //NroCalle		
-                if (email != null && email != "") sqlRequest += " and c.Mail = @email";                                                             //Piso			
+                if (nombre != null && nombre != "") sqlRequest += " and c.Nombre LIKE  @nombre";                                                        //Mail			
+                if (apellido != null && apellido != "") sqlRequest += " and c.Apellido LIKE  @apellido";                                                //DomCalle		
+                if (dni != null && dni != 0) sqlRequest += " and c.Dni_Cliente LIKE  @dni";                                                             //NroCalle		
+                if (email != null && email != "") sqlRequest += " and c.Mail LIKE  @email";                                                             //Piso			
                 SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);                                                                 //Depto			
-                if (nombre != null && nombre != "") command.Parameters.Add("@nombre", SqlDbType.NVarChar).Value = nombre;                           //Cod_Postal		
-                if (apellido != null && apellido != "") command.Parameters.Add("@apellido", SqlDbType.NVarChar).Value = apellido;                   //Tipo_Doc		
-                if (dni != null && dni != 0) command.Parameters.Add("@dni", SqlDbType.Int).Value = dni;                                        //Telefono		
-                if (email != null && email != "") command.Parameters.Add("@email", SqlDbType.NVarChar).Value = email;
-
+                if (nombre != null && nombre != "") command.Parameters.Add("@nombre", SqlDbType.NVarChar).Value = "%" + nombre + "%";                           //Cod_Postal		
+                if (apellido != null && apellido != "") command.Parameters.Add("@apellido", SqlDbType.NVarChar).Value = "%" + apellido + "%";                   //Tipo_Doc		
+                if (dni != null && dni != 0) command.Parameters.Add("@dni", SqlDbType.NVarChar).Value = "%" + dni.ToString() + "%";                                        //Telefono		
+                if (email != null && email != "") command.Parameters.Add("@email", SqlDbType.NVarChar).Value = "%" + email + "%";
+                    
                 using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                 {
                     adapter.Fill(dt);
@@ -179,8 +179,37 @@ namespace MercadoNegocio
         {
             return obj != null ? obj : DBNull.Value;
         }
-       
 
+
+
+        public DataTable ObtenerRubros()
+        {
+            try
+            {
+                var dt = new DataTable();
+                DBConn.openConnection();
+                String sqlRequest;
+                sqlRequest = "SELECT Descripcion FROM PMS.RUBROS ";//Id_Cliente		
+               	
+                SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);                                                              
+
+                using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                {
+                    adapter.Fill(dt);
+                    return dt;
+                }
+
+
+                command.Dispose();
+                DBConn.closeConnection();
+
+            }
+            catch (Exception ex)
+            {
+                DBConn.closeConnection();
+                throw (new Exception("Error en la busqueda de clientes" + ex.Message));
+            }
+        }
     }
     
      

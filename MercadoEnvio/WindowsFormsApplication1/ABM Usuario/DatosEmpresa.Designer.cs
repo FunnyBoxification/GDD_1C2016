@@ -54,12 +54,13 @@
             this.groupBox1.Controls.Add(this.tbxContacto);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(4, 4);
+            this.groupBox1.Location = new System.Drawing.Point(1, 1);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(321, 117);
+            this.groupBox1.Size = new System.Drawing.Size(339, 144);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Empresa";
+            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // tbxCuit
             // 
@@ -80,15 +81,15 @@
             // cbxRubro
             // 
             this.cbxRubro.FormattingEnabled = true;
-            this.cbxRubro.Location = new System.Drawing.Point(53, 81);
+            this.cbxRubro.Location = new System.Drawing.Point(61, 84);
             this.cbxRubro.Name = "cbxRubro";
-            this.cbxRubro.Size = new System.Drawing.Size(103, 21);
+            this.cbxRubro.Size = new System.Drawing.Size(254, 21);
             this.cbxRubro.TabIndex = 16;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 84);
+            this.label4.Location = new System.Drawing.Point(19, 87);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(36, 13);
             this.label4.TabIndex = 15;
@@ -103,15 +104,15 @@
             // 
             // tbxCiudad
             // 
-            this.tbxCiudad.Location = new System.Drawing.Point(215, 77);
+            this.tbxCiudad.Location = new System.Drawing.Point(61, 116);
             this.tbxCiudad.Name = "tbxCiudad";
-            this.tbxCiudad.Size = new System.Drawing.Size(100, 20);
+            this.tbxCiudad.Size = new System.Drawing.Size(254, 20);
             this.tbxCiudad.TabIndex = 14;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(169, 84);
+            this.label3.Location = new System.Drawing.Point(15, 119);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(40, 13);
             this.label3.TabIndex = 13;
@@ -148,7 +149,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.groupBox1);
             this.Name = "DatosEmpresa";
-            this.Size = new System.Drawing.Size(328, 125);
+            this.Size = new System.Drawing.Size(342, 147);
+            this.Load += new System.EventHandler(this.DatosEmpresa_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
