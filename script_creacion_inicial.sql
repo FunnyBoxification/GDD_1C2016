@@ -1525,5 +1525,60 @@ UPDATE PMS.USUARIOS SET Habilitado = 0 WHERE Id_Usuario = @userId
 END
 GO
 
+CREATE PROCEDURE PMS.ALTA_VISIBILIDAD
+			@Descripcion nvarchar(255)
+			,@porcentaje numeric(18,2)
+			,@precio numeric(18,2)
+                              
+AS 
+BEGIN 
+     SET NOCOUNT ON 
+
+INSERT INTO [PMS].[VISIBILIDADES]
+           ([Descripcion]
+           ,[Porcentaje]
+           ,[Precio]
+           ,[Habilitado])           
+     VALUES
+           (@Descripcion
+           ,@porcentaje
+           ,@precio
+		   ,1)
+end
+go
+
+CREATE PROCEDURE PMS.MODIFICACION_VISIBILIDAD
+			 @Id_Visibilidad numeric(18,0)
+			,@Descripcion nvarchar(255)
+			,@porcentaje numeric(18,2)
+			,@precio numeric(18,2)
+                              
+AS 
+BEGIN 
+     SET NOCOUNT ON 
+
+UPDATE [PMS].[VISIBILIDADES]
+Set          [Descripcion] = @Descripcion
+           ,[Porcentaje] = @porcentaje
+           ,[Precio] = @precio
+ where [Id_Visibilidad] = @Id_Visibilidad
+    
+end
+go
+
+CREATE PROCEDURE PMS.BAJA_VISIBILIDAD
+			 @Id_Visibilidad numeric(18,0)
+                              
+AS 
+BEGIN 
+     SET NOCOUNT ON 
+
+UPDATE [PMS].[VISIBILIDADES]
+Set          [Habilitado] = 0
+ where [Id_Visibilidad] = @Id_Visibilidad
+    
+end
+go
+
 COMMIT TRAN TRANSACCION_INICIAL;
 GO
