@@ -1498,7 +1498,15 @@ SET @NUMERO =(select max(Numero)from FACTURAS)+1
 DECLARE @FECHA datetime,@ID numeric(18,0)
 select @FECHA=Fecha,@ID=Id_Publicacion from inserted;
 DECLARE @TOTAL numeric(18,0)
+DECLARE @Primera_Vez numeric(18,0)
+DECLARE @ID_USER numeric(18,0)
 select @TOTAL=Precio from VISIBILIDADES WHERE Id_Visibilidad=(select Id_Visibilidad from PMS.PUBLICACIONES where Id_Publicacion = (select Id_Publicacion from inserted))
+SELECT @Primera_Vez=Primera_Vez, @ID_USER=Id_Usuario FROM PMS.USUARIOS WHERE Id_Usuario IN (SELECT Id_Usuario FROM PMS.Publicaciones WHERE Id_Publicacion=@ID)
+if @Primera_Vez = 1
+BEGIN
+SET @TOTAL = 0
+UPDATE PMS.USUARIOS SET Primera_Vez = 0 WHERE Id_Usuario = @ID_USER
+END
 EXEC PMS.ALTA_FACTURA @NUMERO,@FECHA,@TOTAL,1,@TOTAL,1,@ID,'Comision por Publicacion'
 END
 GO
