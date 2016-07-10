@@ -1437,7 +1437,7 @@ JOIN pms.COMPRAS CO
 declare @reputacionActual int
 
 set @reputacionActual  = ISNULL((select Reputacion from pms.USUARIOS where Id_Usuario = @idVendedor),0)
- update pms.USUARIOS set Reputacion =  @reputacionActual + (@cantidadDeEstrellasRecibidas / @cantidadDeCalificacionesRecibidas) where Id_Usuario = @idVendedor
+ update pms.USUARIOS set Reputacion =  (@cantidadDeEstrellasRecibidas / @cantidadDeCalificacionesRecibidas) where Id_Usuario = @idVendedor
 
 
 
