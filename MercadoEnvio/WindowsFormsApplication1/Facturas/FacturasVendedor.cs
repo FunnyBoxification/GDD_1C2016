@@ -47,5 +47,13 @@ namespace WindowsFormsApplication1.Facturas
             DateTime fechaHasta = dateTimePicker2.Value;
             superGrid1.SetPagedDataSource(negocio.searchFacturasAVendedor(Id,Detalle,importeHasta,importeDesde,fechaHasta.ToString("yyyy-MM-dd"), fechaDesde.ToString("yyyy-MM-dd")),bindingNavigator1);
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            textBox2.Text= null;
+            numericUpDown2.Value = 0 ;
+            numericUpDown1.Value = 0;
+
+        }
     }
 }
