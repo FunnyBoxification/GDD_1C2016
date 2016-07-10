@@ -34,6 +34,8 @@ namespace WindowsFormsApplication1.ABM_Visibilidad
         public AltaModVisibForm(VisibilidadesNegocio visibNegocio1, int IdCod, string Desc, int Porc, int Precio)
         {
             // TODO: Complete member initialization
+            InitializeComponent();
+            this.visibNegocio = visibNegocio1;
             this.Text = "Modificar Visibalidad: Codigo " + IdCod.ToString();
             this.visibNegocio1 = visibNegocio1;
             this.IdCod = IdCod;
@@ -49,14 +51,22 @@ namespace WindowsFormsApplication1.ABM_Visibilidad
 
         private void btnGrabar_Click(object sender, EventArgs e)
         {
-            if (IdCod != null)
+            try
             {
-                visibNegocio.AltaVisibilidad(txbDesc.Text, Convert.ToDecimal(txbPorc.Text), Convert.ToDecimal(txbPorc.Text));
+                if (IdCod == null || IdCod == 0)
+                {
+                    visibNegocio.AltaVisibilidad(txbDesc.Text, Convert.ToDecimal(txbPorc.Text), Convert.ToDecimal(txbPorc.Text));
 
+                }
+                else
+                {
+                    visibNegocio.ModifVisibilidad(IdCod, txbDesc.Text, Convert.ToDecimal(txbPorc.Text), Convert.ToDecimal(txbPorc.Text));
+                }
+                MessageBox.Show("Se ha grabado correctamente");
             }
-            else
+            catch (Exception ex)
             {
-                visibNegocio.ModifVisibilidad(IdCod, txbDesc.Text, Convert.ToDecimal(txbPorc.Text), Convert.ToDecimal(txbPorc.Text));
+                MessageBox.Show(ex.Message);
             }
         }
     }

@@ -32,8 +32,7 @@ namespace WindowsFormsApplication1.ABM_Visibilidad
             {
                 
                 Validaciones();
-                visibNegocio = new VisibilidadesNegocio(instance = new SqlServerDBConnection());
-                 VisilidadesDG.DataSource = visibNegocio.ObtenerVisibListado(txbCod.Text, txbDesc.Text, txbPorc.Text, txbPrecio.Text);
+                Buscar();
                 
             }
             catch (Exception ex)
@@ -41,6 +40,12 @@ namespace WindowsFormsApplication1.ABM_Visibilidad
                 MessageBox.Show(ex.Message);
             }
             
+        }
+
+        private void Buscar()
+        {
+            visibNegocio = new VisibilidadesNegocio(instance = new SqlServerDBConnection());
+            VisilidadesDG.DataSource = visibNegocio.ObtenerVisibListado(txbCod.Text, txbDesc.Text, txbPorc.Text, txbPrecio.Text);
         }
 
         private void Validaciones()
@@ -70,7 +75,7 @@ namespace WindowsFormsApplication1.ABM_Visibilidad
                 visibNegocio = new VisibilidadesNegocio(instance = new SqlServerDBConnection());
 
                 DataGridViewRow row = this.VisilidadesDG.SelectedRows[0];
-                var a = row.Cells["ColumnName"].Value;
+                var a = row.Cells["Id_Visibilidad"].Value;
                 visibNegocio.DeleteVisib(Convert.ToInt32(VisilidadesDG.SelectedRows[0].Cells["Id_Visibilidad"].Value));
             }
             catch (Exception ex)
@@ -82,14 +87,23 @@ namespace WindowsFormsApplication1.ABM_Visibilidad
 
         private void Altabtn_Click(object sender, EventArgs e)
         {
-            visibNegocio = new VisibilidadesNegocio(instance = new SqlServerDBConnection());
+            try
+            {
+                visibNegocio = new VisibilidadesNegocio(instance = new SqlServerDBConnection());
 
-            var frm = new AltaModVisibForm(visibNegocio);
-            frm.Show();
+                var frm = new AltaModVisibForm(visibNegocio);
+                frm.Show();
+                Buscar();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void Modificarbtn_Click(object sender, EventArgs e)
         {
+            try{
             visibNegocio = new VisibilidadesNegocio(instance = new SqlServerDBConnection());
             var IdCod = Convert.ToInt32(VisilidadesDG.SelectedRows[0].Cells["Id_Visibilidad"].Value);
             var Desc = VisilidadesDG.SelectedRows[0].Cells["Descripcion"].Value.ToString();
@@ -97,6 +111,14 @@ namespace WindowsFormsApplication1.ABM_Visibilidad
             var Precio = Convert.ToInt32(VisilidadesDG.SelectedRows[0].Cells["Precio"].Value);
 
             var frm = new AltaModVisibForm(visibNegocio, IdCod,Desc,Porc,Precio);
+            frm.Show();
+             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            Buscar();
+
         }
 
        
