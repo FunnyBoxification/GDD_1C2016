@@ -236,8 +236,8 @@ namespace WindowsFormsApplication1.Generar_Publicación
                     return;
                 }
                 var Precio = this.tbxPrecio.Text;
-                int a;
-                if (!Int32.TryParse(Precio,out a))
+                decimal a;
+                if (!Decimal.TryParse(Precio,out a))
                 {
                     MessageBox.Show("El precio debe ser un numero");
                     return;
@@ -259,6 +259,7 @@ namespace WindowsFormsApplication1.Generar_Publicación
                     this.Hide();
                     formm.Show();
                 }
+                this.Hide();
                
         }
 

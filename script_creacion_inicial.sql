@@ -701,6 +701,24 @@ UPDATE [PMS].[ROLES]
 END
 GO
 
+CREATE  PROCEDURE PMS.HABILITAR_ROL
+       @id numeric 
+                    
+AS 
+BEGIN 
+     SET NOCOUNT ON 
+
+UPDATE [PMS].[ROLES]
+   SET [Habilitado] = 1
+ WHERE Id_Rol = @id;
+ 
+ DELETE FROM [PMS].[ROLES_USUARIOS]
+      where Id_Rol=@id;
+
+
+END
+GO
+
 CREATE PROCEDURE PMS.ALTA_USER
 			@User_Nombre nvarchar(255)
 			,@User_Password binary(32)

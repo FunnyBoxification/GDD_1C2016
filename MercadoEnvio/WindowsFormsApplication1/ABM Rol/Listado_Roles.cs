@@ -42,9 +42,9 @@ namespace WindowsFormsApplication1.ABM_Rol
         {
 
             var negocio = new RolesNegocio(SqlServerDBConnection.Instance());
-            var Nombre = Convert.ToString(dataGridView1.SelectedRows[0].Cells["Nombre"].Value);
-            var Habilitado = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["Habilitado"].Value);
-            var Id = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["Id_Rol"].Value);
+            var Nombre = Convert.ToString(dataGridView1.Rows[e.RowIndex].Cells["Nombre"].Value);
+            var Habilitado = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells["Habilitado"].Value);
+            var Id = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells["Id_Rol"].Value);
             var funcionalidades = negocio.getFuncionalidadesDeRol(Id);
 
             var popupform = new Modificacion_Rol(Id,Nombre,Habilitado,funcionalidades);

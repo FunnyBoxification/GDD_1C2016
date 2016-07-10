@@ -263,7 +263,7 @@ namespace MercadoNegocio
                 }
                 if (Idpubli != null && Idpubli != "") sqlRequest += " and p.Id_Publicacion = " + Idpubli + " ";
                 
-                if (descripcion != null && descripcion != "") sqlRequest += " and p.Descripcion = '"+descripcion+"'";
+                if (descripcion != null && descripcion != "") sqlRequest += " and p.Descripcion LIKE '%"+descripcion+"%'";
                 SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
                 
                 /*if (tipo != null)  command.Parameters.Add("@tipo", SqlDbType.NVarChar).Value = tipo;
@@ -328,7 +328,7 @@ namespace MercadoNegocio
                     cmd.Parameters.Add("@Stock", SqlDbType.Int).Value = Int32.Parse(Stock);
                     cmd.Parameters.Add("@Fecha", SqlDbType.DateTime).Value = Fecha;
                     cmd.Parameters.Add("@FechaVencimiento", SqlDbType.DateTime).Value = FechaVencimiento;
-                    cmd.Parameters.Add("@Precio", SqlDbType.Int).Value = Decimal.Parse(Precio);
+                    cmd.Parameters.Add("@Precio", SqlDbType.Decimal).Value = Decimal.Parse(Precio);
                     cmd.Parameters.Add("@Id_Visibilidad", SqlDbType.Int).Value = Id_Visibilidad;
                     cmd.Parameters.Add("@Id_Tipo", SqlDbType.Int).Value = Id_Tipo;
                     cmd.Parameters.Add("@Id_Rubro", SqlDbType.Int).Value = Id_Rubro;

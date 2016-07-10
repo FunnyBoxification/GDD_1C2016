@@ -41,12 +41,25 @@ namespace WindowsFormsApplication1.ABM_Rol
             var negocio = new RolesNegocio(SqlServerDBConnection.Instance());
             var nombre = textBox1.Text;
             List<int> idsFuncionalidades = new List<int>();
-            negocio.deleteAllFuncionalidadesDeRol(idRol);
-            foreach (DataGridViewRow row in dataGridView1.SelectedRows)
+            if (dataGridView1.SelectedRows.Count > 0)
             {
-                var id = Convert.ToInt32(row.Cells["Id_Funcionalidad"].Value);
-                negocio.insertFuncionalidadToRol(idRol, id);
+                negocio.deleteAllFuncionalidadesDeRol(idRol);
+                foreach (DataGridViewRow row in dataGridView1.SelectedRows)
+                {
+                    var id = Convert.ToInt32(row.Cells["Id_Funcionalidad"].Value);
+                    negocio.insertFuncionalidadToRol(idRol, id);
+                }
             }
+
+            if (!checkBox1.Checked)
+            {
+                negocio.bajaRol(idRol);
+            }
+            else
+            {
+                negocio.habilitarRol(idRol);
+            }
+            this.Hide();
 
         }
 
