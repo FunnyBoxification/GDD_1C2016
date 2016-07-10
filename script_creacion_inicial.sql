@@ -506,6 +506,34 @@ SET
 Descripcion='Activa'
 where Id_Estado=1;
 
+--Calcular la reputacion de los usuarios que ya la tienen
+DECLARE @ID_USER numeric (18,0)
+DECLARE @REPUTACION numeric (18,0)
+
+DECLARE CURSOR_REPUTACION_USUARIOS CURSOR FOR  
+	select Id_Usuario
+	from PMS.USUARIOS  
+
+OPEN CURSOR_REPUTACION_USUARIOS   
+FETCH NEXT FROM CURSOR_REPUTACION_USUARIOS INTO @ID_USER
+
+WHILE @@FETCH_STATUS = 0
+BEGIN
+	SET @REPUTACION =(
+		(select SUM(Cantidad_Estrellas)
+		from PMS.CALIFICACIONES 
+		WHERE Id_Calificacion IN (select Id_Calificacion from PMS.COMPRAS where Id_Publicacion IN (select Id_Publicacion FROM PMS.PUBLICACIONES where Id_Usuario = @ID_USER))) + 
+		(select ISNULL(Reputacion,0) from PMS.USUARIOS where Id_Usuario=@ID_USER))/(select count(Id_Calificacion) from PMS.CALIFICACIONES where Id_Calificacion IN (select Id_Calificacion from PMS.COMPRAS where Id_Publicacion IN (select Id_Publicacion FROM PMS.PUBLICACIONES where Id_Usuario = @ID_USER)))
+
+	UPDATE PMS.USUARIOS
+	set Reputacion=@REPUTACION
+	where Id_Usuario=@ID_USER;
+
+	FETCH NEXT FROM CURSOR_REPUTACION_USUARIOS INTO @ID_USER
+END
+CLOSE CURSOR_REPUTACION_USUARIOS;  
+DEALLOCATE CURSOR_REPUTACION_USUARIOS;  
+
 update PMS.PUBLICACIONES 
 set Id_Estado= 4
 where Id_Publicacion in (select f.Id_Publicacion from PMS.ITEMFACTURA f where Descripcion = 'Comision por venta')

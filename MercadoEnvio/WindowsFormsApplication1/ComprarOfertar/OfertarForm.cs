@@ -42,7 +42,7 @@ namespace WindowsFormsApplication1.ComprarOfertar
             else
             {
                 var comprarOfertarNegocio = new ComprarOfertarNegocio(SqlServerDBConnection.Instance());
-                comprarOfertarNegocio.Ofertar(UsuarioLogueado.Instance().userId, selRow.Cells["Id_Publicacion"].Value.ToString(), parsedValue);
+                comprarOfertarNegocio.Ofertar(UsuarioLogueado.Instance().userId, selRow.Cells["Codigo"].Value.ToString(), parsedValue);
                 this.Close();
             }
         }
