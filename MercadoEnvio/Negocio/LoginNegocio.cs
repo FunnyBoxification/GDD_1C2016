@@ -31,7 +31,7 @@ namespace MercadoNegocio
                 SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
                 command.Parameters.Add("@userName", SqlDbType.VarChar).Value = username;
 
-                command.Parameters.Add("@password", SqlDbType.Int).Value = password.ToString();
+                command.Parameters.Add("@password", SqlDbType.VarChar).Value = password.ToString();
                
                 int result = (int)command.ExecuteScalar();
                 DBConn.closeConnection();
