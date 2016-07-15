@@ -426,15 +426,20 @@ BEGIN
 		  WHERE	Forma_Pago_Desc = Descripcion)	
 	FROM gd_esquema.Maestra WHERE Forma_Pago_Desc IS NOT NULL;
 
+	SELECT  ROW_NUMBER() OVER (PARTITION BY Publicacion_Cod ORDER BY (SELECT NULL)) as rn
+	, *  
+	INTO #TempItems
+	FROM gd_esquema.Maestra WHERE Factura_Nro is not null;
+
 	INSERT INTO PMS.ITEMFACTURA
-	SELECT DISTINCT 
-		Item_Factura_Monto,			
-		Item_Factura_Cantidad,
-		CASE WHEN (Item_Factura_Monto = Publicacion_Precio * Publicacion_Visibilidad_Porcentaje) THEN 'Comision por venta'
-			 ELSE 'Comision por publicacion' END,		
-		Factura_Nro,
-		Publicacion_Cod	
-	FROM gd_esquema.Maestra WHERE Item_Factura_Monto IS NOT NULL;
+	SELECT 
+	Item_Factura_Monto,			
+	Item_Factura_Cantidad,
+	CASE WHEN (rn = 1) THEN 'Comision por publicacion'
+		 ELSE 'Comision por Venta' END,
+	Factura_Nro,
+	Publicacion_Cod	
+	FROM #TempItems;
 
 	-- Asignacion de roles
 	INSERT INTO PMS.ROLES (Nombre, Habilitado) VALUES
