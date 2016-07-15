@@ -11,6 +11,8 @@ using System.Windows.Forms;
 using WindowsFormsApplication1.ABM_Visibilidad;
 using System.Configuration;
 using System.Collections.Specialized;
+using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace WindowsFormsApplication1.ABM_Usuario
 {
@@ -22,6 +24,7 @@ namespace WindowsFormsApplication1.ABM_Usuario
         int modo;
         public string rubro { get; set; }
         private UsuariosNegocio usuNegocio;
+        bool invalid = false;
 
         public int IdCod { get; set; }
         public int Tipo { get; set; }
@@ -119,7 +122,7 @@ namespace WindowsFormsApplication1.ABM_Usuario
         {
             try
             {
-                
+                Validar();
                 if (IdCod != null && IdCod != 0) { modo = 1; } else { modo = 0; };
 
                 if (Tipo == 0)
@@ -172,6 +175,22 @@ namespace WindowsFormsApplication1.ABM_Usuario
             }
         }
 
+        private void Validar()
+        {
+            if (this.txbUsername.Text == "")
+            {
+                throw (new Exception("Ingrese un usuario"));
+            }
+            if (this.txbPassw.Text == "")
+            {
+                throw (new Exception("Ingrese un password"));
+            }
+            if (!IsValidEmail(this.datos1.Mail))
+            {
+                throw (new Exception("Mail no valido"));
+            }
+        }
+
         private void AltaModUsuarioForm_Load(object sender, EventArgs e)
         {
            // hacerload();
@@ -199,6 +218,55 @@ namespace WindowsFormsApplication1.ABM_Usuario
             }
         }
 
-        
+        public bool IsValidEmail(string strIn)
+        {
+            invalid = false;
+            if (String.IsNullOrEmpty(strIn))
+                return false;
+
+            // Use IdnMapping class to convert Unicode domain names.
+            try
+            {
+                strIn = Regex.Replace(strIn, @"(@)(.+)$", this.DomainMapper,
+                                      RegexOptions.None, TimeSpan.FromMilliseconds(200));
+            }
+            catch (RegexMatchTimeoutException)
+            {
+                return false;
+            }
+
+            if (invalid)
+                return false;
+
+            // Return true if strIn is in valid e-mail format.
+            try
+            {
+                return Regex.IsMatch(strIn,
+                      @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
+                      @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$",
+                      RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250));
+            }
+            catch (RegexMatchTimeoutException)
+            {
+                return false;
+            }
+        }
+
+        private string DomainMapper(Match match)
+        {
+            // IdnMapping class with default property values.
+            IdnMapping idn = new IdnMapping();
+
+            string domainName = match.Groups[2].Value;
+            try
+            {
+                domainName = idn.GetAscii(domainName);
+            }
+            catch (ArgumentException)
+            {
+                invalid = true;
+            }
+            return match.Groups[1].Value + domainName;
+        }
     }
 }

@@ -75,6 +75,19 @@
     <Compile Include="ABM Rol\Modificacion_Rol.Designer.cs">
       <DependentUpon>Modificacion_Rol.cs</DependentUpon>
     </Compile>
+    <Compile Include="ABM Rubro\Altas_Rubros.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Rubro\Altas_Rubros.Designer.cs">
+      <DependentUpon>Altas_Rubros.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABM Rubro\dsRubros.Designer.cs" />
+    <Compile Include="ABM Rubro\Listado_Rubros.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABM Rubro\Listado_Rubros.Designer.cs">
+      <DependentUpon>Listado_Rubros.cs</DependentUpon>
+    </Compile>
     <Compile Include="ABM Usuario\AltaModUsuarioForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -267,6 +280,12 @@
     <EmbeddedResource Include="ABM Rol\Modificacion_Rol.resx">
       <DependentUpon>Modificacion_Rol.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ABM Rubro\Altas_Rubros.resx">
+      <DependentUpon>Altas_Rubros.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABM Rubro\Listado_Rubros.resx">
+      <DependentUpon>Listado_Rubros.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ABM Usuario\AltaModUsuarioForm.resx">
       <DependentUpon>AltaModUsuarioForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -366,6 +385,17 @@
     <None Include="ABM Rol\dsRoles.xss">
       <DependentUpon>dsRoles.xsd</DependentUpon>
     </None>
+    <None Include="ABM Rubro\dsRubros.xsc">
+      <DependentUpon>dsRubros.xsd</DependentUpon>
+    </None>
+    <None Include="ABM Rubro\dsRubros.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsRubros1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="ABM Rubro\dsRubros.xss">
+      <DependentUpon>dsRubros.xsd</DependentUpon>
+    </None>
     <None Include="ABM Visibilidad\VisibilidadesDS.xsc">
       <DependentUpon>VisibilidadesDS.xsd</DependentUpon>
     </None>
@@ -413,9 +443,7 @@
   <ItemGroup>
     <None Include="Resources\modifyPage.gif" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ABM Rubro\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\MercadoEN\MercadoEN.csproj">
       <Project>{aba7d4eb-f95b-4247-84b7-5f60a6d0a7b8}</Project>

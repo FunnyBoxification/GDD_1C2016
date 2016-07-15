@@ -35,13 +35,13 @@ namespace MercadoNegocio
                 sqlRequest += " WHERE Habilitado = 1 ";
                 if (codigo != null && codigo != "") sqlRequest += " and Id_Visibilidad LIKE  @idVisib";
                 if (desc != null && desc != "") sqlRequest += " and Descripcion LIKE @Desc";
-                if (porc != null && porc != "") sqlRequest += " and Porcentaje LIKE  @Porc";
-                if (precio != null && precio != "") sqlRequest += " and Precio LIKE @Precio";
+                if (porc != null && porc != "") sqlRequest += " and Porcentaje =  @Porc";
+                if (precio != null && precio != "") sqlRequest += " and Precio = @Precio";
                 SqlCommand command = new SqlCommand(sqlRequest, DBConn.Connection);
                 if (codigo != null && codigo != "") command.Parameters.Add("@idVisib", SqlDbType.NVarChar).Value = "%" + codigo + "%";
                 if (desc != null && desc != "") command.Parameters.Add("@Desc", SqlDbType.NVarChar).Value = "%" + desc + "%";
-                if (porc != null && porc != "") command.Parameters.Add(" @Porc", SqlDbType.NVarChar).Value = "%" + porc + "%";
-                if (precio != null && precio != "") command.Parameters.Add("@Precio", SqlDbType.NVarChar).Value = "%" + precio + "%";
+                if (porc != null && porc != "") command.Parameters.Add("@Porc", SqlDbType.NVarChar).Value =   porc;
+                if (precio != null && precio != "") command.Parameters.Add("@Precio", SqlDbType.NVarChar).Value =  precio  ;
                 
                 using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                 {

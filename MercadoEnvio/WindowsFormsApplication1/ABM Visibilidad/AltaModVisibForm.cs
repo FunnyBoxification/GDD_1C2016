@@ -53,6 +53,7 @@ namespace WindowsFormsApplication1.ABM_Visibilidad
         {
             try
             {
+                Validar();
                 if (IdCod == null || IdCod == 0)
                 {
                     visibNegocio.AltaVisibilidad(txbDesc.Text, Convert.ToDecimal(txbPorc.Text), Convert.ToDecimal(txbPorc.Text));
@@ -69,5 +70,42 @@ namespace WindowsFormsApplication1.ABM_Visibilidad
                 MessageBox.Show(ex.Message);
             }
         }
+
+private void Validar()
+{
+                if (txbDesc.Text == "")
+                { 
+                    throw(new Exception("Debe ingresar una descripcion"));
+                }
+                if (txbPorc.Text == "")
+                {
+                    throw (new Exception("Debe ingresar una Porcentaje"));
+                }
+                if (txbPrecio.Text == "")
+                {
+                    throw (new Exception("Debe ingresar una Precio"));
+                }
+                try
+                {
+                    if (Convert.ToInt32(txbPorc.Text) >= 1 || Convert.ToInt32(txbPorc) <= 0)
+                    {
+                        throw (new Exception("Porcentaje debe estar entre 0 y 1"));
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw (new Exception("Porcentaje debe estar entre 0 y 1"));
+                }
+                try{    
+                    if (Convert.ToInt32(txbPrecio.Text) <= 0)
+                    { 
+                        throw(new Exception("Precio debe ser un numero positivo"));
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw (new Exception("Precio debe ser un numero positivo"));
+                }
+}
     }
 }
