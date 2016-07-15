@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Calificacion.cs" />
     <Compile Include="ComprarOfertarNegocio.cs" />
+    <Compile Include="RubrosNegocio.cs" />
     <Compile Include="HistorialCliente.cs" />
     <Compile Include="HistorialVendedor.cs" />
     <Compile Include="ListadoEstadisticoNegocio.cs" />

@@ -430,8 +430,8 @@ BEGIN
 	SELECT DISTINCT 
 		Item_Factura_Monto,			
 		Item_Factura_Cantidad,
-		CASE WHEN (Item_Factura_Monto = Publicacion_Precio * Publicacion_Visibilidad_Porcentaje) THEN 'Comision por venta'
-			 ELSE 'Comision por publicacion' END,		
+		CASE WHEN (a.Item_Factura_Monto = a.Publicacion_Visibilidad_Precio ) THEN 'Comision por publicacion'
+			 ELSE 'Comision por venta' END as aqw,			
 		Factura_Nro,
 		Publicacion_Cod	
 	FROM gd_esquema.Maestra WHERE Item_Factura_Monto IS NOT NULL;

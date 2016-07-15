@@ -77,10 +77,11 @@ namespace WindowsFormsApplication1.ABM_Visibilidad
                 DataGridViewRow row = this.VisilidadesDG.SelectedRows[0];
                 var a = row.Cells["Id_Visibilidad"].Value;
                 visibNegocio.DeleteVisib(Convert.ToInt32(VisilidadesDG.SelectedRows[0].Cells["Id_Visibilidad"].Value));
+                Buscar();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Debe seleccionar la visibilidad del seleccionador a la izquierda. " + ex.Message);
             }
             
         }
@@ -115,7 +116,7 @@ namespace WindowsFormsApplication1.ABM_Visibilidad
              }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Debe seleccionar la visibilidad del seleccionador a la izquierda. " + ex.Message);
             }
             Buscar();
 

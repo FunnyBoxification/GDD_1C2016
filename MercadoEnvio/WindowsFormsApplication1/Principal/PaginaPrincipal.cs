@@ -78,7 +78,7 @@ namespace WindowsFormsApplication1.Principal
 
         private void ABMRubro_Click(object sender, EventArgs e)
         {
-            WindowsFormsApplication1.ABM_Rol.Listado_Roles FormRol = new WindowsFormsApplication1.ABM_Rol.Listado_Roles();
+            WindowsFormsApplication1.ABM_Rubro.Listado_Rubros FormRol = new WindowsFormsApplication1.ABM_Rubro.Listado_Rubros();
             FormRol.Show();
         }
 
