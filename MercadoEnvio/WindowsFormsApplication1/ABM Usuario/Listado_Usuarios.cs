@@ -118,7 +118,7 @@ string mail = "";
                     }
                     else
                     {
-                        row.Cells[0].Style.BackColor = Color.Green;
+                        row.Cells[0].Style.BackColor = Color.Red;
                     }
                 }
 
@@ -234,6 +234,27 @@ string mail = "";
             catch (Exception ex)
             {
                 MessageBox.Show("Error en llamado a alta mod" + ex.Message);
+            }
+        }
+
+        private void btnHabilitar_Click(object sender, EventArgs e)
+        {
+            try{
+
+                usuNegocio = new UsuariosNegocio(instance = new SqlServerDBConnection());
+                
+                    usuNegocio.HabDeshabUsuario(Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Código Usuario"].Value), Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Habilitado"].Value));
+                
+                if (Convert.ToString(dgvUsuarios.SelectedRows[0].Cells["Habilitado"].Value) == "1"){
+                    MessageBox.Show("Se ha deshabilitado el usuario");
+                }else{
+                    MessageBox.Show("Se ha habilitado el usuario");
+                }
+                Buscar();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Debe seleccionar desde el seleccionador al a izquierda" +ex.Message);
             }
         }
 

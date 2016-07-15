@@ -1096,6 +1096,39 @@ where [Id_Cliente]		=	@Id_Usuario
 end
 go
 
+
+create procedure PMS.BAJALOG_USUARIO
+		@Id_Usuario numeric(18,0)
+		  
+as begin
+	IF not EXISTS (select * from PMS.USUARIOS u  WHERE @Id_Usuario = u.Id_Usuario)
+	BEGIN
+		RAISERROR ('NO Existe usuario', 16, 1)
+	END
+
+	UPDATE [PMS].[USUARIOS]
+	SET			[Habilitado] = 0	
+	WHERE [Id_Usuario] = @Id_Usuario
+	   
+end
+go
+	
+create procedure PMS.ALTALOG_USUARIO
+		@Id_Usuario numeric(18,0)
+			  
+as begin
+	IF not EXISTS (select * from PMS.USUARIOS u  WHERE @Id_Usuario = u.Id_Usuario)
+	 BEGIN
+	    RAISERROR ('NO Existe usuario', 16, 1)
+	 END
+	
+	UPDATE [PMS].[USUARIOS]
+	SET			[Habilitado] = 1	
+	WHERE [Id_Usuario] = @Id_Usuario
+	   
+end
+go
+
 create procedure PMS.MODIFICACION_USUARIO_EMPRESA
 			@Id_Usuario numeric(18,0)
 			,@User_Nombre nvarchar(255)

@@ -43,6 +43,7 @@
             this.btnLimpiar = new System.Windows.Forms.Button();
             this.btnBuscar = new System.Windows.Forms.Button();
             this.btnNuevo = new System.Windows.Forms.Button();
+            this.btnHabilitar = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarios)).BeginInit();
             this.SuspendLayout();
@@ -191,11 +192,22 @@
             this.btnNuevo.UseVisualStyleBackColor = true;
             this.btnNuevo.Click += new System.EventHandler(this.btnNuevo_Click);
             // 
+            // btnHabilitar
+            // 
+            this.btnHabilitar.Location = new System.Drawing.Point(12, 557);
+            this.btnHabilitar.Name = "btnHabilitar";
+            this.btnHabilitar.Size = new System.Drawing.Size(92, 23);
+            this.btnHabilitar.TabIndex = 5;
+            this.btnHabilitar.Text = "Hab./Deshab.";
+            this.btnHabilitar.UseVisualStyleBackColor = true;
+            this.btnHabilitar.Click += new System.EventHandler(this.btnHabilitar_Click);
+            // 
             // Listado_Usuarios
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(953, 592);
+            this.Controls.Add(this.btnHabilitar);
             this.Controls.Add(this.btnNuevo);
             this.Controls.Add(this.btnBuscar);
             this.Controls.Add(this.btnLimpiar);
@@ -228,5 +240,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txbDniCuit;
         private System.Windows.Forms.Label labelDniCuit;
+        private System.Windows.Forms.Button btnHabilitar;
     }
 }

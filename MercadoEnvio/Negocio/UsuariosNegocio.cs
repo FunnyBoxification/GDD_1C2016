@@ -214,6 +214,38 @@ namespace MercadoNegocio
                 throw (new Exception("Error en la busqueda de clientes" + ex.Message));
             }
         }
+
+        public void HabDeshabUsuario(string id_Cod, string habilitado)
+        {
+            try
+            {
+
+                var proc = "PMS.";
+                if (habilitado == "0")
+                {
+                    proc += "ALTALOG_USUARIO";
+                }
+                else
+                {
+                    proc += "BAJALOG_USUARIO";
+                }
+                 DBConn.openConnection();
+                using (SqlCommand cmd = new SqlCommand(proc, DBConn.Connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add("@Id_Usuario", SqlDbType.Int).Value = Convert.ToInt32(id_Cod);              
+                    cmd.ExecuteNonQuery();
+                }
+                DBConn.closeConnection();
+
+            }
+            catch (Exception e)
+            {
+                DBConn.closeConnection();
+                throw (new Exception("No se pudo editar la cantidad de intentos fallidos : " + e.Message));
+
+            }
+        }
     }
     
      
